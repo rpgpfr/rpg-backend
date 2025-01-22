@@ -9,6 +9,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 public class UserH2Adapter implements UserRepository {
+
 	@Override
 	public List<User> getAllUsers() {
 		return emptyList();
@@ -23,4 +24,5 @@ public class UserH2Adapter implements UserRepository {
 	public void insertUser(User user) throws CannotCreateUserException {
 
 	}
+
 }
