@@ -21,88 +21,88 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 @ExtendWith(BasicDatabaseExtension.class)
 class CampaignDaoTest {
 
-    private CampaignDao campaignDao;
+	private CampaignDao campaignDao;
 
-    @EzDatabase
-    private NamedParameterJdbcTemplate jdbcTemplate;
+	@EzDatabase
+	private NamedParameterJdbcTemplate jdbcTemplate;
 
-    @BeforeEach
-    public void setUp() {
-        campaignDao = new CampaignDao(jdbcTemplate);
+	@BeforeEach
+	public void setUp() {
+		campaignDao = new CampaignDao(jdbcTemplate);
 
-        initTables();
-    }
+		initTables();
+	}
 
-    @Test
-    @DisplayName("Should get all campaigns")
-    void shouldGetAllCampaigns() {
-        // Act
-        List<CampaignDTO> actualCampaigns = campaignDao.getAllCampaigns();
+	@SneakyThrows
+	private void initTables() {
+		jdbcTemplate.update(
+			new String(readAllBytes(Paths.get("src/test/resources/initCampaign.sql"))),
+			new HashMap<>()
+		);
+	}
 
-        // Assert
-        List<CampaignDTO> expectedCampaigns = List.of(
-            new CampaignDTO("Campagne 1", "alvin.h"),
-            new CampaignDTO("Campagne 2", "alvin.h"),
-            new CampaignDTO("Campagne 3", "alvin.h"),
-            new CampaignDTO("Campagne 4", "tom.e"),
-            new CampaignDTO("Campagne 5", "tom.e")
-        );
+	@Test
+	@DisplayName("Should get all campaigns")
+	void shouldGetAllCampaigns() {
+		// Act
+		List<CampaignDTO> actualCampaigns = campaignDao.getAllCampaigns();
 
-        assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
-    }
+		// Assert
+		List<CampaignDTO> expectedCampaigns = List.of(
+			new CampaignDTO("Campagne 1", "alvin.h"),
+			new CampaignDTO("Campagne 2", "alvin.h"),
+			new CampaignDTO("Campagne 3", "alvin.h"),
+			new CampaignDTO("Campagne 4", "tom.e"),
+			new CampaignDTO("Campagne 5", "tom.e")
+		);
 
-    @Test
-    @DisplayName("Should get campaign by name and username")
-    void shouldGetCampaignByNameAndUsername() {
-        // Arrange
-        String name = "Campagne 1";
-        String username = "alvin.h";
+		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
 
-        // Act
-        CampaignDTO actualCampaign = campaignDao.getCampaignByNameAndUsername(name, username);
+	@Test
+	@DisplayName("Should get campaign by name and username")
+	void shouldGetCampaignByNameAndUsername() {
+		// Arrange
+		String name = "Campagne 1";
+		String username = "alvin.h";
 
-        // Assert
-        CampaignDTO expectedCampaign = new CampaignDTO("Campagne 1", "alvin.h");
+		// Act
+		CampaignDTO actualCampaign = campaignDao.getCampaignByNameAndUsername(name, username);
 
-        assertThat(actualCampaign).isEqualTo(expectedCampaign);
-    }
+		// Assert
+		CampaignDTO expectedCampaign = new CampaignDTO("Campagne 1", "alvin.h");
 
-    @Test
-    @DisplayName("Should insert campaign When username exists in database")
-    void shouldInsertCampaign_whenUserExistsInDatabase() {
-        // Arrange
-        String name = "insertedCampaign";
-        String username = "alvin.h";
-        CampaignDTO campaignDTO = new CampaignDTO(name, username);
+		assertThat(actualCampaign).isEqualTo(expectedCampaign);
+	}
 
-        // Act
-        campaignDao.insertCampaign(campaignDTO);
+	@Test
+	@DisplayName("Given a campaign When username exists Then it gets inserted")
+	void givenACampaign_whenUsernameExists_thenItGetsInserted() {
+		// Arrange
+		String name = "insertedCampaign";
+		String username = "alvin.h";
+		CampaignDTO campaignDTO = new CampaignDTO(name, username);
 
-        // Assert
-        CampaignDTO actualCampaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
-        CampaignDTO expectedCampaignDTO = new CampaignDTO("insertedCampaign", "alvin.h");
+		// Act
+		campaignDao.insertCampaign(campaignDTO);
 
-        assertThat(actualCampaignDTO).isEqualTo(expectedCampaignDTO);
-    }
+		// Assert
+		CampaignDTO actualCampaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
+		CampaignDTO expectedCampaignDTO = new CampaignDTO(name, username);
 
-    @Test
-    @DisplayName("Should not insert campaign When username does not exist in database")
-    void shouldNotInsertCampaign_whenUserDoesNotExistInDatabase() {
-        // Arrange
-        String name = "insertedCampaign";
-        String username = "nonExistent";
-        CampaignDTO campaignDTO = new CampaignDTO(name, username);
+		assertThat(actualCampaignDTO).isEqualTo(expectedCampaignDTO);
+	}
 
-        // Act & Assert
-        assertThatCode(() -> campaignDao.insertCampaign(campaignDTO));
-    }
+	@Test
+	@DisplayName("Given a campaign When username does not exist Then exception is thrown")
+	void givenACampaign_whenUsernameDoesNotExist_thenExceptionIsThrown() {
+		// Arrange
+		String name = "insertedCampaign";
+		String username = null;
+		CampaignDTO campaignDTO = new CampaignDTO(name, username);
 
-    @SneakyThrows
-    private void initTables() {
-        jdbcTemplate.update(
-            new String(readAllBytes(Paths.get("src/test/resources/initCampaign.sql"))),
-            new HashMap<>()
-        );
-    }
+		// Act & Assert
+		assertThatCode(() -> campaignDao.insertCampaign(campaignDTO)).isInstanceOf(Exception.class);
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.rpgproject.infrastructure.dto;
 
+import com.rpgproject.domain.bean.Campaign;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,7 +11,11 @@ import lombok.*;
 @ToString
 public class CampaignDTO {
 
-    private String name;
-    private String username;
+	private String name;
+	private String username;
 
+	public CampaignDTO(Campaign campaign) {
+		name = campaign.getName();
+		username = campaign.getUserName();
+	}
 }
