@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -55,7 +56,7 @@ public class UserDao {
 		};
 	}
 
-	public void insertUser(UserDTO userDTO) {
+	public void insertUser(UserDTO userDTO) throws DataIntegrityViolationException {
 		Map<String, String> params = Map.of(
 			"username", userDTO.getUsername(),
 			"firstName", userDTO.getFirstName(),

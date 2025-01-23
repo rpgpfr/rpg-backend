@@ -80,8 +80,8 @@ class CampaignH2AdapterTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign When inserting it Then it gets saved in database")
-	void givenACampaign_whenInsertingIt_thenItGetsSavedInDatabase() {
+	@DisplayName("Given a campaign When information is valid Then it gets inserted")
+	void givenACampaign_whenInformationIsValid_thenItGetsInserted() {
 		// Arrange
 		String name = "campagne 1";
 		String username = "alvin.h";
@@ -92,8 +92,8 @@ class CampaignH2AdapterTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign with invalid information When inserting it Then it throws an exception")
-	void shouldInsertCampaignInDatabase() {
+	@DisplayName("Given a campaign When information is invalid Then an exception is thrown")
+	void givenACampaign_whenInformationIsInvalid_thenAnExceptionIsThrown() {
 		// Arrange
 		String name = "campagne 1";
 		String username = "wrong username";

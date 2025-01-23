@@ -98,8 +98,7 @@ class CampaignDaoTest {
 	void givenACampaign_whenUsernameDoesNotExist_thenExceptionIsThrown() {
 		// Arrange
 		String name = "insertedCampaign";
-		String username = null;
-		CampaignDTO campaignDTO = new CampaignDTO(name, username);
+		CampaignDTO campaignDTO = new CampaignDTO(name, null);
 
 		// Act & Assert
 		assertThatCode(() -> campaignDao.insertCampaign(campaignDTO)).isInstanceOf(Exception.class);
