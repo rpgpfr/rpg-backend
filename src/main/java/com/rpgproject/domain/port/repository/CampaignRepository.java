@@ -1,4 +1,4 @@
-package com.rpgproject.domain.port;
+package com.rpgproject.domain.port.repository;
 
 import com.rpgproject.domain.bean.Campaign;
 import com.rpgproject.domain.exception.CannotCreateCampaignException;
@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface CampaignRepository {
 
-	List<Campaign> getAllCampaigns();
-
 	Campaign getCampaignByNameAndUsername(String name, String username);
 
-	void insertCampaign(Campaign campaign) throws CannotCreateCampaignException;
+	List<Campaign> getCampaignsByUsername(String username);
+
+	void createCampaign(Campaign campaign) throws CannotCreateCampaignException;
 
 }

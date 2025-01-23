@@ -42,18 +42,16 @@ class CampaignDaoTest {
 	}
 
 	@Test
-	@DisplayName("Should get all campaigns")
-	void shouldGetAllCampaigns() {
+	@DisplayName("Should get campaignS by username")
+	void shouldGetCampaignsByUsername() {
 		// Act
-		List<CampaignDTO> actualCampaigns = campaignDao.getAllCampaigns();
+		List<CampaignDTO> actualCampaigns = campaignDao.getCampaignsByUsername("alvin.h");
 
 		// Assert
 		List<CampaignDTO> expectedCampaigns = List.of(
 			new CampaignDTO("Campagne 1", "alvin.h"),
 			new CampaignDTO("Campagne 2", "alvin.h"),
-			new CampaignDTO("Campagne 3", "alvin.h"),
-			new CampaignDTO("Campagne 4", "tom.e"),
-			new CampaignDTO("Campagne 5", "tom.e")
+			new CampaignDTO("Campagne 3", "alvin.h")
 		);
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
@@ -84,7 +82,7 @@ class CampaignDaoTest {
 		CampaignDTO campaignDTO = new CampaignDTO(name, username);
 
 		// Act
-		campaignDao.insertCampaign(campaignDTO);
+		campaignDao.createCampaign(campaignDTO);
 
 		// Assert
 		CampaignDTO actualCampaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
@@ -101,7 +99,7 @@ class CampaignDaoTest {
 		CampaignDTO campaignDTO = new CampaignDTO(name, null);
 
 		// Act & Assert
-		assertThatCode(() -> campaignDao.insertCampaign(campaignDTO)).isInstanceOf(Exception.class);
+		assertThatCode(() -> campaignDao.createCampaign(campaignDTO)).isInstanceOf(Exception.class);
 	}
 
 }

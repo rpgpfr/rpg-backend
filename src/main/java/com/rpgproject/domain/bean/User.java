@@ -1,5 +1,7 @@
 package com.rpgproject.domain.bean;
 
+import com.rpgproject.utils.IgnoreCoverage;
+
 import java.util.Objects;
 
 public class User {
@@ -21,6 +23,7 @@ public class User {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
@@ -28,11 +31,13 @@ public class User {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public int hashCode() {
 		return Objects.hash(getUsername(), getFullName());
 	}
 
 	@Override
+	@IgnoreCoverage
 	public String toString() {
 		return "User{" +
 			"username='" + username + '\'' +

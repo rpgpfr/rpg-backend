@@ -1,5 +1,7 @@
 package com.rpgproject.domain.bean;
 
+import com.rpgproject.utils.IgnoreCoverage;
+
 import java.util.Objects;
 
 public class Campaign {
@@ -21,6 +23,7 @@ public class Campaign {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		Campaign campaign = (Campaign) o;
@@ -28,11 +31,13 @@ public class Campaign {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public int hashCode() {
 		return Objects.hash(getName(), getUserName());
 	}
 
 	@Override
+	@IgnoreCoverage
 	public String toString() {
 		return "Campaign{" +
 			"name='" + name + '\'' +

@@ -2,7 +2,7 @@ package com.rpgproject.infrastructure.adapter;
 
 import com.rpgproject.domain.bean.User;
 import com.rpgproject.domain.exception.CannotCreateUserException;
-import com.rpgproject.domain.port.UserRepository;
+import com.rpgproject.domain.port.repository.UserRepository;
 import com.rpgproject.infrastructure.dao.UserDao;
 import com.rpgproject.infrastructure.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 @Repository
 public class UserH2Adapter implements UserRepository {

@@ -1,4 +1,4 @@
-package com.rpgproject.domain.port;
+package com.rpgproject.domain.port.repository;
 
 import com.rpgproject.domain.bean.User;
 import com.rpgproject.domain.exception.CannotCreateUserException;

@@ -2,7 +2,7 @@ package com.rpgproject.infrastructure.adapter;
 
 import com.rpgproject.domain.bean.Campaign;
 import com.rpgproject.domain.exception.CannotCreateCampaignException;
-import com.rpgproject.domain.port.CampaignRepository;
+import com.rpgproject.domain.port.repository.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,6 @@ public class CampaignH2Adapter implements CampaignRepository {
 	}
 
 	@Override
-	public List<Campaign> getAllCampaigns() {
-		List<CampaignDTO> campaignDTOs = campaignDao.getAllCampaigns();
-
-		return mapToCampaigns(campaignDTOs);
-	}
-
-	@Override
 	public Campaign getCampaignByNameAndUsername(String name, String username) {
 		CampaignDTO campaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
 
@@ -36,13 +29,22 @@ public class CampaignH2Adapter implements CampaignRepository {
 	}
 
 	@Override
-	public void insertCampaign(Campaign campaign) throws CannotCreateCampaignException {
+	public List<Campaign> getCampaignsByUsername(String username) {
+		List<CampaignDTO> campaignDTOs = campaignDao.getCampaignsByUsername(username);
+
+		return mapToCampaigns(campaignDTOs);
+	}
+
+	@Override
+	public void createCampaign(Campaign campaign) throws CannotCreateCampaignException {
 		CampaignDTO campaignDTO = new CampaignDTO(campaign);
 
 		try {
-			campaignDao.insertCampaign(campaignDTO);
-		} catch (DataIntegrityViolationException | NullPointerException e) {
-			throw new CannotCreateCampaignException();
+			campaignDao.createCampaign(campaignDTO);
+		} catch (DataIntegrityViolationException e) {
+			throw new CannotCreateCampaignException("La campagne existe déjà.");
+		} catch (NullPointerException e) {
+			throw new CannotCreateCampaignException("Des informations sont manquantes.");
 		}
 	}
 

@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class CampaignDao {
 
-	private final static String GET_ALL_CAMPAIGNS = "SELECT * FROM CAMPAIGN;";
+	private final static String GET_CAMPAIGNS_BY_USERNAME = "SELECT * FROM CAMPAIGN WHERE USERNAME LIKE :username;";
 	private final static String GET_CAMPAIGN_BY_NAME_AND_USERNAME = "SELECT * FROM CAMPAIGN WHERE NAME LIKE :name AND USERNAME LIKE :username;";
 	private final static String INSERT_CAMPAIGN = "INSERT INTO CAMPAIGN VALUES (:name, :username)";
 
@@ -29,10 +29,6 @@ public class CampaignDao {
 
 	public CampaignDao(NamedParameterJdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
-	}
-
-	public List<CampaignDTO> getAllCampaigns() {
-		return jdbcTemplate.query(GET_ALL_CAMPAIGNS, new BeanPropertyRowMapper<>(CampaignDTO.class));
 	}
 
 	public CampaignDTO getCampaignByNameAndUsername(String name, String username) {
@@ -58,7 +54,13 @@ public class CampaignDao {
 		};
 	}
 
-	public void insertCampaign(CampaignDTO campaignDTO) throws DataIntegrityViolationException {
+	public List<CampaignDTO> getCampaignsByUsername(String username) {
+		Map<String, String> params = Map.of("username", username);
+
+		return jdbcTemplate.query(GET_CAMPAIGNS_BY_USERNAME, params, new BeanPropertyRowMapper<>(CampaignDTO.class));
+	}
+
+	public void createCampaign(CampaignDTO campaignDTO) throws DataIntegrityViolationException {
 		Map<String, String> params = Map.of(
 			"name", campaignDTO.getName(),
 			"username", campaignDTO.getUsername()

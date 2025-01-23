@@ -38,29 +38,6 @@ class CampaignH2AdapterTest {
 	}
 
 	@Test
-	@DisplayName("Should get all campaigns")
-	void shouldGetAllCampaigns() {
-		// Arrange
-		List<CampaignDTO> campaignDTOs = List.of(
-			new CampaignDTO("campagne 1", "alvin.h"),
-			new CampaignDTO("campagne 2", "alvin.h")
-		);
-
-		when(jdbcTemplate.query(any(String.class), any(RowMapper.class))).thenReturn(campaignDTOs);
-
-		// Act
-		List<Campaign> actualCampaigns = campaignH2Adapter.getAllCampaigns();
-
-		// Assert
-		List<Campaign> expectedCampaigns = List.of(
-			new Campaign("campagne 1", "alvin.h"),
-			new Campaign("campagne 2", "alvin.h")
-		);
-
-		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
-	}
-
-	@Test
 	@DisplayName("Should get campaign by name and username")
 	void shouldGetCampaignByNameAndUsername() {
 		// Arrange
@@ -80,6 +57,32 @@ class CampaignH2AdapterTest {
 	}
 
 	@Test
+	@DisplayName("Should get campaigns by username")
+	void shouldGetCampaignsByUsername() {
+		// Arrange
+		String username = "alvin.h";
+		List<CampaignDTO> campaignDTOs = List.of(
+			new CampaignDTO("Campagne 1", username),
+			new CampaignDTO("Campagne 2", username),
+			new CampaignDTO("Campagne 3", username)
+		);
+
+		when(jdbcTemplate.query(any(String.class), any(Map.class), any(RowMapper.class))).thenReturn(campaignDTOs);
+
+		// Act
+		List<Campaign> actualCampaigns = campaignH2Adapter.getCampaignsByUsername(username);
+
+		// Assert
+		List<Campaign> expectedCampaigns = List.of(
+			new Campaign("Campagne 1", username),
+			new Campaign("Campagne 2", username),
+			new Campaign("Campagne 3", username)
+		);
+
+		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
 	@DisplayName("Given a campaign When information is valid Then it gets inserted")
 	void givenACampaign_whenInformationIsValid_thenItGetsInserted() {
 		// Arrange
@@ -88,7 +91,7 @@ class CampaignH2AdapterTest {
 		Campaign campaign = new Campaign(name, username);
 
 		// Act & Assert
-		assertThatCode(() -> campaignH2Adapter.insertCampaign(campaign)).doesNotThrowAnyException();
+		assertThatCode(() -> campaignH2Adapter.createCampaign(campaign)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -102,7 +105,7 @@ class CampaignH2AdapterTest {
 		when(jdbcTemplate.update(any(String.class), any(Map.class))).thenThrow(new DataIntegrityViolationException("error"));
 
 		// Act & Assert
-		assertThatCode(() -> campaignH2Adapter.insertCampaign(campaign)).isInstanceOf(CannotCreateCampaignException.class);
+		assertThatCode(() -> campaignH2Adapter.createCampaign(campaign)).isInstanceOf(CannotCreateCampaignException.class);
 	}
 
 }
