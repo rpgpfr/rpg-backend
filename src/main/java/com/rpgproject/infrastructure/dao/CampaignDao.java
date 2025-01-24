@@ -2,7 +2,6 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -60,7 +59,7 @@ public class CampaignDao {
 		return jdbcTemplate.query(GET_CAMPAIGNS_BY_USERNAME, params, new BeanPropertyRowMapper<>(CampaignDTO.class));
 	}
 
-	public void createCampaign(CampaignDTO campaignDTO) throws DataIntegrityViolationException {
+	public void createCampaign(CampaignDTO campaignDTO) {
 		Map<String, String> params = Map.of(
 			"name", campaignDTO.getName(),
 			"username", campaignDTO.getUsername()

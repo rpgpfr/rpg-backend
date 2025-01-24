@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.adapter;
 
 import com.rpgproject.domain.bean.Campaign;
 import com.rpgproject.domain.exception.CannotCreateCampaignException;
+import com.rpgproject.domain.exception.NoResultException;
 import com.rpgproject.domain.port.repository.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
@@ -25,6 +26,10 @@ public class CampaignH2Adapter implements CampaignRepository {
 	public Campaign getCampaignByNameAndUsername(String name, String username) {
 		CampaignDTO campaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
 
+		if (campaignDTO.getName() == null & campaignDTO.getUsername() == null) {
+			throw new NoResultException();
+		}
+
 		return mapToCampaign(campaignDTO);
 	}
 
@@ -36,7 +41,7 @@ public class CampaignH2Adapter implements CampaignRepository {
 	}
 
 	@Override
-	public void createCampaign(Campaign campaign) throws CannotCreateCampaignException {
+	public void createCampaign(Campaign campaign) {
 		CampaignDTO campaignDTO = new CampaignDTO(campaign);
 
 		try {

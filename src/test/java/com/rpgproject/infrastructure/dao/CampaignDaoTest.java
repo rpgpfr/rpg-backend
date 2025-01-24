@@ -42,12 +42,15 @@ class CampaignDaoTest {
 	}
 
 	@Test
-	@DisplayName("Should get campaignS by username")
-	void shouldGetCampaignsByUsername() {
-		// Act
-		List<CampaignDTO> actualCampaigns = campaignDao.getCampaignsByUsername("alvin.h");
+	@DisplayName("Given a username When campaigns exist with this username Then they get returned")
+	void givenAUsername_whenCampaignsExistWithThisUsername_thenTheyGetReturned() {
+		// Given
+		String username = "alvin.h";
 
-		// Assert
+		// When
+		List<CampaignDTO> actualCampaigns = campaignDao.getCampaignsByUsername(username);
+
+		// Then
 		List<CampaignDTO> expectedCampaigns = List.of(
 			new CampaignDTO("Campagne 1", "alvin.h"),
 			new CampaignDTO("Campagne 2", "alvin.h"),
@@ -58,16 +61,16 @@ class CampaignDaoTest {
 	}
 
 	@Test
-	@DisplayName("Should get campaign by name and username")
-	void shouldGetCampaignByNameAndUsername() {
-		// Arrange
+	@DisplayName("Given a campaign name and a username When campaign exists Then it gets returned")
+	void givenACampaignNameAndAUsername_whenCampaignExists_thenItGetsReturned() {
+		// Given
 		String name = "Campagne 1";
 		String username = "alvin.h";
 
-		// Act
+		// When
 		CampaignDTO actualCampaign = campaignDao.getCampaignByNameAndUsername(name, username);
 
-		// Assert
+		// Then
 		CampaignDTO expectedCampaign = new CampaignDTO("Campagne 1", "alvin.h");
 
 		assertThat(actualCampaign).isEqualTo(expectedCampaign);
@@ -76,15 +79,15 @@ class CampaignDaoTest {
 	@Test
 	@DisplayName("Given a campaign When username exists Then it gets inserted")
 	void givenACampaign_whenUsernameExists_thenItGetsInserted() {
-		// Arrange
+		// Given
 		String name = "insertedCampaign";
 		String username = "alvin.h";
 		CampaignDTO campaignDTO = new CampaignDTO(name, username);
 
-		// Act
+		// When
 		campaignDao.createCampaign(campaignDTO);
 
-		// Assert
+		// Then
 		CampaignDTO actualCampaignDTO = campaignDao.getCampaignByNameAndUsername(name, username);
 		CampaignDTO expectedCampaignDTO = new CampaignDTO(name, username);
 
@@ -94,11 +97,11 @@ class CampaignDaoTest {
 	@Test
 	@DisplayName("Given a campaign When username does not exist Then exception is thrown")
 	void givenACampaign_whenUsernameDoesNotExist_thenExceptionIsThrown() {
-		// Arrange
+		// Given
 		String name = "insertedCampaign";
 		CampaignDTO campaignDTO = new CampaignDTO(name, null);
 
-		// Act & Assert
+		// When & Then
 		assertThatCode(() -> campaignDao.createCampaign(campaignDTO)).isInstanceOf(Exception.class);
 	}
 

@@ -2,8 +2,8 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.bean.Campaign;
 import com.rpgproject.domain.exception.CannotCreateCampaignException;
-import com.rpgproject.domain.port.repository.CampaignRepository;
 import com.rpgproject.domain.port.presenter.CampaignPresenter;
+import com.rpgproject.domain.port.repository.CampaignRepository;
 
 public class CreateCampaign<T> {
 
