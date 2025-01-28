@@ -15,11 +15,4 @@ public class RpgProjectApplication {
         SpringApplication.run(RpgProjectApplication.class, args);
     }
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
-        configurer.setLocation(new FileSystemResource(".env"));
-        return configurer;
-    }
-
 }
