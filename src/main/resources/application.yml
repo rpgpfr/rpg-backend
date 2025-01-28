@@ -1,0 +1,11 @@
+spring.application.name: rpg-project
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRE_URL}
+    username: ${POSTGRE_USERNAME}
+    password: ${POSTGRE_PASSWORD}
+  data:
+    mongodb:
+      uri: ${MONGO_URL}
