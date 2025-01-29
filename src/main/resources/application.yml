@@ -1,4 +1,5 @@
 spring.application.name: rpg-project
+logging.level.root: error
 
 spring:
   datasource:

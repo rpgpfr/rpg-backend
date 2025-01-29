@@ -7,7 +7,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.FileSystemResource;
 
 @Configuration
-@Profile("!dev")
+@Profile("default")
 public class ApplicationConfig {
 
 	@Bean
