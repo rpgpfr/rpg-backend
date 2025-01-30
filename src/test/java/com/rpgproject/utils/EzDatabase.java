@@ -1,4 +1,3 @@
-
 package com.rpgproject.utils;
 
 import java.lang.annotation.*;
