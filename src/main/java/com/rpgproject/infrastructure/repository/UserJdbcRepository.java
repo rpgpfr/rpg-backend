@@ -1,10 +1,8 @@
 package com.rpgproject.infrastructure.repository;
 
-import com.rpgproject.domain.bean.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
-import com.rpgproject.infrastructure.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,11 +17,9 @@ public class UserJdbcRepository implements UserRepository {
 	}
 
 	@Override
-	public void register(User user) {
-		UserDTO userDTO = new UserDTO(user);
-
+	public void register(String username) {
 		try {
-			userJdbcDao.register(userDTO);
+			userJdbcDao.register(username);
 		} catch (RuntimeException e) {
 			throw new CannotRegisterUserException();
 		}

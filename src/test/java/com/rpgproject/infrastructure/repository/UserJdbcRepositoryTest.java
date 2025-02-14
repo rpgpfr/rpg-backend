@@ -1,9 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
-import com.rpgproject.domain.bean.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
-import com.rpgproject.utils.CreationTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,24 +34,24 @@ class UserJdbcRepositoryTest {
 	@DisplayName("Given a user When user is registered Then nothing happens")
 	void givenAUser_whenUserIsRegistered_thenNothingHappens() {
 		// Given
-		User user = CreationTestUtils.createUser();
+		String username = "username";
 
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.register(user));
+		assertDoesNotThrow(() -> userJdbcRepository.register(username));
 	}
 
 	@Test
 	@DisplayName("Given a user When register fails Then exception is thrown")
 	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
 		// Given
-		User user = CreationTestUtils.createUser();
+		String username = "username";
 
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(CannotRegisterUserException.class);
+		assertThatCode(() -> userJdbcRepository.register(username)).isInstanceOf(CannotRegisterUserException.class);
 	}
 
 }

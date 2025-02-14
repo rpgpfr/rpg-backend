@@ -1,10 +1,8 @@
 package com.rpgproject.domain.usecase;
 
-import com.rpgproject.domain.bean.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.port.UserPresenter;
 import com.rpgproject.domain.port.UserRepository;
-import com.rpgproject.utils.CreationTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,12 +30,12 @@ class RegisterUserTest {
 
 	@Test
 	@DisplayName("Given a user When user is registered Then present success")
-	void givenAUser_whenUserisRegistered_thenPresentSuccess() {
+	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
 		// Given
-		User user = CreationTestUtils.createUser();
+		String username = "username";
 
 		// When
-		registerUser.execute(user);
+		registerUser.execute(username);
 
 		// Then
 		verify(userPresenter, times(1)).ok();
@@ -45,15 +43,15 @@ class RegisterUserTest {
 
 	@Test
 	@DisplayName("Given a user When register throw an exception Then present error")
-	void givenAUser_whenRegisterThrowAnException_thenPresentError() {
+	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
-		User user = CreationTestUtils.createUser();
+		String username = "username";
 		RuntimeException exception = new CannotRegisterUserException();
 
-		doThrow(exception).when(userRepository).register(user);
+		doThrow(exception).when(userRepository).register(username);
 
 		// When
-		registerUser.execute(user);
+		registerUser.execute(username);
 
 		// Then
 		verify(userPresenter, times(1)).error(exception);
