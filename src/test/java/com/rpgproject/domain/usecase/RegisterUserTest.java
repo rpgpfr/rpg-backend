@@ -1,6 +1,7 @@
 package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.bean.User;
+import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.port.UserPresenter;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.utils.CreationTestUtils;
@@ -47,9 +48,9 @@ class RegisterUserTest {
 	void givenAUser_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = CreationTestUtils.createUser();
-		RuntimeException exception = new RuntimeException();
+		RuntimeException exception = new CannotRegisterUserException();
 
-		doThrow(exception).when(userRepository).signUp(user);
+		doThrow(exception).when(userRepository).register(user);
 
 		// When
 		registerUser.execute(user);

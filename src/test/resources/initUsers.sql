@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS USERS;
+
+CREATE TABLE USERS
+(
+    USERNAME      TEXT,
+    EMAIL         TEXT,
+    FIRST_NAME    TEXT,
+    LAST_NAME     TEXT,
+    INTRODUCTION  TEXT,
+    RPG_KNOWLEDGE TEXT,
+    PASSWORD      TEXT NOT NULL,
+    PRIMARY KEY (USERNAME, EMAIL)
+);
+
+INSERT INTO USERS
+VALUES ('alvin', 'alvin@test.com', 'Alvin', 'Alvinson', NULL, NULL, 'password');

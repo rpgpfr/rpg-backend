@@ -4,6 +4,6 @@ import com.rpgproject.domain.bean.User;
 
 public interface UserRepository {
 
-	void signUp(User user);
+	void register(User user);
 
 }
