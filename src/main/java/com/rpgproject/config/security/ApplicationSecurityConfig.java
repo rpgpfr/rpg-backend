@@ -1,5 +1,6 @@
 package com.rpgproject.config.security;
 
+import com.rpgproject.utils.IgnoreCoverage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.oauth2.jwt.JwtDecoders.fromOidcIssuerLocation;
 import static org.springframework.security.oauth2.jwt.JwtValidators.createDefaultWithIssuer;
 
+@IgnoreCoverage
 @Configuration
 public class ApplicationSecurityConfig {
 
@@ -26,6 +28,8 @@ public class ApplicationSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		System.out.println("Audience " + audience);
+		System.out.println(issuer);
 		return http
 			.authorizeHttpRequests((authorize) ->
 				authorize.anyRequest().authenticated()

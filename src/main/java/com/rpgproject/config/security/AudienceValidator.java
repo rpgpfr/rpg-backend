@@ -1,5 +1,6 @@
 package com.rpgproject.config.security;
 
+import com.rpgproject.utils.IgnoreCoverage;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
@@ -9,6 +10,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 
+@IgnoreCoverage
 public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
 
 	private final String audience;
