@@ -2,7 +2,6 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.port.UserRepository;
-import com.rpgproject.domain.usecase.RegisterUser;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.repository.UserJdbcRepository;
 import com.rpgproject.utils.BasicDatabaseExtension;
@@ -12,14 +11,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.file.Paths;
@@ -27,7 +22,6 @@ import java.util.HashMap;
 
 import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -68,8 +62,6 @@ class AuthenticationControllerTest {
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
-
-
 
 	@Test
 	@DisplayName("Given a username when registration fails then return error")

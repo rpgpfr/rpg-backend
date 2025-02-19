@@ -36,7 +36,9 @@ public class ApplicationSecurityConfig {
 			)
 			.cors(withDefaults())
 			.oauth2ResourceServer((oauth2) ->
-				oauth2.jwt(withDefaults())
+				oauth2.jwt((jwt) ->
+					jwt.decoder(jwtDecoder())
+				)
 			)
 			.build();
 	}
