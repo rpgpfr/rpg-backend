@@ -1,11 +1,13 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.RegisterRequestBody;
 import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.repository.UserJdbcRepository;
 import com.rpgproject.utils.BasicDatabaseExtension;
 import com.rpgproject.utils.EzDatabase;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,10 +54,11 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username when user is registered then return success")
 	void givenAUsername_whenUserIsRegistered_thenReturnSuccess() {
 		// Given
-		String username = "username";
+		RegisterRequestBody requestBody = new RegisterRequestBody("username");
+		HttpServletRequest request = mock(HttpServletRequest.class);
 
 		// When
-		ResponseEntity<String> actualResponse = authenticationController.registerUser(username);
+		ResponseEntity<String> actualResponse = authenticationController.registerUser(request, requestBody);
 
 		// Then
 		ResponseEntity<String> expectedResponse = ResponseEntity.ok().build();
@@ -67,14 +70,15 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username when registration fails then return error")
 	void givenAUsername_whenRegistrationFails_thenReturnError() {
 		// Given
-		String username = "username";
+		RegisterRequestBody requestBody = new RegisterRequestBody("username");
+		HttpServletRequest request = mock(HttpServletRequest.class);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
 		doThrow(new DataIntegrityViolationException("")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When
-		ResponseEntity<String> actualResponse = authenticationController.registerUser(username);
+		ResponseEntity<String> actualResponse = authenticationController.registerUser(request, requestBody);
 
 		// Then
 		ResponseEntity<String> expectedResponse = ResponseEntity.internalServerError().body("An error occurred while registering the user");

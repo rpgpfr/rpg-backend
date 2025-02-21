@@ -28,11 +28,11 @@ public class ApplicationSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		System.out.println("Audience " + audience);
-		System.out.println(issuer);
 		return http
 			.authorizeHttpRequests((authorize) ->
-				authorize.anyRequest().authenticated()
+				authorize
+					.requestMatchers("/register").permitAll()
+					.anyRequest().authenticated()
 			)
 			.cors(withDefaults())
 			.oauth2ResourceServer((oauth2) ->
