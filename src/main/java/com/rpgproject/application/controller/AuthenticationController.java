@@ -7,6 +7,7 @@ import com.rpgproject.domain.usecase.RegisterUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -21,6 +22,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/register")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerUser(@RequestBody RegisterRequestBody requestBody) {
 		ResponseEntity<String> result = registerUser.execute(requestBody.getUser());
 		return result;

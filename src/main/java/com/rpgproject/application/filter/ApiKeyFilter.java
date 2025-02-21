@@ -27,7 +27,7 @@ public class ApiKeyFilter implements Filter {
 
 		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 		String requestApiKey = httpRequest.getHeader("backend-api-key");
-
+		System.out.println("request API key: " + requestApiKey);
 		if (!StringUtils.equals(requestApiKey, apiKey)) {
 			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid API key");
 			throw new ServletException("Missing or invalid API key");
