@@ -1,5 +1,5 @@
 spring.application.name: rpg-project
-logging.level.root: error
+logging.level.root: trace
 
 spring:
   datasource:
@@ -15,3 +15,5 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${AUTH0_ISSUER}
+
+backend-api-key: ${BACKEND_API_KEY}
