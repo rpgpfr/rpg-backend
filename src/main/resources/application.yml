@@ -1,5 +1,5 @@
 spring.application.name: rpg-project
-logging.level.root: info
+logging.level.root: trace
 
 spring:
   datasource:

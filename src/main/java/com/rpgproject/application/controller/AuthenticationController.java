@@ -2,6 +2,7 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.RegisterRequestBody;
 import com.rpgproject.application.presenter.UserRestPresenter;
+import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.domain.usecase.RegisterUser;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<String> registerUser(@RequestBody RegisterRequestBody requestBody) {
-		return registerUser.execute(requestBody.getUser());
+		User user = new User(requestBody.getUser(), requestBody.getUsername());
+		return registerUser.execute(user);
 	}
-
 
 }

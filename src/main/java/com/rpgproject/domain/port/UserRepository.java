@@ -1,7 +1,9 @@
 package com.rpgproject.domain.port;
 
+import com.rpgproject.domain.entity.User;
+
 public interface UserRepository {
 
-	void register(String username);
+	void register(User user);
 
 }

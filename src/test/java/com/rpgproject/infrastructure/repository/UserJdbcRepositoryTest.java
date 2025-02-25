@@ -1,5 +1,6 @@
 package com.rpgproject.infrastructure.repository;
 
+import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
@@ -34,24 +36,24 @@ class UserJdbcRepositoryTest {
 	@DisplayName("Given a user When user is registered Then nothing happens")
 	void givenAUser_whenUserIsRegistered_thenNothingHappens() {
 		// Given
-		String username = "username";
+		User user = createUser();
 
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.register(username));
+		assertDoesNotThrow(() -> userJdbcRepository.register(user));
 	}
 
 	@Test
 	@DisplayName("Given a user When register fails Then exception is thrown")
 	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
 		// Given
-		String username = "username";
+		User user = createUser();
 
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(username)).isInstanceOf(CannotRegisterUserException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(CannotRegisterUserException.class);
 	}
 
 }

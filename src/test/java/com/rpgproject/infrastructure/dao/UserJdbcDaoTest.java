@@ -43,13 +43,14 @@ class UserJdbcDaoTest {
 	@DisplayName("Given a username When getting user by username Then user is returned")
 	void givenAUserName_whenGettingUserByUsername_thenUserIsReturned() {
 		// Given
-		String username = "alvin";
+		String id = "ID123";
 
 		// When
-		UserDTO actualUserDTO = userJdbcDao.getUserByUsername(username);
+		UserDTO actualUserDTO = userJdbcDao.getUserById(id);
 
 		// Then
 		UserDTO expectedUserDTO = new UserDTO(
+			"ID123",
 			"alvin",
 			"Alvin",
 			"Alvinson",
@@ -61,39 +62,26 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user is registered, then nothing happens")
-	void givenAUsernameWithNoIntroductionOrRpgKnowledge_whenUserIsRegistered_thenNothingHappens() {
+	@DisplayName("Given an id and a username, when user is registered, then nothing happens")
+	void givenAnIdAndAUsernameWithNoIntroductionOrRpgKnowledge_whenUserIsRegistered_thenNothingHappens() {
 		// Given
+		String id = "uniqueName";
 		String username = "username";
 
 		// When
-		userJdbcDao.register(username);
+		userJdbcDao.register(id, username);
 
 		// Then
 		UserDTO expectedUserDTO = CreationTestUtils.createUserDTO(null, null, null, null);
 
-		assertThat(userJdbcDao.getUserByUsername("username")).isEqualTo(expectedUserDTO);
-	}
-
-	@Test
-	@DisplayName("Given a UserDTO, when user is registered, then nothing happens")
-	void givenAUserDTOWithIntroductionAndRpgKnowledge_whenUserIsRegistered_thenNothingHappens() {
-		// Given
-		String username = "username";
-
-		// When
-		userJdbcDao.register(username);
-
-		// Then
-		UserDTO expectedUserDTO = CreationTestUtils.createUserDTO(null, null, null, null);
-
-		assertThat(userJdbcDao.getUserByUsername("username")).isEqualTo(expectedUserDTO);
+		assertThat(userJdbcDao.getUserById("uniqueName")).isEqualTo(expectedUserDTO);
 	}
 
 	@Test
 	@DisplayName("Given a UserDTO When register fails Then RuntimeException is thrown")
 	void givenAUserDTO_whenRegisterFails_thenRuntimeExceptionIsThrown() {
 		// Given
+		String id = "id";
 		String username = "username";
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
@@ -102,7 +90,7 @@ class UserJdbcDaoTest {
 		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.register(username)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.register(id, username)).isInstanceOf(RuntimeException.class);
 	}
 
 	@SneakyThrows
