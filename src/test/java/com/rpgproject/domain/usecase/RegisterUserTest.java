@@ -1,5 +1,6 @@
 package com.rpgproject.domain.usecase;
 
+import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.port.UserPresenter;
 import com.rpgproject.domain.port.UserRepository;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,10 +34,10 @@ class RegisterUserTest {
 	@DisplayName("Given a user When user is registered Then present success")
 	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
 		// Given
-		String username = "username";
+		User user = createUser();
 
 		// When
-		registerUser.execute(username);
+		registerUser.execute(user);
 
 		// Then
 		verify(userPresenter, times(1)).ok();
@@ -45,13 +47,13 @@ class RegisterUserTest {
 	@DisplayName("Given a user When register throw an exception Then present error")
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
-		String username = "username";
+		User user = createUser();
 		RuntimeException exception = new CannotRegisterUserException();
 
-		doThrow(exception).when(userRepository).register(username);
+		doThrow(exception).when(userRepository).register(user);
 
 		// When
-		registerUser.execute(username);
+		registerUser.execute(user);
 
 		// Then
 		verify(userPresenter, times(1)).error(exception);

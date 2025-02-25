@@ -12,5 +12,6 @@ import lombok.ToString;
 public class RegisterRequestBody {
 
 	private String user;
+	private String username;
 
 }

@@ -1,6 +1,7 @@
 package com.rpgproject.application.filter;
 
 
+import com.rpgproject.utils.IgnoreCoverage;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@IgnoreCoverage
 public class ApiKeyFilter implements Filter {
 
 	@Value("${BACKEND_API_KEY}")

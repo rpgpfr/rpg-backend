@@ -11,8 +11,8 @@ import java.util.Map;
 @Component
 public class UserJdbcDao {
 
-	private static final String GET_BY_USERNAME = "SELECT * FROM USERS WHERE USERNAME = :username";
-	private static final String REGISTER = "INSERT INTO USERS (USERNAME) VALUES (:username);";
+	private static final String GET_BY_USERNAME = "SELECT * FROM USERS WHERE ID = :id";
+	private static final String REGISTER = "INSERT INTO USERS (ID, USERNAME) VALUES (:id, :username);";
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -20,14 +20,17 @@ public class UserJdbcDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public UserDTO getUserByUsername(String username) {
-		Map<String, String> parameters = Map.of("username", username);
+	public UserDTO getUserById(String id) {
+		Map<String, String> parameters = Map.of("id", id);
 
 		return jdbcTemplate.queryForObject(GET_BY_USERNAME, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
 	}
 
-	public void register(String username) {
-		Map<String, String> parameters = Map.of("username", username);
+	public void register(String id, String username) {
+		Map<String, String> parameters = Map.of(
+			"id", id,
+			"username", username
+		);
 
 		try {
 			jdbcTemplate.update(REGISTER, parameters);

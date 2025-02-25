@@ -53,7 +53,7 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username when user is registered then return success")
 	void givenAUsername_whenUserIsRegistered_thenReturnSuccess() {
 		// Given
-		RegisterRequestBody requestBody = new RegisterRequestBody("username");
+		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
 
 		// When
 		ResponseEntity<String> actualResponse = authenticationController.registerUser(requestBody);
@@ -68,7 +68,7 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username when registration fails then return error")
 	void givenAUsername_whenRegistrationFails_thenReturnError() {
 		// Given
-		RegisterRequestBody requestBody = new RegisterRequestBody("username");
+		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
