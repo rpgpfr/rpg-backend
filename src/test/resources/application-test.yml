@@ -1,2 +1,11 @@
 spring.application.name: rpg-project
 logging.level.root: error
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://any/test
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+backend-api-key: apiKey
