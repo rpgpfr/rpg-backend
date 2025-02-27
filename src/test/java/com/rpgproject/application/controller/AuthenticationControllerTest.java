@@ -1,7 +1,7 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.RegisterRequestBody;
-import com.rpgproject.application.dto.responsebody.Response;
+import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.port.UserRepository;
@@ -58,10 +58,10 @@ class AuthenticationControllerTest {
 		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
 
 		// When
-		ResponseEntity<Response<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
@@ -77,10 +77,10 @@ class AuthenticationControllerTest {
 		doThrow(new DataIntegrityViolationException("")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When
-		ResponseEntity<Response<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new Response<>(null, "An error occurred while registering the user"));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "An error occurred while registering the user"));
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}

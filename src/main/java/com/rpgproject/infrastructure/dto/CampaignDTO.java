@@ -1,6 +1,10 @@
 package com.rpgproject.infrastructure.dto;
 
-import lombok.*;
+import com.rpgproject.utils.IgnoreCoverage;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,6 +29,7 @@ public class CampaignDTO {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		CampaignDTO that = (CampaignDTO) o;
@@ -32,6 +37,7 @@ public class CampaignDTO {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public int hashCode() {
 		return Objects.hash(getUserId(), getName());
 	}

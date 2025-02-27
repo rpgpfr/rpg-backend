@@ -1,12 +1,11 @@
 package com.rpgproject.application.presenter;
 
-import com.rpgproject.application.dto.responsebody.Response;
+import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +23,10 @@ class UserRestPresenterTest {
 	@DisplayName("Should return an empty response entity")
 	void shouldReturnAnEmptyResponseEntity() {
 		// Act
-		ResponseEntity<Response<UserViewModel>> actualResponseEntity = userRestPresenter.ok();
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -39,10 +38,10 @@ class UserRestPresenterTest {
 		CannotRegisterUserException exception = new CannotRegisterUserException();
 
 		// Act
-		ResponseEntity<Response<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new Response<>(null, "An error occurred while registering the user"));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "An error occurred while registering the user"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
