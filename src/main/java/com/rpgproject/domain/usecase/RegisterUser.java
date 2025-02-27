@@ -2,17 +2,17 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
-import com.rpgproject.domain.port.UserPresenter;
+import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 
 public class RegisterUser<T> {
 
 	private final UserRepository userRepository;
-	private final UserPresenter<T> userPresenter;
+	private final Presenter<User, T> userPresenter;
 
-	public RegisterUser(UserRepository userRepository, UserPresenter<T> userPresenter) {
+	public RegisterUser(UserRepository userRepository, Presenter<User, T> presenter) {
 		this.userRepository = userRepository;
-		this.userPresenter = userPresenter;
+		this.userPresenter = presenter;
 	}
 
 	public T execute(User user) {

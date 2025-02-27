@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
-import com.rpgproject.domain.port.UserPresenter;
+import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,11 +23,11 @@ class RegisterUserTest {
 	private UserRepository userRepository;
 
 	@Mock
-	private UserPresenter<?> userPresenter;
+	private Presenter<User, ?> presenter;
 
 	@BeforeEach
 	public void setUp() {
-		registerUser = new RegisterUser<>(userRepository, userPresenter);
+		registerUser = new RegisterUser<>(userRepository, presenter);
 	}
 
 	@Test
@@ -40,7 +40,7 @@ class RegisterUserTest {
 		registerUser.execute(user);
 
 		// Then
-		verify(userPresenter, times(1)).ok();
+		verify(presenter, times(1)).ok();
 	}
 
 	@Test
@@ -56,7 +56,7 @@ class RegisterUserTest {
 		registerUser.execute(user);
 
 		// Then
-		verify(userPresenter, times(1)).error(exception);
+		verify(presenter, times(1)).error(exception);
 	}
 
 }

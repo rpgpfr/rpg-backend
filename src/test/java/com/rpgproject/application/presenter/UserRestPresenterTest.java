@@ -21,20 +21,20 @@ class UserRestPresenterTest {
 	}
 
 	@Test
-	@DisplayName("Should return a 200 ResponseEntity")
-	void shouldReturnA200ResponseEntity() {
+	@DisplayName("Should return an empty response entity")
+	void shouldReturnAnEmptyResponseEntity() {
 		// Act
 		ResponseEntity<Response<UserViewModel>> actualResponseEntity = userRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.status(HttpStatus.OK).build();
+		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
-	@DisplayName("Should return a 500 ResponseEntity with error message")
-	void shouldReturnA500ResponseEntityWithErrorMessage() {
+	@DisplayName("Should return a response with an error message")
+	void shouldReturnA500ResponseEntityWithAnErrorMessage() {
 		// Arrange
 		CannotRegisterUserException exception = new CannotRegisterUserException();
 
@@ -42,7 +42,7 @@ class UserRestPresenterTest {
 		ResponseEntity<Response<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response<>(null, "An error occurred while registering the user"));
+		ResponseEntity<Response<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new Response<>(null, "An error occurred while registering the user"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

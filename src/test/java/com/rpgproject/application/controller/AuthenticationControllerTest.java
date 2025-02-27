@@ -61,7 +61,7 @@ class AuthenticationControllerTest {
 		ResponseEntity<Response<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.ok().build();
+		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
@@ -80,7 +80,7 @@ class AuthenticationControllerTest {
 		ResponseEntity<Response<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.internalServerError().body(new Response<>(null, "An error occurred while registering the user"));
+		ResponseEntity<Response<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new Response<>(null, "An error occurred while registering the user"));
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
