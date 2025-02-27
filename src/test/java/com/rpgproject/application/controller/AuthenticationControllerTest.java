@@ -50,7 +50,7 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a username when user is registered then return success")
+	@DisplayName("Given a username, when user is registered, then return success")
 	void givenAUsername_whenUserIsRegistered_thenReturnSuccess() {
 		// Given
 		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
@@ -65,7 +65,7 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a username when registration fails then return error")
+	@DisplayName("Given a username, when registration fails, then return error")
 	void givenAUsername_whenRegistrationFails_thenReturnError() {
 		// Given
 		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");

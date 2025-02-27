@@ -31,7 +31,7 @@ class RegisterUserTest {
 	}
 
 	@Test
-	@DisplayName("Given a user When user is registered Then present success")
+	@DisplayName("Given a user, when user is registered, then present success")
 	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
 		// Given
 		User user = createUser();
@@ -44,7 +44,7 @@ class RegisterUserTest {
 	}
 
 	@Test
-	@DisplayName("Given a user When register throw an exception Then present error")
+	@DisplayName("Given a user, when register throw an exception, then present error")
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
