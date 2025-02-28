@@ -1,5 +1,6 @@
 package com.rpgproject.utils;
 
+import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
@@ -24,6 +25,14 @@ public class CreationTestUtils {
 			lastName,
 			introduction,
 			rpgKnowledge
+		);
+	}
+
+	public static List<CampaignViewModel> createCampaignViewModels() {
+		return List.of(
+			new CampaignViewModel("campagne 1"),
+			new CampaignViewModel("campagne 2"),
+			new CampaignViewModel("campagne 3")
 		);
 	}
 

@@ -26,7 +26,7 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> registerUser(@RequestBody RegisterRequestBody requestBody) {
-		User user = new User(requestBody.getUser(), requestBody.getUsername());
+		User user = new User(requestBody.user(), requestBody.username());
 
 		return registerUser.execute(user);
 	}

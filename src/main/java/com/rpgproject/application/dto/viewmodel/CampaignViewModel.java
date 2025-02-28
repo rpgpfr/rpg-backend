@@ -1,4 +1,5 @@
 package com.rpgproject.application.dto.viewmodel;
 
-public record UserViewModel() {
+public record CampaignViewModel(String name) {
+
 }
