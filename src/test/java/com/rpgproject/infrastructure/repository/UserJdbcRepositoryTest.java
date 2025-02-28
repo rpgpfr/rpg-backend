@@ -33,7 +33,7 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user When user is registered Then nothing happens")
+	@DisplayName("Given a user, when user is registered, then nothing happens")
 	void givenAUser_whenUserIsRegistered_thenNothingHappens() {
 		// Given
 		User user = createUser();
@@ -45,7 +45,7 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user When register fails Then exception is thrown")
+	@DisplayName("Given a user, when register fails, then exception is thrown")
 	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
 		// Given
 		User user = createUser();

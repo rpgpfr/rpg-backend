@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
-import com.rpgproject.domain.port.UserPresenter;
+import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,15 +23,15 @@ class RegisterUserTest {
 	private UserRepository userRepository;
 
 	@Mock
-	private UserPresenter<?> userPresenter;
+	private Presenter<User, ?> presenter;
 
 	@BeforeEach
 	public void setUp() {
-		registerUser = new RegisterUser<>(userRepository, userPresenter);
+		registerUser = new RegisterUser<>(userRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a user When user is registered Then present success")
+	@DisplayName("Given a user, when user is registered, then present success")
 	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
 		// Given
 		User user = createUser();
@@ -40,11 +40,11 @@ class RegisterUserTest {
 		registerUser.execute(user);
 
 		// Then
-		verify(userPresenter, times(1)).ok();
+		verify(presenter, times(1)).ok();
 	}
 
 	@Test
-	@DisplayName("Given a user When register throw an exception Then present error")
+	@DisplayName("Given a user, when register throw an exception, then present error")
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
@@ -56,7 +56,7 @@ class RegisterUserTest {
 		registerUser.execute(user);
 
 		// Then
-		verify(userPresenter, times(1)).error(exception);
+		verify(presenter, times(1)).error(exception);
 	}
 
 }

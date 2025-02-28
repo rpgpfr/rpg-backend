@@ -1,6 +1,8 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.RegisterRequestBody;
+import com.rpgproject.application.dto.responsebody.ResponseViewModel;
+import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
@@ -50,22 +52,22 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a username when user is registered then return success")
+	@DisplayName("Given a username, when user is registered, then return success")
 	void givenAUsername_whenUserIsRegistered_thenReturnSuccess() {
 		// Given
 		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
 
 		// When
-		ResponseEntity<String> actualResponse = authenticationController.registerUser(requestBody);
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<String> expectedResponse = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
 
 	@Test
-	@DisplayName("Given a username when registration fails then return error")
+	@DisplayName("Given a username, when registration fails, then return error")
 	void givenAUsername_whenRegistrationFails_thenReturnError() {
 		// Given
 		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
@@ -75,10 +77,10 @@ class AuthenticationControllerTest {
 		doThrow(new DataIntegrityViolationException("")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When
-		ResponseEntity<String> actualResponse = authenticationController.registerUser(requestBody);
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<String> expectedResponse = ResponseEntity.internalServerError().body("An error occurred while registering the user");
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "An error occurred while registering the user"));
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}

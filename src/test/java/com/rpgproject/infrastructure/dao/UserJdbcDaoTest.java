@@ -40,7 +40,7 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a username When getting user by username Then user is returned")
+	@DisplayName("Given a username, when getting user by username, then user is returned")
 	void givenAUserName_whenGettingUserByUsername_thenUserIsReturned() {
 		// Given
 		String id = "ID123";
@@ -78,7 +78,7 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO When register fails Then RuntimeException is thrown")
+	@DisplayName("Given a UserDTO, when register fails, then RuntimeException is thrown")
 	void givenAUserDTO_whenRegisterFails_thenRuntimeExceptionIsThrown() {
 		// Given
 		String id = "id";
