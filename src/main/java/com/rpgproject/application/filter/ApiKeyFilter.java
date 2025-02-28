@@ -25,11 +25,9 @@ public class ApiKeyFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-		System.out.println("Hello world");
-
 		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 		String requestApiKey = httpRequest.getHeader("backend-api-key");
-		System.out.println("request API key: " + requestApiKey);
+
 		if (!StringUtils.equals(requestApiKey, apiKey)) {
 			((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid API key");
 			throw new ServletException("Missing or invalid API key");

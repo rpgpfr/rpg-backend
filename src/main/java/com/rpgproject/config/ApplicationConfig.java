@@ -14,15 +14,15 @@ public class ApplicationConfig {
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-
 		if (new File("/etc/secrets/.env").exists()) {
 			PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
 			configurer.setLocation(new FileSystemResource("/etc/secrets/.env"));
+
 			return configurer;
 		} else {
-			System.out.println("hello");
 			PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
 			configurer.setLocation(new FileSystemResource(".env"));
+
 			return configurer;
 		}
 	}

@@ -5,9 +5,11 @@ import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.Presenter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class CampaignsRestPresenter implements Presenter<List<Campaign>, ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> {
 
 	@Override
