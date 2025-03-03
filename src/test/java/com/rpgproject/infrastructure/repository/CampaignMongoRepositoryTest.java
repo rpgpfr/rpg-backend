@@ -33,6 +33,7 @@ class CampaignMongoRepositoryTest {
 	public void setUp() {
 		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		campaignMongoRepository = new CampaignMongoRepository(campaignMongoDao);
+
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
 	}
 
@@ -54,6 +55,21 @@ class CampaignMongoRepositoryTest {
 		List<Campaign> expectedCampaigns = createCampaigns();
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
+	@DisplayName("Given a userId, when getting the number of campaigns created by the user, then the count is returned")
+	void givenAUserId_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
+		// Given
+		String userId = "username";
+
+		// When
+		long actualCount = campaignMongoRepository.getCountByUserId(userId);
+
+		// Then
+		long expectedCount = 3;
+
+		assertThat(actualCount).isEqualTo(expectedCount);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
+import com.rpgproject.domain.entity.UserProfile;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
@@ -22,6 +23,11 @@ public class UserJdbcRepository implements UserRepository {
 		} catch (RuntimeException e) {
 			throw new CannotRegisterUserException();
 		}
+	}
+
+	@Override
+	public User getUserByUniqueName(String uniqueName) {
+		return null;
 	}
 
 }

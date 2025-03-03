@@ -31,4 +31,9 @@ public class CampaignMongoRepository implements CampaignRepository {
 			.toList();
 	}
 
+	@Override
+	public long getCountByUserId(String userId) {
+		return campaignMongoDao.getCountByUserId(userId);
+	}
+
 }

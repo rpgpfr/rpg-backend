@@ -3,12 +3,17 @@ package com.rpgproject.utils;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.User;
+import com.rpgproject.domain.entity.UserProfile;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import com.rpgproject.infrastructure.dto.UserDTO;
 
 import java.util.List;
 
 public class CreationTestUtils {
+
+	public static UserProfile createUserProfile() {
+		return new UserProfile(createUser(), 1, 1, 1, 3);
+	}
 
 	public static User createUser() {
 		return new User(

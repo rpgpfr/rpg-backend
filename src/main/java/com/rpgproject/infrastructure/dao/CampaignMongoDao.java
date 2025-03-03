@@ -22,4 +22,8 @@ public class CampaignMongoDao {
 		return mongoTemplate.query(CampaignDTO.class).matching(query(where("userId").is(userId))).all();
 	}
 
+	public long getCountByUserId(String userId) {
+		return mongoTemplate.query(CampaignDTO.class).matching(query(where("userId").is(userId))).count();
+	}
+
 }

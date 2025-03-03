@@ -1,23 +1,69 @@
 package com.rpgproject.domain.usecase;
 
+import com.rpgproject.domain.entity.User;
+import com.rpgproject.domain.entity.UserProfile;
+import com.rpgproject.domain.port.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.rpgproject.domain.port.UserPresenter;
-import com.rpgproject.domain.port.UserRepository;
+import static com.rpgproject.utils.CreationTestUtils.createUser;
+import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserProfileTest {
 
-    private GetUserProfile getUserProfile;
+	private GetUserProfile<?> getUserProfile;
 
 	@Mock
 	private UserRepository userRepository;
 
+	@Mock
+	private CampaignRepository campaignRepository;
+
+	@Mock
+	private MapRepository mapRepository;
+
+	@Mock
+	private CharacterRepository characterRepository;
+
+	@Mock
+	private Presenter<UserProfile, ?> presenter;
+
 	@BeforeEach
 	public void setUp() {
-		getUserProfile = new GetUserProfile(userRepository);
+		getUserProfile = new GetUserProfile<>(userRepository, campaignRepository, mapRepository, characterRepository, presenter);
+	}
+
+	@Test
+	@DisplayName("Given a user's uniquename, when accessing the user's profile, then all the profile's information are sent")
+	void givenAUsername_whenAccessingTheUsersProfile_thenAllTheProfilesInformationAreSent() {
+		// Given
+		String uniqueName = "uniqueName";
+		User user = createUser();
+
+		when(userRepository.getUserByUniqueName(uniqueName)).thenReturn(user);
+		when(campaignRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
+		when(mapRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
+		when(characterRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
+
+		// When
+		getUserProfile.execute(uniqueName);
+
+		// Then
+		String expectedUniqueName = "uniqueName";
+		UserProfile expectedUserProfile = createUserProfile();
+
+		verify(userRepository).getUserByUniqueName(expectedUniqueName);
+		verify(campaignRepository).getCountByUserId(expectedUniqueName);
+		verify(mapRepository).getCountByUserId(expectedUniqueName);
+		verify(characterRepository).getCountByUserId(expectedUniqueName);
+		verify(presenter).ok(expectedUserProfile);
 	}
 
 }

@@ -8,4 +8,6 @@ public interface CampaignRepository {
 
 	List<Campaign> getCampaignsByUserId(String userId);
 
+	long getCountByUserId(String userId);
+
 }
