@@ -5,6 +5,8 @@ import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
+import com.rpgproject.infrastructure.dto.CharacterDTO;
+import com.rpgproject.infrastructure.dto.MapDTO;
 import com.rpgproject.infrastructure.dto.UserDTO;
 
 import java.util.List;
@@ -43,9 +45,9 @@ public class CreationTestUtils {
 
 	public static List<Campaign> createCampaigns() {
 		return List.of(
-			new Campaign("campagne 1"),
-			new Campaign("campagne 2"),
-			new Campaign("campagne 3")
+			new Campaign("username", "campagne 1"),
+			new Campaign("username", "campagne 2"),
+			new Campaign("username", "campagne 3")
 		);
 	}
 
@@ -54,6 +56,22 @@ public class CreationTestUtils {
 			new CampaignDTO("username", "campagne 1"),
 			new CampaignDTO("username", "campagne 2"),
 			new CampaignDTO("username", "campagne 3")
+		);
+	}
+
+	public static List<MapDTO> createMapDTOs() {
+		return List.of(
+			new MapDTO("username", "map 1"),
+			new MapDTO("username", "map 2"),
+			new MapDTO("username", "map 3")
+		);
+	}
+
+	public static List<CharacterDTO> createCharacterDTOs() {
+		return List.of(
+			new CharacterDTO("username", "character 1"),
+			new CharacterDTO("username", "character 2"),
+			new CharacterDTO("username", "character 3")
 		);
 	}
 

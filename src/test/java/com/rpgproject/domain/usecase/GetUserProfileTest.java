@@ -48,9 +48,9 @@ public class GetUserProfileTest {
 		User user = createUser();
 
 		when(userRepository.getUserByUniqueName(uniqueName)).thenReturn(user);
-		when(campaignRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
-		when(mapRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
-		when(characterRepository.getCountByUserId(uniqueName)).thenReturn((long) 1);
+		when(campaignRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
+		when(mapRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
+		when(characterRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
 
 		// When
 		getUserProfile.execute(uniqueName);
@@ -60,9 +60,9 @@ public class GetUserProfileTest {
 		UserProfile expectedUserProfile = createUserProfile();
 
 		verify(userRepository).getUserByUniqueName(expectedUniqueName);
-		verify(campaignRepository).getCountByUserId(expectedUniqueName);
-		verify(mapRepository).getCountByUserId(expectedUniqueName);
-		verify(characterRepository).getCountByUserId(expectedUniqueName);
+		verify(campaignRepository).getCountByOwner(expectedUniqueName);
+		verify(mapRepository).getCountByOwner(expectedUniqueName);
+		verify(characterRepository).getCountByOwner(expectedUniqueName);
 		verify(presenter).ok(expectedUserProfile);
 	}
 

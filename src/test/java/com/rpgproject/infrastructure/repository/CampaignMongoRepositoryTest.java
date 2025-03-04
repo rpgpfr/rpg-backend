@@ -49,7 +49,7 @@ class CampaignMongoRepositoryTest {
 		String userId = "username";
 
 		// When
-		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByUserId(userId);
+		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner(userId);
 
 		// Then
 		List<Campaign> expectedCampaigns = createCampaigns();
@@ -64,7 +64,7 @@ class CampaignMongoRepositoryTest {
 		String userId = "username";
 
 		// When
-		long actualCount = campaignMongoRepository.getCountByUserId(userId);
+		long actualCount = campaignMongoRepository.getCountByOwner(userId);
 
 		// Then
 		long expectedCount = 3;

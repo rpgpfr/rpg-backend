@@ -39,13 +39,13 @@ class GetAllCampaignsByUserIdTest {
 		String userId = "userId";
 		List<Campaign> campaigns = createCampaigns();
 
-		when(campaignRepository.getCampaignsByUserId(userId)).thenReturn(campaigns);
+		when(campaignRepository.getCampaignsByOwner(userId)).thenReturn(campaigns);
 
 		// When
 		getAllCampaignsByUserId.execute(userId);
 
 		// Then
-		verify(campaignRepository).getCampaignsByUserId(userId);
+		verify(campaignRepository).getCampaignsByOwner(userId);
 		verify(campaignsPresenter).ok(campaigns);
 	}
 

@@ -1,7 +1,6 @@
 package com.rpgproject.domain.port;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.entity.UserProfile;
 
 public interface UserRepository {
 

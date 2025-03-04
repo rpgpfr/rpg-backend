@@ -22,9 +22,9 @@ public class GetUserProfile<T> {
 
 	public T execute(String uniqueName) {
 		User user = userRepository.getUserByUniqueName(uniqueName);
-		long campaignsCount = campaignRepository.getCountByUserId(uniqueName);
-		long mapsCount = mapRepository.getCountByUserId(uniqueName);
-		long charactersCount = characterRepository.getCountByUserId(uniqueName);
+		long campaignsCount = campaignRepository.getCountByOwner(uniqueName);
+		long mapsCount = mapRepository.getCountByOwner(uniqueName);
+		long charactersCount = characterRepository.getCountByOwner(uniqueName);
 		long resourcesCount = campaignsCount + mapsCount + charactersCount;
 
 		UserProfile userProfile = new UserProfile(user, campaignsCount, mapsCount, charactersCount, resourcesCount);

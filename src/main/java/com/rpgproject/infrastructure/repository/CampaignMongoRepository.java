@@ -18,7 +18,7 @@ public class CampaignMongoRepository implements CampaignRepository {
 	}
 
 	@Override
-	public List<Campaign> getCampaignsByUserId(String userId) {
+	public List<Campaign> getCampaignsByOwner(String userId) {
 		List<CampaignDTO> campaignDTOs = campaignMongoDao.findAllCampaignsByUserId(userId);
 
 		return mapToCampaigns(campaignDTOs);
@@ -27,12 +27,12 @@ public class CampaignMongoRepository implements CampaignRepository {
 	private List<Campaign> mapToCampaigns(List<CampaignDTO> campaignDTOs) {
 		return campaignDTOs
 			.stream()
-			.map(dto -> new Campaign(dto.getName()))
+			.map(dto -> new Campaign(dto.getUserId(), dto.getName()))
 			.toList();
 	}
 
 	@Override
-	public long getCountByUserId(String userId) {
+	public long getCountByOwner(String userId) {
 		return campaignMongoDao.getCountByUserId(userId);
 	}
 
