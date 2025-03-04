@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,11 @@ public class UserJdbcDao {
 	public UserDTO getUserById(String id) {
 		Map<String, String> parameters = Map.of("id", id);
 
-		return jdbcTemplate.queryForObject(GET_BY_USERNAME, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
+		try {
+			return jdbcTemplate.queryForObject(GET_BY_USERNAME, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
+		} catch (EmptyResultDataAccessException e) {
+			throw new RuntimeException("User not found");
+		}
 	}
 
 	public void register(String id, String username) {

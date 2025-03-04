@@ -2,6 +2,7 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
+import com.rpgproject.domain.exception.UserNotFoundException;
 import com.rpgproject.domain.port.*;
 
 public class GetUserProfile<T> {
@@ -21,15 +22,19 @@ public class GetUserProfile<T> {
 	}
 
 	public T execute(String uniqueName) {
-		User user = userRepository.getUserByUniqueName(uniqueName);
-		long campaignsCount = campaignRepository.getCountByOwner(uniqueName);
-		long mapsCount = mapRepository.getCountByOwner(uniqueName);
-		long charactersCount = characterRepository.getCountByOwner(uniqueName);
-		long resourcesCount = campaignsCount + mapsCount + charactersCount;
+		try {
+			User user = userRepository.getUserByUniqueName(uniqueName);
+			long campaignsCount = campaignRepository.getCountByOwner(uniqueName);
+			long mapsCount = mapRepository.getCountByOwner(uniqueName);
+			long charactersCount = characterRepository.getCountByOwner(uniqueName);
+			long resourcesCount = campaignsCount + mapsCount + charactersCount;
 
-		UserProfile userProfile = new UserProfile(user, campaignsCount, mapsCount, charactersCount, resourcesCount);
+			UserProfile userProfile = new UserProfile(user, campaignsCount, mapsCount, charactersCount, resourcesCount);
 
-		return presenter.ok(userProfile);
+			return presenter.ok(userProfile);
+		} catch (UserNotFoundException e) {
+			return presenter.error(e);
+		}
 	}
 
 }

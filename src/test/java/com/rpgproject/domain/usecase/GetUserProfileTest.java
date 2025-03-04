@@ -2,6 +2,7 @@ package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
+import com.rpgproject.domain.exception.UserNotFoundException;
 import com.rpgproject.domain.port.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserProfileTest {
@@ -64,6 +65,23 @@ public class GetUserProfileTest {
 		verify(mapRepository).getCountByOwner(expectedUniqueName);
 		verify(characterRepository).getCountByOwner(expectedUniqueName);
 		verify(presenter).ok(expectedUserProfile);
+	}
+
+	@Test
+	@DisplayName("Given a user's uniquename, when the user does not exist, then an error is sent")
+	void givenAUsername_whenTheUserDoesNotExist_thenAnErrorIsSent() {
+		// Given
+		String uniqueName = "uniqueName";
+		UserNotFoundException exception = new UserNotFoundException();
+
+		doThrow(exception).when(userRepository).getUserByUniqueName(uniqueName);
+
+		// When
+		getUserProfile.execute(uniqueName);
+
+		// Then
+
+		verify(presenter).error(exception);
 	}
 
 }
