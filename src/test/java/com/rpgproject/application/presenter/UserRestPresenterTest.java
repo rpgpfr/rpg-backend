@@ -33,7 +33,7 @@ class UserRestPresenterTest {
 
 	@Test
 	@DisplayName("Should return a response with an error message")
-	void shouldReturnA500ResponseEntityWithAnErrorMessage() {
+	void shouldReturnA400ResponseEntityWithAnErrorMessage() {
 		// Arrange
 		CannotRegisterUserException exception = new CannotRegisterUserException();
 

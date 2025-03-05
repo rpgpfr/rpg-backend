@@ -17,7 +17,7 @@ public class GetAllCampaignsByUserId<T> {
 	}
 
 	public T execute(String userId) {
-		List<Campaign> campaigns = campaignRepository.getCampaignsByUserId(userId);
+		List<Campaign> campaigns = campaignRepository.getCampaignsByOwner(userId);
 
 		return campaignsPresenter.ok(campaigns);
 	}

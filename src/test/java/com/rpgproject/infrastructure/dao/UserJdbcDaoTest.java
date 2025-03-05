@@ -40,8 +40,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when getting user by username, then user is returned")
-	void givenAUserName_whenGettingUserByUsername_thenUserIsReturned() {
+	@DisplayName("Given a username, when user exists, then user is returned")
+	void givenAUserName_whenUserExists_thenUserIsReturned() {
 		// Given
 		String id = "ID123";
 
@@ -59,6 +59,16 @@ class UserJdbcDaoTest {
 		);
 
 		assertThat(actualUserDTO).isEqualTo(expectedUserDTO);
+	}
+
+	@Test
+	@DisplayName("Given a username, when user does not exist then an error is thrown")
+	void givenAUserName_whenGettingUserByUsername_thenUserIsReturned() {
+		// Given
+		String id = "ID124";
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.getUserById(id)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test

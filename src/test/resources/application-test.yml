@@ -5,7 +5,5 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_URL}/test?retryWrites=true&w=majority&appName=rpg-project
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 backend-api-key: apiKey
