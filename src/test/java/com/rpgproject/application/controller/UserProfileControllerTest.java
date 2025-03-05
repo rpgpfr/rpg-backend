@@ -103,6 +103,7 @@ class UserProfileControllerTest {
 				"Alvin",
 				"Alvinson",
 				null,
+				null,
 				0,
 				0,
 				0,

@@ -38,6 +38,7 @@ class UserProfileRestPresenterTest {
 				null,
 				null,
 				null,
+				null,
 				1,
 				1,
 				1,

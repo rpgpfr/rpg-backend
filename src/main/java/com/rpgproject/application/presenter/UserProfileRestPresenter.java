@@ -28,6 +28,7 @@ public class UserProfileRestPresenter implements Presenter<UserProfile, Response
 			userProfile.user().firstName(),
 			userProfile.user().lastName(),
 			userProfile.user().description(),
+			userProfile.user().rpgKnowledge(),
 			userProfile.campaignCount(),
 			userProfile.mapCount(),
 			userProfile.characterCount(),
