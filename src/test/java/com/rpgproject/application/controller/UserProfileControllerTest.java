@@ -4,7 +4,6 @@ import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
 import com.rpgproject.application.presenter.UserProfileRestPresenter;
 import com.rpgproject.config.ApplicationConfig;
-import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.CharacterMongoDao;
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,7 +35,6 @@ import java.util.HashMap;
 import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
 import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")

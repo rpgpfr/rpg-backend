@@ -2,7 +2,6 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
-import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.UserProfile;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import org.junit.jupiter.api.BeforeEach;

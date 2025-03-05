@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
