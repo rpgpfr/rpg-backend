@@ -34,8 +34,9 @@ class UserProfileRestPresenterTest {
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expected = ResponseEntity.ok(
 			new ResponseViewModel<>(new UserProfileViewModel(
 				"username",
-				null,
-				null,
+				"mail@example2.com",
+				"firstName",
+				"lastName",
 				null,
 				null,
 				1,

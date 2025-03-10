@@ -35,8 +35,6 @@ class AuthenticationControllerTest {
 
 	private AuthenticationController authenticationController;
 	private UserJdbcDao userJdbcDao;
-	private UserRepository userRepository;
-	private UserRestPresenter userRestPresenter;
 
 	@EzDatabase
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -44,8 +42,8 @@ class AuthenticationControllerTest {
 	@BeforeEach
 	public void setUp() {
 		userJdbcDao = new UserJdbcDao(jdbcTemplate);
-		userRepository = new UserJdbcRepository(userJdbcDao);
-		userRestPresenter = new UserRestPresenter();
+		UserRepository userRepository = new UserJdbcRepository(userJdbcDao);
+		UserRestPresenter userRestPresenter = new UserRestPresenter();
 		authenticationController = new AuthenticationController(userRepository, userRestPresenter);
 
 		initTables();
@@ -55,7 +53,7 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username, when user is registered, then return success")
 	void givenAUsername_whenUserIsRegistered_thenReturnSuccess() {
 		// Given
-		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
+		RegisterRequestBody requestBody = new RegisterRequestBody("username", "mail2@example.com", "firstName", "lastName", "password");
 
 		// When
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
@@ -70,7 +68,7 @@ class AuthenticationControllerTest {
 	@DisplayName("Given a username, when registration fails, then return error")
 	void givenAUsername_whenRegistrationFails_thenReturnError() {
 		// Given
-		RegisterRequestBody requestBody = new RegisterRequestBody("id", "username");
+		RegisterRequestBody requestBody = new RegisterRequestBody("username", "mail@example.com", "firstName", "lastName", "password");
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);

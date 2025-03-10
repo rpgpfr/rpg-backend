@@ -4,7 +4,7 @@ import com.rpgproject.domain.entity.User;
 
 public interface UserRepository {
 
-	User getUserByUniqueName(String uniqueName);
+	User getUserByIdentifier(String identifier);
 
 	void register(User user);
 

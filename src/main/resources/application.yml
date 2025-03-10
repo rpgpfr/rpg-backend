@@ -1,7 +1,9 @@
 spring.application.name: rpg-project
-logging.level.root: info
+logging.level.root: trace
 
 spring:
+  config:
+    import: "optional:file:.env[.properties],optional:file:/etc/secrets/.env[.properties]"
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${POSTGRE_URL}

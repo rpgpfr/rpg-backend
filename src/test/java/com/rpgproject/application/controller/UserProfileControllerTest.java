@@ -85,20 +85,21 @@ class UserProfileControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a unique name, when user exists, then user profile is returned")
-	void givenAUniqueName_whenUserExists_thenUserProfileIsReturned() {
+	@DisplayName("Given a username, when user exists, then user profile is returned")
+	void givenAUsername_whenUserExists_thenUserProfileIsReturned() {
 		// Given
-		String uniqueName = "ID123";
+		String username = "alvin";
 
 		// When
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.test(uniqueName);
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.test(username);
 
 		// Then
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(new UserProfileViewModel(
 				"alvin",
+				"mail@example.com",
 				"Alvin",
-				"Alvinson",
+				"Hamaide",
 				null,
 				null,
 				0,

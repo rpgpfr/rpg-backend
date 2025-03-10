@@ -2,7 +2,6 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
 import com.rpgproject.utils.BasicDatabaseExtension;
-import com.rpgproject.utils.CreationTestUtils;
 import com.rpgproject.utils.EzDatabase;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
 import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -43,17 +43,41 @@ class UserJdbcDaoTest {
 	@DisplayName("Given a username, when user exists, then user is returned")
 	void givenAUserName_whenUserExists_thenUserIsReturned() {
 		// Given
-		String id = "ID123";
+		String username = "alvin";
 
 		// When
-		UserDTO actualUserDTO = userJdbcDao.getUserById(id);
+		UserDTO actualUserDTO = userJdbcDao.getUserByIdentifier(username);
 
 		// Then
 		UserDTO expectedUserDTO = new UserDTO(
-			"ID123",
 			"alvin",
+			"mail@example.com",
 			"Alvin",
-			"Alvinson",
+			"Hamaide",
+			"password",
+			null,
+			null
+		);
+
+		assertThat(actualUserDTO).isEqualTo(expectedUserDTO);
+	}
+
+	@Test
+	@DisplayName("Given an email, when user exists, then user is returned")
+	void givenAnEmail_whenUserExists_thenUserIsReturned() {
+		// Given
+		String email = "mail@example.com";
+
+		// When
+		UserDTO actualUserDTO = userJdbcDao.getUserByIdentifier(email);
+
+		// Then
+		UserDTO expectedUserDTO = new UserDTO(
+			"alvin",
+			"mail@example.com",
+			"Alvin",
+			"Hamaide",
+			"password",
 			null,
 			null
 		);
@@ -63,36 +87,34 @@ class UserJdbcDaoTest {
 
 	@Test
 	@DisplayName("Given a username, when user does not exist then an error is thrown")
-	void givenAUserName_whenGettingUserByUsername_thenUserIsReturned() {
+	void givenAUsername_whenGettingUserByUsername_thenUserIsReturned() {
 		// Given
-		String id = "ID124";
+		String username = "usernaaaaame";
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.getUserById(id)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.getUserByIdentifier(username)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
-	@DisplayName("Given an id and a username, when user is registered, then nothing happens")
+	@DisplayName("Given a UserDTO, when user is registered, then nothing happens")
 	void givenAnIdAndAUsernameWithNoIntroductionOrRpgKnowledge_whenUserIsRegistered_thenNothingHappens() {
 		// Given
-		String id = "uniqueName";
-		String username = "username";
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 
 		// When
-		userJdbcDao.register(id, username);
+		userJdbcDao.register(userDTO);
 
 		// Then
-		UserDTO expectedUserDTO = CreationTestUtils.createUserDTO(null, null, null, null);
+		UserDTO expectedUserDTO = createUserDTO("firstName", "lastName", null, null, null);
 
-		assertThat(userJdbcDao.getUserById("uniqueName")).isEqualTo(expectedUserDTO);
+		assertThat(userJdbcDao.getUserByIdentifier("username")).isEqualTo(expectedUserDTO);
 	}
 
 	@Test
 	@DisplayName("Given a UserDTO, when register fails, then RuntimeException is thrown")
 	void givenAUserDTO_whenRegisterFails_thenRuntimeExceptionIsThrown() {
 		// Given
-		String id = "id";
-		String username = "username";
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
@@ -100,7 +122,7 @@ class UserJdbcDaoTest {
 		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.register(id, username)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.register(userDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@SneakyThrows

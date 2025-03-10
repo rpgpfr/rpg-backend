@@ -26,8 +26,8 @@ public class UserProfileController {
 	}
 
 	@GetMapping("/")
-	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> test(@CurrentOwner String uniqueName) {
-		return getUserProfile.execute(uniqueName);
+	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> test(@CurrentOwner String username) {
+		return getUserProfile.execute(username);
 	}
 
 }

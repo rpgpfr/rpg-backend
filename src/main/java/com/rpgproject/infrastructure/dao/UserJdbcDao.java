@@ -7,13 +7,15 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class UserJdbcDao {
 
-	private static final String GET_BY_USERNAME = "SELECT * FROM USERS WHERE ID = :id";
-	private static final String REGISTER = "INSERT INTO USERS (ID, USERNAME) VALUES (:id, :username);";
+	private static final String GET_BY_USERNAME = "SELECT * FROM USERS WHERE USERNAME = :identifier OR EMAIL = :identifier";
+	private static final String REGISTER_START = "INSERT INTO USERS (USERNAME, EMAIL, FIRST_NAME, LAST_NAME";
+	private static final String REGISTER_END = "VALUES (:username, :email, :firstName, :lastName";
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -21,8 +23,8 @@ public class UserJdbcDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public UserDTO getUserById(String id) {
-		Map<String, String> parameters = Map.of("id", id);
+	public UserDTO getUserByIdentifier(String identifier) {
+		Map<String, String> parameters = Map.of("identifier", identifier);
 
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_USERNAME, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
@@ -31,15 +33,26 @@ public class UserJdbcDao {
 		}
 	}
 
-	public void register(String id, String username) {
-		Map<String, String> parameters = Map.of(
-			"id", id,
-			"username", username
-		);
+	public void register(UserDTO userDTO) {
+		Map<String, String> parameters = new HashMap<>();
+		parameters.put("username", userDTO.getUsername());
+		parameters.put("email", userDTO.getEmail());
+		parameters.put("firstName", userDTO.getFirstName());
+		parameters.put("lastName", userDTO.getLastName());
+
+		String registerQuery = REGISTER_START;
+
+		if (userDTO.getPassword() != null) {
+			registerQuery += ", PASSWORD) " + REGISTER_END + ", :password);";
+			parameters.put("password", userDTO.getPassword());
+		} else {
+			registerQuery += ") " + REGISTER_END + ");";
+		}
 
 		try {
-			jdbcTemplate.update(REGISTER, parameters);
+			jdbcTemplate.update(registerQuery, parameters);
 		} catch (DataAccessException e) {
+			System.out.println(e.getMessage());
 			throw new RuntimeException("Error registering user", e);
 		}
 	}

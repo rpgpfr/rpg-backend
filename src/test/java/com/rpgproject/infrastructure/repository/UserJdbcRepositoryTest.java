@@ -37,15 +37,15 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a uniqueName, when user exists, then user is returned")
-	void givenAUniqueName_whenUserExists_thenUserIsReturned() {
+	@DisplayName("Given a username, when user exists, then user is returned")
+	void givenAUsername_whenUserExists_thenUserIsReturned() {
 		// Given
-		String uniqueName = "ID123";
+		String username = "username";
 
-		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO(null, null, null, null));
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
 
 		// When
-		User actualUser = userJdbcRepository.getUserByUniqueName(uniqueName);
+		User actualUser = userJdbcRepository.getUserByIdentifier(username);
 
 		// Then
 		User expectedUser = createUser();
@@ -54,15 +54,15 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a uniqueName, when user does not exist, then user an error is thrown")
-	void givenAUniqueName_whenUserDoesNotExist_thenUserIsReturned() {
+	@DisplayName("Given a username, when user does not exist, then user an error is thrown")
+	void givenAUsername_whenUserDoesNotExist_thenUserIsReturned() {
 		// Given
-		String uniqueName = "ID124";
+		String username = "usernaaaame";
 
 		doThrow(new EmptyResultDataAccessException(1)).when(jdbcTemplate).queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class));
 
 		// When
-		assertThatCode(() -> userJdbcRepository.getUserByUniqueName(uniqueName)).isInstanceOf(UserNotFoundException.class);
+		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserNotFoundException.class);
 	}
 
 	@Test

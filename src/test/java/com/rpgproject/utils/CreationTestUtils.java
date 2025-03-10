@@ -19,17 +19,21 @@ public class CreationTestUtils {
 
 	public static User createUser() {
 		return new User(
-			"uniqueName",
-			"username"
+			"username",
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			"password"
 		);
 	}
 
-	public static UserDTO createUserDTO(String firstName, String lastName, String introduction, String rpgKnowledge) {
+	public static UserDTO createUserDTO(String firstName, String lastName, String password, String introduction, String rpgKnowledge) {
 		return new UserDTO(
-			"uniqueName",
 			"username",
+			"mail@example2.com",
 			firstName,
 			lastName,
+			password,
 			introduction,
 			rpgKnowledge
 		);

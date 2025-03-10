@@ -18,9 +18,9 @@ public class UserJdbcRepository implements UserRepository {
 	}
 
 	@Override
-	public User getUserByUniqueName(String uniqueName) {
+	public User getUserByIdentifier(String identifier) {
 		try {
-			UserDTO userDTO = userJdbcDao.getUserById(uniqueName);
+			UserDTO userDTO = userJdbcDao.getUserByIdentifier(identifier);
 
 			return mapToUser(userDTO);
 		} catch (RuntimeException e) {
@@ -30,10 +30,11 @@ public class UserJdbcRepository implements UserRepository {
 
 	private User mapToUser(UserDTO userDTO) {
 		return new User(
-			userDTO.getId(),
 			userDTO.getUsername(),
+			userDTO.getEmail(),
 			userDTO.getFirstName(),
 			userDTO.getLastName(),
+			userDTO.getPassword(),
 			userDTO.getIntroduction(),
 			userDTO.getRpgKnowledge()
 		);
@@ -42,10 +43,24 @@ public class UserJdbcRepository implements UserRepository {
 	@Override
 	public void register(User user) {
 		try {
-			userJdbcDao.register(user.uniqueName(), user.username());
+			UserDTO userDTO = mapToUserDTO(user);
+
+			userJdbcDao.register(userDTO);
 		} catch (RuntimeException e) {
 			throw new CannotRegisterUserException();
 		}
+	}
+
+	private static UserDTO mapToUserDTO(User user) {
+		return new UserDTO(
+			user.username(),
+			user.email(),
+			user.firstName(),
+			user.lastName(),
+			user.password(),
+			user.description(),
+			user.rpgKnowledge()
+		);
 	}
 
 }

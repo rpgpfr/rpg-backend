@@ -9,12 +9,10 @@ import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.domain.usecase.RegisterUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/auth")
 public class AuthenticationController {
 
 	final RegisterUser<ResponseEntity<ResponseViewModel<UserViewModel>>> registerUser;
@@ -26,9 +24,17 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> registerUser(@RequestBody RegisterRequestBody requestBody) {
-		User user = new User(requestBody.user(), requestBody.username());
+		User user = new User(requestBody.username(), requestBody.email(), requestBody.firstName(), requestBody.lastName(), requestBody.password());
 
-		return registerUser.execute(user);
+		ResponseEntity<ResponseViewModel<UserViewModel>> execute = registerUser.execute(user);
+		return execute;
+	}
+
+	@PostMapping("/login")
+	@CrossOrigin(origins = "*")
+	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> login() {
+		System.out.println("hello");
+		return ResponseEntity.ok().body(new ResponseViewModel<>(new UserViewModel("username"), null));
 	}
 
 }
