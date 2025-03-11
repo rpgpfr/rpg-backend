@@ -1,6 +1,7 @@
 package com.rpgproject.utils;
 
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
+import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
@@ -15,6 +16,17 @@ public class CreationTestUtils {
 
 	public static UserProfile createUserProfile() {
 		return new UserProfile(createUser(), 1, 1, 1, 3);
+	}
+
+	public static UserViewModel createUserViewModel() {
+		return new UserViewModel(
+			"username",
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			null,
+			null
+		);
 	}
 
 	public static User createUser() {

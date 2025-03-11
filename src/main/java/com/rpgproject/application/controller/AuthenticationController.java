@@ -1,11 +1,13 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.LoginRequestBody;
 import com.rpgproject.application.dto.requestbody.RegisterRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.port.UserRepository;
+import com.rpgproject.domain.usecase.LogUserIn;
 import com.rpgproject.domain.usecase.RegisterUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-	final RegisterUser<ResponseEntity<ResponseViewModel<UserViewModel>>> registerUser;
+	private final RegisterUser<ResponseEntity<ResponseViewModel<UserViewModel>>> registerUser;
+	private final LogUserIn<ResponseEntity<ResponseViewModel<UserViewModel>>> logUserIn;
 
 	public AuthenticationController(UserRepository userRepository, UserRestPresenter userRestPresenter) {
 		registerUser = new RegisterUser<>(userRepository, userRestPresenter);
+		logUserIn = new LogUserIn<>(userRepository, userRestPresenter);
 	}
 
 	@PostMapping("/register")
@@ -31,9 +35,10 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	@CrossOrigin(origins = "*")
-	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> login() {
-		System.out.println("hello");
-		return ResponseEntity.ok().body(new ResponseViewModel<>(new UserViewModel("username"), null));
+	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> login(@RequestBody LoginRequestBody requestBody) {
+		User user = new User(requestBody.username(), requestBody.email(), null, null, requestBody.password());
+
+		return logUserIn.execute(user);
 	}
 
 }
