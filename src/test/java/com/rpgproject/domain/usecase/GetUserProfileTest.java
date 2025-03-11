@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserProfileTest {
