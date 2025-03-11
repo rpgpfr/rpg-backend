@@ -27,6 +27,26 @@ public class CreationTestUtils {
 		);
 	}
 
+	public static User createUserWithEmail() {
+		return new User(
+			null,
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			"password"
+		);
+	}
+
+	public static User createUserWithUsername() {
+		return new User(
+			"username",
+			null,
+			"firstName",
+			"lastName",
+			"password"
+		);
+	}
+
 	public static UserDTO createUserDTO(String firstName, String lastName, String password, String introduction, String rpgKnowledge) {
 		return new UserDTO(
 			"username",

@@ -73,7 +73,7 @@ public class GetUserProfileTest {
 		String username = "username";
 		UserNotFoundException exception = new UserNotFoundException();
 
-		doThrow(exception).when(userRepository).getUserByIdentifier(username);
+		when(userRepository.getUserByIdentifier(username)).thenThrow(exception);
 
 		// When
 		getUserProfile.execute(username);

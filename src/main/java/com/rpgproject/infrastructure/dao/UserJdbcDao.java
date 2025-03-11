@@ -13,7 +13,7 @@ import java.util.Map;
 @Component
 public class UserJdbcDao {
 
-	private static final String GET_BY_USERNAME = "SELECT * FROM USERS WHERE USERNAME = :identifier OR EMAIL = :identifier";
+	private static final String GET_BY_IDENTIFIER = "SELECT * FROM USERS WHERE USERNAME = :identifier OR EMAIL = :identifier";
 	private static final String REGISTER_START = "INSERT INTO USERS (USERNAME, EMAIL, FIRST_NAME, LAST_NAME";
 	private static final String REGISTER_END = "VALUES (:username, :email, :firstName, :lastName";
 
@@ -27,7 +27,7 @@ public class UserJdbcDao {
 		Map<String, String> parameters = Map.of("identifier", identifier);
 
 		try {
-			return jdbcTemplate.queryForObject(GET_BY_USERNAME, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
+			return jdbcTemplate.queryForObject(GET_BY_IDENTIFIER, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
 		} catch (EmptyResultDataAccessException e) {
 			throw new RuntimeException("User not found");
 		}

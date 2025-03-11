@@ -48,7 +48,7 @@ class RegisterUserTest {
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
-		RuntimeException exception = new CannotRegisterUserException();
+		RuntimeException exception = new CannotRegisterUserException("L'utilisateur ou le mail associé est déjà utilisé.");
 
 		doThrow(exception).when(userRepository).register(user);
 

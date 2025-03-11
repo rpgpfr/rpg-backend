@@ -26,8 +26,7 @@ public class AuthenticationController {
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> registerUser(@RequestBody RegisterRequestBody requestBody) {
 		User user = new User(requestBody.username(), requestBody.email(), requestBody.firstName(), requestBody.lastName(), requestBody.password());
 
-		ResponseEntity<ResponseViewModel<UserViewModel>> execute = registerUser.execute(user);
-		return execute;
+		return registerUser.execute(user);
 	}
 
 	@PostMapping("/login")

@@ -35,13 +35,13 @@ class UserRestPresenterTest {
 	@DisplayName("Should return a response with an error message")
 	void shouldReturnA400ResponseEntityWithAnErrorMessage() {
 		// Arrange
-		CannotRegisterUserException exception = new CannotRegisterUserException();
+		CannotRegisterUserException exception = new CannotRegisterUserException("L'utilisateur ou le mail associé est déjà utilisé.");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "An error occurred while registering the user"));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "L'utilisateur ou le mail associé est déjà utilisé."));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

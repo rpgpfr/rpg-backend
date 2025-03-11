@@ -3,7 +3,6 @@ package com.rpgproject.application.controller;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
-import com.rpgproject.config.ApplicationConfig;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataMongoTest
 @ActiveProfiles("test")
 @Import({
-	ApplicationConfig.class,
 	CampaignController.class,
 	CampaignsRestPresenter.class,
 	CampaignMongoRepository.class,

@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.file.Paths;
@@ -42,7 +43,8 @@ class AuthenticationControllerTest {
 	@BeforeEach
 	public void setUp() {
 		userJdbcDao = new UserJdbcDao(jdbcTemplate);
-		UserRepository userRepository = new UserJdbcRepository(userJdbcDao);
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		UserRepository userRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 		UserRestPresenter userRestPresenter = new UserRestPresenter();
 		authenticationController = new AuthenticationController(userRepository, userRestPresenter);
 
@@ -78,7 +80,7 @@ class AuthenticationControllerTest {
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "An error occurred while registering the user"));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "Le nom d'utilisateur ou le mail associé est déjà utilisé."));
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
