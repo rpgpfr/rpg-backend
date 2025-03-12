@@ -3,7 +3,6 @@ package com.rpgproject.application.controller;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
 import com.rpgproject.application.presenter.UserProfileRestPresenter;
-import com.rpgproject.config.ApplicationConfig;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.CharacterMongoDao;
@@ -27,6 +26,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.nio.file.Paths;
@@ -40,7 +40,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @ExtendWith(BasicDatabaseExtension.class)
 @Import({
-	ApplicationConfig.class,
 	UserProfileController.class,
 	UserJdbcRepository.class,
 	UserJdbcDao.class,
@@ -64,7 +63,8 @@ class UserProfileControllerTest {
 	@BeforeEach
 	public void setUp() {
 		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
-		UserRepository userRepository = new UserJdbcRepository(userJdbcDao);
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		UserRepository userRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		CampaignMongoRepository campaignRepository = new CampaignMongoRepository(campaignMongoDao);
 		MapMongoDao mapMongoDao = new MapMongoDao(mongoTemplate);
@@ -85,20 +85,21 @@ class UserProfileControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a unique name, when user exists, then user profile is returned")
-	void givenAUniqueName_whenUserExists_thenUserProfileIsReturned() {
+	@DisplayName("Given a username, when user exists, then user profile is returned")
+	void givenAUsername_whenUserExists_thenUserProfileIsReturned() {
 		// Given
-		String uniqueName = "ID123";
+		String username = "alvin";
 
 		// When
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.test(uniqueName);
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.test(username);
 
 		// Then
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(new UserProfileViewModel(
 				"alvin",
+				"mail@example.com",
 				"Alvin",
-				"Alvinson",
+				"Hamaide",
 				null,
 				null,
 				0,

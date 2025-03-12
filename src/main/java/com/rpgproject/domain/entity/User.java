@@ -1,10 +1,11 @@
 package com.rpgproject.domain.entity;
 
-public record User(String uniqueName, String username, String firstName, String lastName, String description,
+public record User(String username, String email, String firstName, String lastName, String password,
+				   String description,
 				   String rpgKnowledge) {
 
-	public User(String uniqueName, String username) {
-		this(uniqueName, username, null, null, null, null);
+	public User(String username, String email, String firstName, String lastName, String password) {
+		this(username, email, firstName, lastName, password, null, null);
 	}
 
 }

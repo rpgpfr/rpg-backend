@@ -1,7 +1,9 @@
 spring.application.name: rpg-project
-logging.level.root: info
+logging.level.root: trace
 
 spring:
+  config:
+    import: "optional:file:.env[.properties],optional:file:/etc/secrets/.env[.properties]"
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${POSTGRE_URL}
@@ -14,6 +16,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${AUTH0_ISSUER}
+          secret-key: ${NEXTAUTH_SECRET}
 
 backend-api-key: ${BACKEND_API_KEY}

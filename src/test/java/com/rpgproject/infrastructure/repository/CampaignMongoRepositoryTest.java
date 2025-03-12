@@ -1,6 +1,5 @@
 package com.rpgproject.infrastructure.repository;
 
-import com.rpgproject.config.ApplicationConfig;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import org.junit.jupiter.api.AfterEach;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @ActiveProfiles("test")
-@Import(ApplicationConfig.class)
 class CampaignMongoRepositoryTest {
 
 	private CampaignMongoRepository campaignMongoRepository;

@@ -12,12 +12,24 @@ public class UserRestPresenter implements Presenter<User, ResponseEntity<Respons
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserViewModel>> ok() {
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserViewModel>> ok(User user) {
-		return null;
+		return ResponseEntity.ok(
+			new ResponseViewModel<>(
+				new UserViewModel(
+					user.username(),
+					user.email(),
+					user.firstName(),
+					user.lastName(),
+					user.description(),
+					user.rpgKnowledge()
+				),
+				null
+			)
+		);
 	}
 
 	@Override

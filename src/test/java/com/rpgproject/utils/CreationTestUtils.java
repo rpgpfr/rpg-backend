@@ -1,6 +1,7 @@
 package com.rpgproject.utils;
 
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
+import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
@@ -17,19 +18,54 @@ public class CreationTestUtils {
 		return new UserProfile(createUser(), 1, 1, 1, 3);
 	}
 
-	public static User createUser() {
-		return new User(
-			"uniqueName",
-			"username"
+	public static UserViewModel createUserViewModel() {
+		return new UserViewModel(
+			"username",
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			null,
+			null
 		);
 	}
 
-	public static UserDTO createUserDTO(String firstName, String lastName, String introduction, String rpgKnowledge) {
-		return new UserDTO(
-			"uniqueName",
+	public static User createUser() {
+		return new User(
 			"username",
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			"password"
+		);
+	}
+
+	public static User createUserWithEmail() {
+		return new User(
+			null,
+			"mail@example2.com",
+			"firstName",
+			"lastName",
+			"password"
+		);
+	}
+
+	public static User createUserWithUsername() {
+		return new User(
+			"username",
+			null,
+			"firstName",
+			"lastName",
+			"password"
+		);
+	}
+
+	public static UserDTO createUserDTO(String firstName, String lastName, String password, String introduction, String rpgKnowledge) {
+		return new UserDTO(
+			"username",
+			"mail@example2.com",
 			firstName,
 			lastName,
+			password,
 			introduction,
 			rpgKnowledge
 		);

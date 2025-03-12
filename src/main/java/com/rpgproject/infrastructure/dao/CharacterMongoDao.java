@@ -16,8 +16,8 @@ public class CharacterMongoDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	public long getCountByOwner(String uniqueName) {
-		return mongoTemplate.count(query(where("owner").is(uniqueName)), CharacterDTO.class);
+	public long getCountByOwner(String username) {
+		return mongoTemplate.count(query(where("owner").is(username)), CharacterDTO.class);
 	}
 
 }

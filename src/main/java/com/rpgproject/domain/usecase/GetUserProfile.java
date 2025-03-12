@@ -21,12 +21,12 @@ public class GetUserProfile<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(String uniqueName) {
+	public T execute(String username) {
 		try {
-			User user = userRepository.getUserByUniqueName(uniqueName);
-			long campaignsCount = campaignRepository.getCountByOwner(uniqueName);
-			long mapsCount = mapRepository.getCountByOwner(uniqueName);
-			long charactersCount = characterRepository.getCountByOwner(uniqueName);
+			User user = userRepository.getUserByIdentifier(username);
+			long campaignsCount = campaignRepository.getCountByOwner(username);
+			long mapsCount = mapRepository.getCountByOwner(username);
+			long charactersCount = characterRepository.getCountByOwner(username);
 			long resourcesCount = campaignsCount + mapsCount + charactersCount;
 
 			UserProfile userProfile = new UserProfile(user, campaignsCount, mapsCount, charactersCount, resourcesCount);

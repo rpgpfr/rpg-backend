@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserProfileTest {
@@ -44,25 +45,25 @@ public class GetUserProfileTest {
 	@DisplayName("Given a user's uniquename, when accessing the user's profile, then all the profile's information are sent")
 	void givenAUsername_whenAccessingTheUsersProfile_thenAllTheProfilesInformationAreSent() {
 		// Given
-		String uniqueName = "uniqueName";
+		String username = "username";
 		User user = createUser();
 
-		when(userRepository.getUserByUniqueName(uniqueName)).thenReturn(user);
-		when(campaignRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
-		when(mapRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
-		when(characterRepository.getCountByOwner(uniqueName)).thenReturn((long) 1);
+		when(userRepository.getUserByIdentifier(username)).thenReturn(user);
+		when(campaignRepository.getCountByOwner(username)).thenReturn((long) 1);
+		when(mapRepository.getCountByOwner(username)).thenReturn((long) 1);
+		when(characterRepository.getCountByOwner(username)).thenReturn((long) 1);
 
 		// When
-		getUserProfile.execute(uniqueName);
+		getUserProfile.execute(username);
 
 		// Then
-		String expectedUniqueName = "uniqueName";
+		String expectedUsername = "username";
 		UserProfile expectedUserProfile = createUserProfile();
 
-		verify(userRepository).getUserByUniqueName(expectedUniqueName);
-		verify(campaignRepository).getCountByOwner(expectedUniqueName);
-		verify(mapRepository).getCountByOwner(expectedUniqueName);
-		verify(characterRepository).getCountByOwner(expectedUniqueName);
+		verify(userRepository).getUserByIdentifier(expectedUsername);
+		verify(campaignRepository).getCountByOwner(expectedUsername);
+		verify(mapRepository).getCountByOwner(expectedUsername);
+		verify(characterRepository).getCountByOwner(expectedUsername);
 		verify(presenter).ok(expectedUserProfile);
 	}
 
@@ -70,13 +71,13 @@ public class GetUserProfileTest {
 	@DisplayName("Given a user's uniquename, when the user does not exist, then an error is sent")
 	void givenAUsername_whenTheUserDoesNotExist_thenAnErrorIsSent() {
 		// Given
-		String uniqueName = "uniqueName";
+		String username = "username";
 		UserNotFoundException exception = new UserNotFoundException();
 
-		doThrow(exception).when(userRepository).getUserByUniqueName(uniqueName);
+		when(userRepository.getUserByIdentifier(username)).thenThrow(exception);
 
 		// When
-		getUserProfile.execute(uniqueName);
+		getUserProfile.execute(username);
 
 		// Then
 

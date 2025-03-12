@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
+import com.rpgproject.domain.exception.UserLoginFailedException;
 import com.rpgproject.domain.exception.UserNotFoundException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
@@ -30,22 +32,25 @@ class UserJdbcRepositoryTest {
 	@Mock
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
+	@Mock
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	@BeforeEach
 	public void setUp() {
 		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
-		userJdbcRepository = new UserJdbcRepository(userJdbcDao);
+		userJdbcRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 	}
 
 	@Test
-	@DisplayName("Given a uniqueName, when user exists, then user is returned")
-	void givenAUniqueName_whenUserExists_thenUserIsReturned() {
+	@DisplayName("Given a username, when user exists, then user is returned")
+	void givenAUsername_whenUserExists_thenUserIsReturned() {
 		// Given
-		String uniqueName = "ID123";
+		String username = "username";
 
-		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO(null, null, null, null));
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
 
 		// When
-		User actualUser = userJdbcRepository.getUserByUniqueName(uniqueName);
+		User actualUser = userJdbcRepository.getUserByIdentifier(username);
 
 		// Then
 		User expectedUser = createUser();
@@ -54,15 +59,15 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a uniqueName, when user does not exist, then user an error is thrown")
-	void givenAUniqueName_whenUserDoesNotExist_thenUserIsReturned() {
+	@DisplayName("Given a username, when user does not exist, then user an error is thrown")
+	void givenAUsername_whenUserDoesNotExist_thenUserIsReturned() {
 		// Given
-		String uniqueName = "ID124";
+		String username = "usernaaaame";
 
-		doThrow(new EmptyResultDataAccessException(1)).when(jdbcTemplate).queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class));
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When
-		assertThatCode(() -> userJdbcRepository.getUserByUniqueName(uniqueName)).isInstanceOf(UserNotFoundException.class);
+		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserNotFoundException.class);
 	}
 
 	@Test
@@ -87,6 +92,52 @@ class UserJdbcRepositoryTest {
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(CannotRegisterUserException.class);
+	}
+
+	@Test
+	@DisplayName("Given an identifier and a password, when logging is successfull, then user is returned")
+	void givenAnIdentifierAndAPassword_whenLoggingIsSuccessfull_thenUserIsReturned() {
+		// Given
+		String username = "username";
+		String password = "password";
+
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
+		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
+
+		// When
+		User actualUser = userJdbcRepository.logIn(username, password);
+
+		// Then
+		User expectedUser = createUser();
+
+		assertThat(actualUser).isEqualTo(expectedUser);
+	}
+
+	@Test
+	@DisplayName("Given an identifier and a password, when password does not match, then login error is thrown")
+	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginErrorIsThrown() {
+		// Given
+		String username = "username";
+		String password = "password";
+
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
+		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+	}
+
+	@Test
+	@DisplayName("Given an identifier and a password, when user is not found on login, then login error is thrown")
+	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginErrorIsThrown() {
+		// Given
+		String username = "username";
+		String password = "password";
+
+		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
 	}
 
 }

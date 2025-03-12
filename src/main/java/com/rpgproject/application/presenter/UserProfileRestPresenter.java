@@ -25,6 +25,7 @@ public class UserProfileRestPresenter implements Presenter<UserProfile, Response
 	private UserProfileViewModel createUserProfileModel(UserProfile userProfile) {
 		return new UserProfileViewModel(
 			userProfile.user().username(),
+			userProfile.user().email(),
 			userProfile.user().firstName(),
 			userProfile.user().lastName(),
 			userProfile.user().description(),

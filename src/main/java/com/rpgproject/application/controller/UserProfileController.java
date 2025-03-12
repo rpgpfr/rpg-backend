@@ -11,6 +11,7 @@ import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.domain.usecase.GetUserProfile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,8 +27,9 @@ public class UserProfileController {
 	}
 
 	@GetMapping("/")
-	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> test(@CurrentOwner String uniqueName) {
-		return getUserProfile.execute(uniqueName);
+	@CrossOrigin(origins = "*")
+	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> test(@CurrentOwner String username) {
+		return getUserProfile.execute(username);
 	}
 
 }
