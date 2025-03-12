@@ -33,13 +33,11 @@ public class UserJdbcRepository implements UserRepository {
 	}
 
 	@Override
-	public User logIn(User user) {
-		String identifier = getLoginIdentifier(user);
-
+	public User logIn(String identifier, String password) {
 		try {
 			UserDTO userDTO = userJdbcDao.getUserByIdentifier(identifier);
 
-			if (bCryptPasswordEncoder.matches(user.password(), userDTO.getPassword())) {
+			if (bCryptPasswordEncoder.matches(password, userDTO.getPassword())) {
 				return mapToUser(userDTO);
 			}
 
@@ -47,14 +45,6 @@ public class UserJdbcRepository implements UserRepository {
 		} catch (RuntimeException e) {
 			throw new UserLoginFailedException();
 		}
-	}
-
-	private String getLoginIdentifier(User user) {
-		if (user.username() != null) {
-			return user.username();
-		}
-
-		return user.email();
 	}
 
 	private User mapToUser(UserDTO userDTO) {

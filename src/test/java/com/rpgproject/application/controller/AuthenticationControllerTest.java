@@ -89,10 +89,10 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when login is sucessful, then user is returned")
-	void givenAUser_whenLoginIsSuccessful_thenUserIsReturned() {
+	@DisplayName("Given a login request, when login is sucessful, then user is returned")
+	void givenALoginRequest_whenLoginIsSuccessful_thenUserIsReturned() {
 		// Given
-		LoginRequestBody requestBody = new LoginRequestBody("alvin", null, "password");
+		LoginRequestBody requestBody = new LoginRequestBody("alvin", "password");
 
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
 
@@ -106,10 +106,10 @@ class AuthenticationControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when login fails, then return error")
-	void givenAUser_whenLoginFails_thenReturnError() {
+	@DisplayName("Given a loginRequest, when login fails, then return error")
+	void givenALoginRequest_whenLoginFails_thenReturnError() {
 		// Given
-		LoginRequestBody requestBody = new LoginRequestBody("username", null, "password");
+		LoginRequestBody requestBody = new LoginRequestBody("alvin", "password");
 
 		// When
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.login(requestBody);

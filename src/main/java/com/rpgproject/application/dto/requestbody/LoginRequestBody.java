@@ -1,5 +1,5 @@
 package com.rpgproject.application.dto.requestbody;
 
-public record LoginRequestBody(String username, String email, String password) {
+public record LoginRequestBody(String identifier, String password) {
 
 }

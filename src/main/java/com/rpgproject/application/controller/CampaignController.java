@@ -8,6 +8,7 @@ import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.usecase.GetAllCampaignsByUserId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,6 +25,7 @@ public class CampaignController {
 	}
 
 	@GetMapping("/")
+	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> getAllCampaignsByUserId(@CurrentOwner String userId) {
 		return getAllCampaignsByUserId.execute(userId);
 	}

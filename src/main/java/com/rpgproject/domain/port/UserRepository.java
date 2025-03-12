@@ -6,7 +6,7 @@ public interface UserRepository {
 
 	User getUserByIdentifier(String identifier);
 
-	User logIn(User user);
+	User logIn(String identifier, String password);
 
 	void register(User user);
 

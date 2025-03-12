@@ -36,9 +36,7 @@ public class AuthenticationController {
 	@PostMapping("/login")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> login(@RequestBody LoginRequestBody requestBody) {
-		User user = new User(requestBody.username(), requestBody.email(), null, null, requestBody.password());
-
-		return logUserIn.execute(user);
+		return logUserIn.execute(requestBody.identifier(), requestBody.password());
 	}
 
 }

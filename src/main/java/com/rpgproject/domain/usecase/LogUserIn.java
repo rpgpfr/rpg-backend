@@ -15,9 +15,9 @@ public class LogUserIn<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(User user) {
+	public T execute(String identifier, String password) {
 		try {
-			User loggedUser = userRepository.logIn(user);
+			User loggedUser = userRepository.logIn(identifier, password);
 			return presenter.ok(loggedUser);
 		} catch (UserLoginFailedException e) {
 			return presenter.error(e);

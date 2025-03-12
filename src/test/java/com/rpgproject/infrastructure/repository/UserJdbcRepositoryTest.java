@@ -17,7 +17,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.rpgproject.utils.CreationTestUtils.*;
+import static com.rpgproject.utils.CreationTestUtils.createUser;
+import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -94,16 +95,17 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user with username, when logging is successfull, then user is returned")
-	void givenAUserWithUsername_whenLoggingIsSuccessfull_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when logging is successfull, then user is returned")
+	void givenAnIdentifierAndAPassword_whenLoggingIsSuccessfull_thenUserIsReturned() {
 		// Given
-		User user = createUserWithUsername();
+		String username = "username";
+		String password = "password";
 
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
 
 		// When
-		User actualUser = userJdbcRepository.logIn(user);
+		User actualUser = userJdbcRepository.logIn(username, password);
 
 		// Then
 		User expectedUser = createUser();
@@ -112,46 +114,30 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user with email, when logging is successfull, then user is returned")
-	void givenAUserWithEmail_whenLoggingIsSuccessfull_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when password does not match, then login error is thrown")
+	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginErrorIsThrown() {
 		// Given
-		User user = createUserWithEmail();
-
-		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
-		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(true);
-
-		// When
-		User actualUser = userJdbcRepository.logIn(user);
-
-		// Then
-		User expectedUser = createUser();
-
-		assertThat(actualUser).isEqualTo(expectedUser);
-	}
-
-	@Test
-	@DisplayName("Given a user, when password does not match, then login error is thrown")
-	void givenAUser_whenPasswordDoesNotMatch_thenLoginErrorIsThrown() {
-		// Given
-		User user = createUser();
+		String username = "username";
+		String password = "password";
 
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenReturn(createUserDTO("firstName", "lastName", "password", null, null));
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(user)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
 	}
 
 	@Test
-	@DisplayName("Given a user, when user is not found on login, then login error is thrown")
-	void givenAUser_whenUserIsNotFoundOnLogin_ThenLoginErrorIsThrown() {
+	@DisplayName("Given an identifier and a password, when user is not found on login, then login error is thrown")
+	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginErrorIsThrown() {
 		// Given
-		User user = createUser();
+		String username = "username";
+		String password = "password";
 
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(user)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
 	}
 
 }

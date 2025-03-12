@@ -31,48 +31,34 @@ class LogUserInTest {
 	}
 
 	@Test
-	@DisplayName("Given a user with username, when logging in, then user is returned")
-	void givenAUserWithUsername_whenLoggingIn_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when logging in, then user is returned")
+	void givenAnIdentifierAndAPassword_whenLoggingIn_thenUserIsReturned() {
 		// Given
-		User requestedUser = new User("username", null, null, null, "password");
+		String identifier = "username";
+		String password = "password";
 		User user = createUser();
 
-		when(userRepository.logIn(requestedUser)).thenReturn(user);
+		when(userRepository.logIn(identifier, password)).thenReturn(user);
 
 		// When
-		logUserIn.execute(requestedUser);
+		logUserIn.execute(identifier, password);
 
 		// Then
 		verify(presenter, times(1)).ok(user);
 	}
 
 	@Test
-	@DisplayName("Given a user with email, when logging in, then user is returned")
-	void givenAUserWithEmail_whenLoggingIn_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when login fails, then an error is returned")
+	void givenAnIdentifierAndAPassword_whenLoginFails_thenAnErrorIsReturned() {
 		// Given
-		User requestedUser = new User(null, "email", null, null, "password");
-		User user = createUser();
-
-		when(userRepository.logIn(requestedUser)).thenReturn(user);
-
-		// When
-		logUserIn.execute(requestedUser);
-
-		// Then
-		verify(presenter, times(1)).ok(user);
-	}
-
-	@Test
-	@DisplayName("Given a user, when login fails, then an error is returned")
-	void givenAUserWithEmail_whenLoginFails_thenAnErrorIsReturned() {
-		// Given
-		User requestedUser = new User(null, "email", null, null, "password");
+		String identifier = "username";
+		String password = "password";
 		UserLoginFailedException exception = new UserLoginFailedException();
 
-		when(userRepository.logIn(requestedUser)).thenThrow(exception);
+		when(userRepository.logIn(identifier, password)).thenThrow(exception);
 
 		// When
-		logUserIn.execute(requestedUser);
+		logUserIn.execute(identifier, password);
 
 		// Then
 		verify(presenter, times(1)).error(exception);

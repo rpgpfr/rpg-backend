@@ -16,6 +16,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${AUTH0_ISSUER}
+          secret-key: ${NEXTAUTH_SECRET}
 
 backend-api-key: ${BACKEND_API_KEY}
