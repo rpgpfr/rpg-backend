@@ -30,7 +30,7 @@ class CampaignsRestPresenterTest {
 		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> actualResponseEntity = campaignsRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> expectedResponseEntity = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

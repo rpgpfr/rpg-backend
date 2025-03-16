@@ -12,7 +12,7 @@ public class UserProfileRestPresenter implements Presenter<UserProfile, Response
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserProfileViewModel>> ok() {
-		return null;
+		return ResponseEntity.ok().build();
 	}
 
 	@Override

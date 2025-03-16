@@ -1,5 +1,6 @@
 package com.rpgproject.application.filter;
 
+import com.rpgproject.utils.IgnoreCoverage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
+@IgnoreCoverage
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	@Value("${NEXTAUTH_SECRET}")

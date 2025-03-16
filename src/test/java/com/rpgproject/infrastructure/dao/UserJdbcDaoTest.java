@@ -97,7 +97,7 @@ class UserJdbcDaoTest {
 
 	@Test
 	@DisplayName("Given a UserDTO, when user is registered, then nothing happens")
-	void givenAnIdAndAUsernameWithNoIntroductionOrRpgKnowledge_whenUserIsRegistered_thenNothingHappens() {
+	void givenAUserDTO_whenUserIsRegistered_thenNothingHappens() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 
@@ -106,6 +106,21 @@ class UserJdbcDaoTest {
 
 		// Then
 		UserDTO expectedUserDTO = createUserDTO("firstName", "lastName", null, null, null);
+
+		assertThat(userJdbcDao.getUserByIdentifier("username")).isEqualTo(expectedUserDTO);
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO with a password, when user is registered, then nothing happens")
+	void givenAUserDTOWithAPassword_whenUserIsRegistered_thenNothingHappens() {
+		// Given
+		UserDTO userDTO = createUserDTO("firstName", "lastName", "password", null, null);
+
+		// When
+		userJdbcDao.register(userDTO);
+
+		// Then
+		UserDTO expectedUserDTO = createUserDTO("firstName", "lastName", "password", null, null);
 
 		assertThat(userJdbcDao.getUserByIdentifier("username")).isEqualTo(expectedUserDTO);
 	}

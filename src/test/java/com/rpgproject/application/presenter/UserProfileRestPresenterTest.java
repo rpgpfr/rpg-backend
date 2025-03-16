@@ -2,6 +2,7 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
+import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.UserProfile;
 import com.rpgproject.domain.exception.CannotRegisterUserException;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,18 @@ class UserProfileRestPresenterTest {
 	@BeforeEach
 	public void setUp() {
 		userProfileRestPresenter = new UserProfileRestPresenter();
+	}
+
+	@Test
+	@DisplayName("Should return an empty response entity")
+	void shouldReturnAnEmptyResponseEntity() {
+		// Act
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileRestPresenter.ok();
+
+		// Assert
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
