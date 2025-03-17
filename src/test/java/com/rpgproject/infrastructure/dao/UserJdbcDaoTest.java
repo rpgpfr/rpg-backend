@@ -96,8 +96,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when user is registered, then nothing happens")
-	void givenAUserDTO_whenUserIsRegistered_thenNothingHappens() {
+	@DisplayName("Given a UserDTO, when registering, then user is saved")
+	void givenAUserDTO_whenRegistering_thenUserIsSaved() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 
@@ -111,8 +111,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO with a password, when user is registered, then nothing happens")
-	void givenAUserDTOWithAPassword_whenUserIsRegistered_thenNothingHappens() {
+	@DisplayName("Given a UserDTO with a password, when registering, then user is saved")
+	void givenAUserDTOWithAPassword_whenRegistering_thenUserIsSaved() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", "password", null, null);
 
@@ -138,6 +138,51 @@ class UserJdbcDaoTest {
 
 		// When & Then
 		assertThatCode(() -> userJdbcDao.register(userDTO)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when updating, then updates are saved")
+	void givenAUserDTO_whenUpdating_thenUpdatesAreSaved() {
+		// Given
+		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null);
+
+		// When
+		userJdbcDao.update(userDTO);
+
+		// Then
+		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null);
+
+		assertThat(userJdbcDao.getUserByIdentifier("alvin")).isEqualTo(expectedUserDTO);
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO with description and rpgKnowledge, when updating, then updates are saved")
+	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenUpdating_thenUpdatesAreSaved() {
+		// Given
+		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge");
+
+		// When
+		userJdbcDao.update(userDTO);
+
+		// Then
+		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge");
+
+		assertThat(userJdbcDao.getUserByIdentifier("alvin")).isEqualTo(expectedUserDTO);
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when update fails, then RuntimeException is thrown")
+	void givenAUserDTO_whenUpdateFails_thenRuntimeExceptionIsThrown() {
+		// Given
+		UserDTO userDTO = createUserDTO("goulou", "lastName", null, null, null);
+		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+
+		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
+
+		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.update(userDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@SneakyThrows

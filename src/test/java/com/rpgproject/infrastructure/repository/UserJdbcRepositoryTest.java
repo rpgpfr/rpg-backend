@@ -1,9 +1,10 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.CannotRegisterUserException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.exception.UserLoginFailedException;
 import com.rpgproject.domain.exception.UserNotFoundException;
+import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,8 +60,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist, then user an error is thrown")
-	void givenAUsername_whenUserDoesNotExist_thenUserIsReturned() {
+	@DisplayName("Given a username, when user does not exist, then an error is thrown")
+	void givenAUsername_whenUserDoesNotExist_thenAnErrorIsThrown() {
 		// Given
 		String username = "usernaaaame";
 
@@ -71,8 +72,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when user is registered, then nothing happens")
-	void givenAUser_whenUserIsRegistered_thenNothingHappens() {
+	@DisplayName("Given a user, when registering, then user is saved")
+	void givenAUser_whenRegistering_thenUserIsSaved() {
 		// Given
 		User user = createUser();
 
@@ -91,7 +92,7 @@ class UserJdbcRepositoryTest {
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(CannotRegisterUserException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(UserRegistrationFailedException.class);
 	}
 
 	@Test
@@ -138,6 +139,30 @@ class UserJdbcRepositoryTest {
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+	}
+
+	@Test
+	@DisplayName("Given a user, when updating, then updates are saved")
+	void givenAUser_whenUpdating_thenUpdatesAreSaved() {
+		// Given
+		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
+
+		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
+
+		// When & Then
+		assertDoesNotThrow(() -> userJdbcRepository.update(user));
+	}
+
+	@Test
+	@DisplayName("Given a user, when update fails, then exception is thrown")
+	void givenAUser_whenUpdateFails_thenExceptionIsThrown() {
+		// Given
+		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
+
+		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(UserUpdateFailedException.class);
 	}
 
 }

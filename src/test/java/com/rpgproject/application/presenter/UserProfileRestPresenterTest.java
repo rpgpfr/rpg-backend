@@ -2,9 +2,8 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
-import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.CannotRegisterUserException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +65,7 @@ class UserProfileRestPresenterTest {
 	@DisplayName("Should return a response with an error message")
 	void shouldReturnA400ResponseEntityWithAnErrorMessage() {
 		// Arrange
-		CannotRegisterUserException exception = new CannotRegisterUserException("L'utilisateur ou le mail associé est déjà utilisé.");
+		UserRegistrationFailedException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileRestPresenter.error(exception);

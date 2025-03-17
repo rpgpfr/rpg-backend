@@ -15,7 +15,7 @@ public class UserDTO {
 	private String firstName;
 	private String lastName;
 	private String password;
-	private String introduction;
+	private String description;
 	private String rpgKnowledge;
 
 }

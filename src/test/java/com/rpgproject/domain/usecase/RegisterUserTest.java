@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.CannotRegisterUserException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class RegisterUserTest {
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
-		RuntimeException exception = new CannotRegisterUserException("L'utilisateur ou le mail associé est déjà utilisé.");
+		RuntimeException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
 
 		doThrow(exception).when(userRepository).register(user);
 

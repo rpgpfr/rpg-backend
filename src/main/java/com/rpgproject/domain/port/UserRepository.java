@@ -10,4 +10,5 @@ public interface UserRepository {
 
 	void register(User user);
 
+	void update(User user);
 }

@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.CannotRegisterUserException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 
@@ -19,7 +19,7 @@ public class RegisterUser<T> {
 		try {
 			userRepository.register(user);
 			return userPresenter.ok();
-		} catch (CannotRegisterUserException e) {
+		} catch (UserRegistrationFailedException e) {
 			return userPresenter.error(e);
 		}
 	}
