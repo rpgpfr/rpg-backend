@@ -15,7 +15,6 @@ import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.domain.usecase.GetUserProfile;
 import com.rpgproject.domain.usecase.UpdateUser;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

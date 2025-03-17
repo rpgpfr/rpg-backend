@@ -1,7 +1,6 @@
 package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;

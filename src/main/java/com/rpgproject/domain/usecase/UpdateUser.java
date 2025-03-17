@@ -7,8 +7,8 @@ import com.rpgproject.domain.port.UserRepository;
 
 public class UpdateUser<T> {
 
-	private UserRepository userRepository;
-	private Presenter<User, T> presenter;
+	private final UserRepository userRepository;
+	private final Presenter<User, T> presenter;
 
 	public UpdateUser(UserRepository userRepository, Presenter<User, T> presenter) {
 		this.userRepository = userRepository;

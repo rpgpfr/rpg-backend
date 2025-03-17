@@ -1,9 +1,9 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.exception.UserLoginFailedException;
 import com.rpgproject.domain.exception.UserNotFoundException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
