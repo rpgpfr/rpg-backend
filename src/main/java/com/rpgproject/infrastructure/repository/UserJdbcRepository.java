@@ -1,9 +1,10 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.CannotRegisterUserException;
 import com.rpgproject.domain.exception.UserLoginFailedException;
 import com.rpgproject.domain.exception.UserNotFoundException;
+import com.rpgproject.domain.exception.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.dto.UserDTO;
@@ -54,8 +55,9 @@ public class UserJdbcRepository implements UserRepository {
 			userDTO.getFirstName(),
 			userDTO.getLastName(),
 			userDTO.getPassword(),
-			userDTO.getIntroduction(),
-			userDTO.getRpgKnowledge()
+			userDTO.getDescription(),
+			userDTO.getRpgKnowledge(),
+			userDTO.getSignedUpAt()
 		);
 	}
 
@@ -66,7 +68,18 @@ public class UserJdbcRepository implements UserRepository {
 
 			userJdbcDao.register(userDTO);
 		} catch (RuntimeException e) {
-			throw new CannotRegisterUserException("Le nom d'utilisateur ou le mail associé est déjà utilisé.");
+			throw new UserRegistrationFailedException("Le nom d'utilisateur ou le mail associé est déjà utilisé.");
+		}
+	}
+
+	@Override
+	public void update(User user) {
+		try {
+			UserDTO userDTO = mapToUserDTO(user);
+
+			userJdbcDao.update(userDTO);
+		} catch (RuntimeException e) {
+			throw new UserUpdateFailedException();
 		}
 	}
 
@@ -76,9 +89,10 @@ public class UserJdbcRepository implements UserRepository {
 			user.email(),
 			user.firstName(),
 			user.lastName(),
-			bCryptPasswordEncoder.encode(user.password()),
+			user.password(),
 			user.description(),
-			user.rpgKnowledge()
+			user.rpgKnowledge(),
+			null
 		);
 	}
 

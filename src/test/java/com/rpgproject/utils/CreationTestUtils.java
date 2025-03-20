@@ -10,6 +10,7 @@ import com.rpgproject.infrastructure.dto.CharacterDTO;
 import com.rpgproject.infrastructure.dto.MapDTO;
 import com.rpgproject.infrastructure.dto.UserDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CreationTestUtils {
@@ -35,7 +36,10 @@ public class CreationTestUtils {
 			"mail@example2.com",
 			"firstName",
 			"lastName",
-			"password"
+			"password",
+			null,
+			null,
+			LocalDate.of(2025, 1, 1)
 		);
 	}
 
@@ -67,7 +71,8 @@ public class CreationTestUtils {
 			lastName,
 			password,
 			introduction,
-			rpgKnowledge
+			rpgKnowledge,
+			LocalDate.of(2025, 1, 1)
 		);
 	}
 

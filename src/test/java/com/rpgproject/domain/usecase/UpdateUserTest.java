@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +15,9 @@ import static com.rpgproject.utils.CreationTestUtils.createUser;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RegisterUserTest {
+class UpdateUserTest {
 
-	private RegisterUser<?> registerUser;
+	private UpdateUser<?> updateUser;
 
 	@Mock
 	private UserRepository userRepository;
@@ -27,33 +27,33 @@ class RegisterUserTest {
 
 	@BeforeEach
 	public void setUp() {
-		registerUser = new RegisterUser<>(userRepository, presenter);
+		updateUser = new UpdateUser<>(userRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a user, when user is registered, then present success")
+	@DisplayName("Given a user, when updating, then present success")
 	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
 		// Given
 		User user = createUser();
 
 		// When
-		registerUser.execute(user);
+		updateUser.execute(user);
 
 		// Then
-		verify(presenter, times(1)).ok();
+		verify(presenter, times(1)).ok(user);
 	}
 
 	@Test
-	@DisplayName("Given a user, when register throw an exception, then present error")
+	@DisplayName("Given a user, when update throw an exception, then present error")
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
-		RuntimeException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
+		RuntimeException exception = new UserUpdateFailedException();
 
-		doThrow(exception).when(userRepository).register(user);
+		doThrow(exception).when(userRepository).update(user);
 
 		// When
-		registerUser.execute(user);
+		updateUser.execute(user);
 
 		// Then
 		verify(presenter, times(1)).error(exception);

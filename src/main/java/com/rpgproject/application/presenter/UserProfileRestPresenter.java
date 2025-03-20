@@ -7,8 +7,12 @@ import com.rpgproject.domain.port.Presenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class UserProfileRestPresenter implements Presenter<UserProfile, ResponseEntity<ResponseViewModel<UserProfileViewModel>>> {
+
+	private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserProfileViewModel>> ok() {
@@ -28,6 +32,7 @@ public class UserProfileRestPresenter implements Presenter<UserProfile, Response
 			userProfile.user().email(),
 			userProfile.user().firstName(),
 			userProfile.user().lastName(),
+			dateFormatter.format(userProfile.user().signedUpAt()),
 			userProfile.user().description(),
 			userProfile.user().rpgKnowledge(),
 			userProfile.campaignCount(),

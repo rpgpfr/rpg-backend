@@ -1,8 +1,11 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.UserUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
+import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.application.presenter.UserProfileRestPresenter;
+import com.rpgproject.application.presenter.UserRestPresenter;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.CharacterMongoDao;
@@ -72,8 +75,9 @@ class UserProfileControllerTest {
 		CharacterMongoDao characterMongoDao = new CharacterMongoDao(mongoTemplate);
 		CharacterMongoRepository characterRepository = new CharacterMongoRepository(characterMongoDao);
 		UserProfileRestPresenter userProfileRestPresenter = new UserProfileRestPresenter();
+		UserRestPresenter userRestPresenter = new UserRestPresenter();
 
-		userProfileController = new UserProfileController(userRepository, campaignRepository, mapRepository, characterRepository, userProfileRestPresenter);
+		userProfileController = new UserProfileController(userRepository, campaignRepository, mapRepository, characterRepository, userProfileRestPresenter, userRestPresenter);
 
 		initTables();
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
@@ -91,7 +95,7 @@ class UserProfileControllerTest {
 		String username = "alvin";
 
 		// When
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.test(username);
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileController.getUserProfile(username);
 
 		// Then
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.ok(
@@ -100,12 +104,38 @@ class UserProfileControllerTest {
 				"mail@example.com",
 				"Alvin",
 				"Hamaide",
+				"01/01/2025",
 				null,
 				null,
 				0,
 				0,
 				0,
 				0
+			), null)
+		);
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given a username and a userUpdateRequestBody, when updated, then new user is returned")
+	void givenAUsernameAndAUserUpdateRequestBody_whenUpdated_thenNewUserIsReturned() {
+		// Given
+		String username = "alvin";
+		UserUpdateRequestBody userUpdateRequestBody = new UserUpdateRequestBody("Goulou", "Hamaide", "Description", "RPG Knowledge");
+
+		// When
+		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userProfileController.update(username, userUpdateRequestBody);
+
+		// Then
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.ok(
+			new ResponseViewModel<>(new UserViewModel(
+				"alvin",
+				null,
+				"Goulou",
+				"Hamaide",
+				"Description",
+				"RPG Knowledge"
 			), null)
 		);
 
