@@ -32,4 +32,14 @@ public class CampaignMongoDao {
 			.count();
 	}
 
+	public void save(CampaignDTO campaignDTO) {
+		try {
+			mongoTemplate.save(campaignDTO);
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Error saving campaign", e);
+		}
+	}
+
 }

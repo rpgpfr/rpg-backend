@@ -1,7 +1,9 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.exception.CampaignCreationFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
+import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,7 @@ import java.util.List;
 import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
 import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -67,6 +70,32 @@ class CampaignMongoRepositoryTest {
 		long expectedCount = 3;
 
 		assertThat(actualCount).isEqualTo(expectedCount);
+	}
+
+	@Test
+	@DisplayName("Given a campaign, when saving it, then it is saved")
+	void givenACampaign_whenSavingTheCampaign_thenCampaignIsSaved() {
+		// Given
+		Campaign campaign = new Campaign("alvin", "myCampaign");
+
+		// When
+		campaignMongoRepository.save(campaign);
+
+		// Then
+		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("alvin");
+		List<Campaign> expectedCampaigns = List.of(new Campaign("alvin", "myCampaign"));
+
+		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
+	@DisplayName("Given a campaign, when saving fails, then an exception is thrown")
+	void givenACampaign_whenSavingFails_thenAnExceptionIsThrown() {
+		// Given
+		Campaign campaign = null;
+
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.save(campaign)).isInstanceOf(CampaignCreationFailedException.class);
 	}
 
 }

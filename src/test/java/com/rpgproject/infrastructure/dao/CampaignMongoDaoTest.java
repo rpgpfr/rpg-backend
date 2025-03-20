@@ -14,6 +14,7 @@ import java.util.List;
 
 import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -63,6 +64,32 @@ class CampaignMongoDaoTest {
 		long expectedCount = 3;
 
 		assertThat(actualCount).isEqualTo(expectedCount);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when saving it, then it is saved")
+	void givenACampaignDTO_whenSavingIt_thenItIsSaved() {
+		// Given
+		CampaignDTO campaignDTO = new CampaignDTO("alvin", "myCampaign");
+
+		// When
+		campaignMongoDao.save(campaignDTO);
+
+		// Then
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("alvin");
+		List<CampaignDTO> expectedCampaigns = List.of(new CampaignDTO("alvin", "myCampaign"));
+
+		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when saving fails, then an exception is thrown")
+	void givenACampaignDTO_whenSavingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = null;
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.save(campaignDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 }

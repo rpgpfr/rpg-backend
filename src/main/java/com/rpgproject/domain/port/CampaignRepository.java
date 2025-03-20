@@ -10,4 +10,6 @@ public interface CampaignRepository {
 
 	long getCountByOwner(String owner);
 
+	void save(Campaign campaign);
+
 }

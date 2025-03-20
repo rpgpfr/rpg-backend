@@ -1,6 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.exception.CampaignCreationFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
@@ -34,6 +35,23 @@ public class CampaignMongoRepository implements CampaignRepository {
 	@Override
 	public long getCountByOwner(String owner) {
 		return campaignMongoDao.getCountByOwner(owner);
+	}
+
+	@Override
+	public void save(Campaign campaign) {
+		try {
+			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
+			campaignMongoDao.save(campaignDTO);
+		} catch (Exception e) {
+			throw new CampaignCreationFailedException();
+		}
+	}
+
+	private CampaignDTO mapToCampaignDTO(Campaign campaign) {
+		return new CampaignDTO(
+			campaign.owner(),
+			campaign.name()
+		);
 	}
 
 }
