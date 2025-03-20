@@ -5,7 +5,7 @@ import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.domain.port.CampaignRepository;
-import com.rpgproject.domain.usecase.GetAllCampaignsByUserId;
+import com.rpgproject.domain.usecase.GetAllCampaignsByOwner;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,16 +18,16 @@ import java.util.List;
 @Controller
 public class CampaignController {
 
-	private final GetAllCampaignsByUserId<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getAllCampaignsByUserId;
+	private final GetAllCampaignsByOwner<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getAllCampaignsByOwner;
 
 	public CampaignController(CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter) {
-		this.getAllCampaignsByUserId = new GetAllCampaignsByUserId<>(campaignRepository, campaignsRestPresenter);
+		this.getAllCampaignsByOwner = new GetAllCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
 	}
 
 	@GetMapping("/")
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> getAllCampaignsByUserId(@CurrentOwner String userId) {
-		return getAllCampaignsByUserId.execute(userId);
+	public ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> getAllCampaignsByOwner(@CurrentOwner String owner) {
+		return getAllCampaignsByOwner.execute(owner);
 	}
 
 }

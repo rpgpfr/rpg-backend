@@ -41,12 +41,12 @@ class CampaignMongoRepositoryTest {
 
 	@Test
 	@DisplayName("Given a user id, when looking for users campaigns, then all of its campaigns are returned")
-	void givenAUserId_whenLookingForUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
+	void givenAnOwner_whenLookingForUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner(userId);
+		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner(owner);
 
 		// Then
 		List<Campaign> expectedCampaigns = createCampaigns();
@@ -55,13 +55,13 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when getting the number of campaigns created by the user, then the count is returned")
-	void givenAUserId_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
+	@DisplayName("Given an owner, when getting the number of campaigns created by the user, then the count is returned")
+	void givenAnOwner_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		long actualCount = campaignMongoRepository.getCountByOwner(userId);
+		long actualCount = campaignMongoRepository.getCountByOwner(owner);
 
 		// Then
 		long expectedCount = 3;

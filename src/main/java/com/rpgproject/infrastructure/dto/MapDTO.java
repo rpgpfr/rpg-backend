@@ -18,11 +18,11 @@ public class MapDTO {
 	@Id
 	private String id;
 
-	private String userId;
+	private String owner;
 	private String url;
 
-	public MapDTO(String userId, String url) {
-		this.userId = userId;
+	public MapDTO(String owner, String url) {
+		this.owner = owner;
 		this.url = url;
 	}
 
@@ -31,13 +31,13 @@ public class MapDTO {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		MapDTO mapDTO = (MapDTO) o;
-		return Objects.equals(getUserId(), mapDTO.getUserId()) && Objects.equals(getUrl(), mapDTO.getUrl());
+		return Objects.equals(getOwner(), mapDTO.getOwner()) && Objects.equals(getUrl(), mapDTO.getUrl());
 	}
 
 	@Override
 	@IgnoreCoverage
 	public int hashCode() {
-		return Objects.hash(getUserId(), getUrl());
+		return Objects.hash(getOwner(), getUrl());
 	}
 
 }

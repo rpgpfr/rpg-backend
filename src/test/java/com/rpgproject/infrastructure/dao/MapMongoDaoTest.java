@@ -34,13 +34,13 @@ class MapMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when looking for the number of maps created by the user, then the count is returned")
-	void givenAUserId_whenGettingTheNumberOfMapsCreatedByTheUser_thenTheCountIsReturned() {
+	@DisplayName("Given an owner, when looking for the number of maps created by the user, then the count is returned")
+	void givenAnOwner_whenGettingTheNumberOfMapsCreatedByTheUser_thenTheCountIsReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		long actualCount = mapMongoDao.getCountByUserId(userId);
+		long actualCount = mapMongoDao.getCountByOwner(owner);
 
 		// Then
 		long expectedCount = 3;

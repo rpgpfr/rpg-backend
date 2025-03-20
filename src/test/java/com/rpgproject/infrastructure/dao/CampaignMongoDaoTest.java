@@ -36,13 +36,13 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when looking for all the user's campaigns, then all of its campaigns are returned")
-	void givenAUserId_whenLookingForAllTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
+	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	void givenAnOwner_whenLookingForAllTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByUserId(userId);
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner(owner);
 
 		// Then
 		List<CampaignDTO> expectedCampaigns = createCampaignDTOs();
@@ -51,13 +51,13 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when getting the number of campaigns created by the user, then the count is returned")
-	void givenAUserId_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
+	@DisplayName("Given an owner, when getting the number of campaigns created by the user, then the count is returned")
+	void givenAnOwner_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		long actualCount = campaignMongoDao.getCountByUserId(userId);
+		long actualCount = campaignMongoDao.getCountByOwner(owner);
 
 		// Then
 		long expectedCount = 3;

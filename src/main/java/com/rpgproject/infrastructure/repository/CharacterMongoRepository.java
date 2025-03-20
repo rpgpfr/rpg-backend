@@ -14,8 +14,8 @@ public class CharacterMongoRepository implements CharacterRepository {
 	}
 
 	@Override
-	public long getCountByOwner(String userId) {
-		return characterMongoDao.getCountByOwner(userId);
+	public long getCountByOwner(String owner) {
+		return characterMongoDao.getCountByOwner(owner);
 	}
 
 }

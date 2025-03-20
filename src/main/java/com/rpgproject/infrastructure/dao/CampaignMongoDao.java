@@ -18,17 +18,17 @@ public class CampaignMongoDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	public List<CampaignDTO> findAllCampaignsByUserId(String userId) {
+	public List<CampaignDTO> findAllCampaignsByOwner(String owner) {
 		return mongoTemplate
 			.query(CampaignDTO.class)
-			.matching(query(where("userId").is(userId)))
+			.matching(query(where("owner").is(owner)))
 			.all();
 	}
 
-	public long getCountByUserId(String userId) {
+	public long getCountByOwner(String owner) {
 		return mongoTemplate
 			.query(CampaignDTO.class)
-			.matching(query(where("userId").is(userId)))
+			.matching(query(where("owner").is(owner)))
 			.count();
 	}
 

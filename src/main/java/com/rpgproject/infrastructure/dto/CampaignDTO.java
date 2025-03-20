@@ -20,11 +20,11 @@ public class CampaignDTO {
 	@Id
 	private String id;
 
-	private String userId;
+	private String owner;
 	private String name;
 
-	public CampaignDTO(String userId, String name) {
-		this.userId = userId;
+	public CampaignDTO(String owner, String name) {
+		this.owner = owner;
 		this.name = name;
 	}
 
@@ -33,13 +33,13 @@ public class CampaignDTO {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		CampaignDTO that = (CampaignDTO) o;
-		return Objects.equals(getUserId(), that.getUserId()) && Objects.equals(getName(), that.getName());
+		return Objects.equals(getOwner(), that.getOwner()) && Objects.equals(getName(), that.getName());
 	}
 
 	@Override
 	@IgnoreCoverage
 	public int hashCode() {
-		return Objects.hash(getUserId(), getName());
+		return Objects.hash(getOwner(), getName());
 	}
 
 }

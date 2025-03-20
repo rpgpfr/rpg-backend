@@ -49,13 +49,13 @@ class CampaignControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when looking for all the user's campaigns, then all of its campaigns are returned")
-	void givenAUserId_whenLookingForTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
+	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	void givenAnOwner_whenLookingForTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> actualResponseEntity = campaignController.getAllCampaignsByUserId(userId);
+		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> actualResponseEntity = campaignController.getAllCampaignsByOwner(owner);
 
 		// Then
 		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> expectedResponseEntity = ResponseEntity.ok(new ResponseViewModel<>(createCampaignViewModels(), null));

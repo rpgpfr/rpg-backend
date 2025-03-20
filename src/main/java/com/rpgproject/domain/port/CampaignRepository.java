@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface CampaignRepository {
 
-	List<Campaign> getCampaignsByOwner(String userId);
+	List<Campaign> getCampaignsByOwner(String owner);
 
-	long getCountByOwner(String userId);
+	long getCountByOwner(String owner);
 
 }
