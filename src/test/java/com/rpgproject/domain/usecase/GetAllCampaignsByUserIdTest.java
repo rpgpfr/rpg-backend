@@ -3,6 +3,7 @@ package com.rpgproject.domain.usecase;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
+import com.rpgproject.domain.usecase.campaign.GetAllCampaignsByOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

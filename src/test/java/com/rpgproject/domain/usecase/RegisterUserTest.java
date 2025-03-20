@@ -4,6 +4,7 @@ import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.UserRegistrationFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
+import com.rpgproject.domain.usecase.user.RegisterUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

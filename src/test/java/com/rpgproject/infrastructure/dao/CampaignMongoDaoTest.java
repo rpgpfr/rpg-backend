@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
+import static com.rpgproject.utils.CreationTestUtils.createCampaignDTO;
 import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -70,14 +71,14 @@ class CampaignMongoDaoTest {
 	@DisplayName("Given a campaignDTO, when saving it, then it is saved")
 	void givenACampaignDTO_whenSavingIt_thenItIsSaved() {
 		// Given
-		CampaignDTO campaignDTO = new CampaignDTO("alvin", "myCampaign");
+		CampaignDTO campaignDTO = createCampaignDTO();
 
 		// When
 		campaignMongoDao.save(campaignDTO);
 
 		// Then
 		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("alvin");
-		List<CampaignDTO> expectedCampaigns = List.of(new CampaignDTO("alvin", "myCampaign"));
+		List<CampaignDTO> expectedCampaigns = List.of(createCampaignDTO());
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
 	}

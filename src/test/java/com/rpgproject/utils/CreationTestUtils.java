@@ -100,6 +100,14 @@ public class CreationTestUtils {
 		);
 	}
 
+	public static Campaign createCampaign() {
+		return new Campaign("alvin", "My campaign");
+	}
+
+	public static CampaignDTO createCampaignDTO() {
+		return new CampaignDTO("alvin", "My campaign");
+	}
+
 	public static List<MapDTO> createMapDTOs() {
 		return List.of(
 			new MapDTO("username", "map 1"),

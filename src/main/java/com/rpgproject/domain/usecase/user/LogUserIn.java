@@ -1,4 +1,4 @@
-package com.rpgproject.domain.usecase;
+package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.UserLoginFailedException;

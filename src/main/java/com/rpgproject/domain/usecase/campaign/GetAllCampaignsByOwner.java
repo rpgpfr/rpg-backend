@@ -1,4 +1,4 @@
-package com.rpgproject.domain.usecase;
+package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
