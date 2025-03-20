@@ -49,6 +49,7 @@ class UserProfileRestPresenterTest {
 				"mail@example2.com",
 				"firstName",
 				"lastName",
+				"01/01/2025",
 				null,
 				null,
 				1,

@@ -42,6 +42,16 @@ public class UserJdbcDao {
 		parameters.put("firstName", userDTO.getFirstName());
 		parameters.put("lastName", userDTO.getLastName());
 
+		String registerQuery = buildQuery(userDTO, parameters);
+
+		try {
+			jdbcTemplate.update(registerQuery, parameters);
+		} catch (DataAccessException e) {
+			throw new RuntimeException("Error registering user", e);
+		}
+	}
+
+	private String buildQuery(UserDTO userDTO, Map<String, String> parameters) {
 		String registerQuery = REGISTER_START;
 
 		if (userDTO.getPassword() != null) {
@@ -49,13 +59,7 @@ public class UserJdbcDao {
 		} else {
 			registerQuery += ") " + REGISTER_END + ");";
 		}
-
-		try {
-			jdbcTemplate.update(registerQuery, parameters);
-		} catch (DataAccessException e) {
-			System.out.println(e.getMessage());
-			throw new RuntimeException("Error registering user", e);
-		}
+		return registerQuery;
 	}
 
 	private String addPassword(UserDTO userDTO, String registerQuery, Map<String, String> parameters) {

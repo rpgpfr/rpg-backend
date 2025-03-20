@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
@@ -56,7 +57,8 @@ class UserJdbcDaoTest {
 			"Hamaide",
 			"password",
 			null,
-			null
+			null,
+			LocalDate.of(2025, 1, 1)
 		);
 
 		assertThat(actualUserDTO).isEqualTo(expectedUserDTO);
@@ -79,7 +81,8 @@ class UserJdbcDaoTest {
 			"Hamaide",
 			"password",
 			null,
-			null
+			null,
+			LocalDate.of(2025, 1, 1)
 		);
 
 		assertThat(actualUserDTO).isEqualTo(expectedUserDTO);
@@ -144,13 +147,13 @@ class UserJdbcDaoTest {
 	@DisplayName("Given a UserDTO, when updating, then updates are saved")
 	void givenAUserDTO_whenUpdating_thenUpdatesAreSaved() {
 		// Given
-		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null);
+		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null, LocalDate.of(2025, 1, 1));
 
 		// When
 		userJdbcDao.update(userDTO);
 
 		// Then
-		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null);
+		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null, LocalDate.of(2025, 1, 1));
 
 		assertThat(userJdbcDao.getUserByIdentifier("alvin")).isEqualTo(expectedUserDTO);
 	}
@@ -159,13 +162,13 @@ class UserJdbcDaoTest {
 	@DisplayName("Given a UserDTO with description and rpgKnowledge, when updating, then updates are saved")
 	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenUpdating_thenUpdatesAreSaved() {
 		// Given
-		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge");
+		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge", LocalDate.of(2025, 1, 1));
 
 		// When
 		userJdbcDao.update(userDTO);
 
 		// Then
-		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge");
+		UserDTO expectedUserDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge", LocalDate.of(2025, 1, 1));
 
 		assertThat(userJdbcDao.getUserByIdentifier("alvin")).isEqualTo(expectedUserDTO);
 	}

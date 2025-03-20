@@ -2,6 +2,8 @@ package com.rpgproject.infrastructure.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,5 +19,6 @@ public class UserDTO {
 	private String password;
 	private String description;
 	private String rpgKnowledge;
+	private LocalDate signedUpAt;
 
 }

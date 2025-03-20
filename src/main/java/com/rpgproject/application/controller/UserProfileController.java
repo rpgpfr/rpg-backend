@@ -39,7 +39,7 @@ public class UserProfileController {
 	@PatchMapping("/")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> update(@CurrentOwner String username, @RequestBody UserUpdateRequestBody userUpdateRequestBody) {
-		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), null, userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge());
+		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), null, userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge(), null);
 
 		return updateUser.execute(user);
 	}

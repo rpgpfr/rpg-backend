@@ -104,6 +104,7 @@ class UserProfileControllerTest {
 				"mail@example.com",
 				"Alvin",
 				"Hamaide",
+				"01/01/2025",
 				null,
 				null,
 				0,

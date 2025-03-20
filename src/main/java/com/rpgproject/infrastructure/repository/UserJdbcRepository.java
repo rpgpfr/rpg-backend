@@ -56,7 +56,8 @@ public class UserJdbcRepository implements UserRepository {
 			userDTO.getLastName(),
 			userDTO.getPassword(),
 			userDTO.getDescription(),
-			userDTO.getRpgKnowledge()
+			userDTO.getRpgKnowledge(),
+			userDTO.getSignedUpAt()
 		);
 	}
 
@@ -90,7 +91,8 @@ public class UserJdbcRepository implements UserRepository {
 			user.lastName(),
 			user.password(),
 			user.description(),
-			user.rpgKnowledge()
+			user.rpgKnowledge(),
+			null
 		);
 	}
 
