@@ -100,6 +100,10 @@ public class CreationTestUtils {
 		);
 	}
 
+	public static CampaignViewModel createCampaignViewModel() {
+		return new CampaignViewModel("My campaign");
+	}
+
 	public static Campaign createCampaign() {
 		return new Campaign("alvin", "My campaign");
 	}

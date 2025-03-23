@@ -1,7 +1,9 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
+import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
@@ -27,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({
 	CampaignController.class,
 	CampaignsRestPresenter.class,
+	CampaignRestPresenter.class,
 	CampaignMongoRepository.class,
 	CampaignMongoDao.class
 })
@@ -59,6 +62,22 @@ class CampaignControllerTest {
 
 		// Then
 		ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> expectedResponseEntity = ResponseEntity.ok(new ResponseViewModel<>(createCampaignViewModels(), null));
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	void givenAnOwnerAndACampaignRequestBody_whenCreatingIt_thenTheCampaignIsSaved() {
+		// Given
+		String owner = "username";
+		CampaignRequestBody campaignRequestBody = new CampaignRequestBody("my campaign");
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
