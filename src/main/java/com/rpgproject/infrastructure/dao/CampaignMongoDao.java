@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -39,6 +40,23 @@ public class CampaignMongoDao {
 			System.err.println(e.getMessage());
 
 			throw new RuntimeException("Error saving campaign", e);
+		}
+	}
+
+	public void update(CampaignDTO campaignDTO, String originalName) {
+		try {
+			Query query = new Query(
+				where("name")
+					.is(originalName)
+					.and("owner")
+					.is(campaignDTO.getOwner())
+			);
+
+			mongoTemplate.findAndReplace(query, campaignDTO);
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Error updating campaign", e);
 		}
 	}
 

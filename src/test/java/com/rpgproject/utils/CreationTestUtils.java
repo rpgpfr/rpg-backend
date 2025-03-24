@@ -94,9 +94,9 @@ public class CreationTestUtils {
 
 	public static List<CampaignDTO> createCampaignDTOs() {
 		return List.of(
-			new CampaignDTO("username", "campagne 1"),
-			new CampaignDTO("username", "campagne 2"),
-			new CampaignDTO("username", "campagne 3")
+			new CampaignDTO("username", "campagne 1", "description", "type", "mood"),
+			new CampaignDTO("username", "campagne 2", "description", "type", "mood"),
+			new CampaignDTO("username", "campagne 3", "description", "type", "mood")
 		);
 	}
 
@@ -109,7 +109,7 @@ public class CreationTestUtils {
 	}
 
 	public static CampaignDTO createCampaignDTO() {
-		return new CampaignDTO("alvin", "My campaign");
+		return new CampaignDTO("alvin", "My campaign", "description", "type", "mood");
 	}
 
 	public static List<MapDTO> createMapDTOs() {

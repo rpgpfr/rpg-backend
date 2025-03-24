@@ -47,10 +47,18 @@ public class CampaignMongoRepository implements CampaignRepository {
 		}
 	}
 
+	@Override
+	public void update(Campaign campaign, String originalName) {
+
+	}
+
 	private CampaignDTO mapToCampaignDTO(Campaign campaign) {
 		return new CampaignDTO(
 			campaign.owner(),
-			campaign.name()
+			campaign.name(),
+			null,
+			null,
+			null
 		);
 	}
 

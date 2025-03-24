@@ -93,4 +93,35 @@ class CampaignMongoDaoTest {
 		assertThatCode(() -> campaignMongoDao.save(campaignDTO)).isInstanceOf(RuntimeException.class);
 	}
 
+	@Test
+	@DisplayName("Given a campaignDTO, when updating it, then it is updated")
+	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String originalName = campaignDTO.getName();
+
+		campaignDTO.setName("updated");
+
+		// When
+		campaignMongoDao.update(campaignDTO, originalName);
+
+		// Then
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("username");
+
+		CampaignDTO expectedCampaignDTO = createCampaignDTOs().getFirst();
+		expectedCampaignDTO.setName("updated");
+
+		assertThat(actualCampaigns).contains(expectedCampaignDTO);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
+	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = null;
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, null)).isInstanceOf(RuntimeException.class);
+	}
+
 }
