@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.CampaignUpdateFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
@@ -15,8 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
-import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
+import static com.rpgproject.utils.CreationTestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -96,6 +96,35 @@ class CampaignMongoRepositoryTest {
 
 		// When & Then
 		assertThatCode(() -> campaignMongoRepository.save(campaign)).isInstanceOf(CampaignCreationFailedException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when updating it, then it is updated")
+	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
+		// Given
+		Campaign oldCampaign = createCampaigns().getFirst();
+		Campaign campaign = new Campaign(oldCampaign.owner(), "updated");
+		String originalName = oldCampaign.name();
+
+		// When
+		campaignMongoRepository.update(campaign, originalName);
+
+		// Then
+		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("username");
+
+		Campaign expectedCampaign = new Campaign(createCampaignDTOs().getFirst().getOwner(), "updated");
+
+		assertThat(actualCampaigns).contains(expectedCampaign);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
+	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		Campaign campaign = null;
+
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.update(campaign, null)).isInstanceOf(CampaignUpdateFailedException.class);
 	}
 
 }

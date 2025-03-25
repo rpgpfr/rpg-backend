@@ -2,6 +2,8 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.CampaignUpdateFailedException;
+import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
@@ -42,14 +44,19 @@ public class CampaignMongoRepository implements CampaignRepository {
 		try {
 			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
 			campaignMongoDao.save(campaignDTO);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			throw new CampaignCreationFailedException();
 		}
 	}
 
 	@Override
 	public void update(Campaign campaign, String originalName) {
-
+		try {
+			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
+			campaignMongoDao.update(campaignDTO, originalName);
+		} catch (RuntimeException e) {
+			throw new CampaignUpdateFailedException();
+		}
 	}
 
 	private CampaignDTO mapToCampaignDTO(Campaign campaign) {
