@@ -8,11 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
-import static com.rpgproject.utils.CreationTestUtils.*;
+import static com.rpgproject.utils.CreationTestUtils.createCampaign;
+import static com.rpgproject.utils.CreationTestUtils.createCampaignViewModel;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CampaignRestPresenterTest {
 

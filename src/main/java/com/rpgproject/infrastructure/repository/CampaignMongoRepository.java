@@ -3,7 +3,6 @@ package com.rpgproject.infrastructure.repository;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.CampaignCreationFailedException;
 import com.rpgproject.domain.exception.CampaignUpdateFailedException;
-import com.rpgproject.domain.exception.UserUpdateFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;

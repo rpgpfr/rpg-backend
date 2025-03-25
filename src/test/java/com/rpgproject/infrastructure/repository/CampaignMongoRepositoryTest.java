@@ -4,7 +4,6 @@ import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.CampaignCreationFailedException;
 import com.rpgproject.domain.exception.CampaignUpdateFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
-import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.*;
+import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
+import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
