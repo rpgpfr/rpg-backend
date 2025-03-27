@@ -2,6 +2,7 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.annotation.CurrentOwner;
 import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
+import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
@@ -37,6 +38,12 @@ public class CampaignController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
 		return createCampaign.execute(owner, campaignRequestBody.name());
+	}
+
+	@PutMapping("/{slug}")
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<ResponseViewModel<CampaignViewModel>> updateCampaign(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CampaignUpdateRequestBody campaignUpdateRequestBody) {
+		return null;
 	}
 
 }

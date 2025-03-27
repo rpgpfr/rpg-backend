@@ -43,11 +43,11 @@ public class CampaignMongoDao {
 		}
 	}
 
-	public void update(CampaignDTO campaignDTO, String originalName) {
+	public void update(CampaignDTO campaignDTO, String slug) {
 		try {
 			Query query = new Query(
-				where("name")
-					.is(originalName)
+				where("slug")
+					.is(slug)
 					.and("owner")
 					.is(campaignDTO.getOwner())
 			);

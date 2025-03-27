@@ -4,7 +4,6 @@ import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.CampaignUpdateFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
-import org.apache.commons.lang3.StringUtils;
 
 public class UpdateCampaign<T> {
 
@@ -16,11 +15,11 @@ public class UpdateCampaign<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(Campaign campaign, String originalName) {
+	public T execute(Campaign campaign, String slug) {
 		try {
-			campaignRepository.update(campaign, originalName);
-				String newSlug = campaign.name().toLowerCase().replace(" ", "-");
-				campaign = new Campaign(newSlug);
+			campaignRepository.update(campaign, slug);
+			String newSlug = campaign.name().toLowerCase().replace(" ", "-");
+			campaign = new Campaign(newSlug);
 
 			return presenter.ok(campaign);
 		} catch (CampaignUpdateFailedException e) {

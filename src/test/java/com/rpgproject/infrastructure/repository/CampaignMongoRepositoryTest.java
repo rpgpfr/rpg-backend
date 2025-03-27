@@ -101,10 +101,10 @@ class CampaignMongoRepositoryTest {
 		// Given
 		Campaign oldCampaign = createCampaigns().getFirst();
 		Campaign campaign = new Campaign(oldCampaign.owner(), "updated name", "updated-name");
-		String originalName = oldCampaign.name();
+		String slug = oldCampaign.slug();
 
 		// When
-		campaignMongoRepository.update(campaign, originalName);
+		campaignMongoRepository.update(campaign, slug);
 
 		// Then
 		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("username");

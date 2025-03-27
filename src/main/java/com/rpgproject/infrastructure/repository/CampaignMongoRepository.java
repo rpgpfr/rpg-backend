@@ -56,10 +56,10 @@ public class CampaignMongoRepository implements CampaignRepository {
 	}
 
 	@Override
-	public void update(Campaign campaign, String originalName) {
+	public void update(Campaign campaign, String slug) {
 		try {
 			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
-			campaignMongoDao.update(campaignDTO, originalName);
+			campaignMongoDao.update(campaignDTO, slug);
 		} catch (RuntimeException e) {
 			throw new CampaignUpdateFailedException();
 		}

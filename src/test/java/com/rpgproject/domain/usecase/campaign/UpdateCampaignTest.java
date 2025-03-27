@@ -30,35 +30,37 @@ class UpdateCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign and its original name, when updating it, then it is updated")
-	void givenACampaignAndItsOriginalName_whenUpdatingIt_thenItIsUpdated() {
+	@DisplayName("Given a campaign and its slug, when updating it, then it is updated")
+	void givenACampaignAndItsSlug_whenUpdatingIt_thenItIsUpdated() {
 		// Given
 		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
-		String originalName = "originalName";
+		String slug = "camapgne-1";
 
 		// When
-		updateCampaign.execute(campaign, originalName);
+		updateCampaign.execute(campaign, slug);
 
 		// Then
-		verify(campaignRepository).update(campaign, originalName);
-		verify(presenter, times(1)).ok(campaign);
+		Campaign expectedCampaign = new Campaign("updated-name");
+
+		verify(campaignRepository).update(campaign, slug);
+		verify(presenter, times(1)).ok(expectedCampaign);
 	}
 
 	@Test
-	@DisplayName("Given a campaign and its original name, when update fails, then an error is presented")
-	void givenACampaignAndItsOriginalName_whenUpdateFails_thenAnErrorIsPresented() {
+	@DisplayName("Given a campaign and its slug, when update fails, then an error is presented")
+	void givenACampaignAndItsSlug_whenUpdateFails_thenAnErrorIsPresented() {
 		// Given
 		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
-		String originalName = "originalName";
+		String slug = "slug";
 		CampaignUpdateFailedException exception = new CampaignUpdateFailedException();
 
-		doThrow(exception).when(campaignRepository).update(campaign, originalName);
+		doThrow(exception).when(campaignRepository).update(campaign, slug);
 
 		// When
-		updateCampaign.execute(campaign, originalName);
+		updateCampaign.execute(campaign, slug);
 
 		// Then
-		verify(campaignRepository).update(campaign, originalName);
+		verify(campaignRepository).update(campaign, slug);
 		verify(presenter, times(1)).error(exception);
 	}
 

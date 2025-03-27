@@ -12,6 +12,6 @@ public interface CampaignRepository {
 
 	void save(Campaign campaign);
 
-	void update(Campaign campaign, String originalName);
+	void update(Campaign campaign, String slug);
 
 }

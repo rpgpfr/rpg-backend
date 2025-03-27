@@ -98,12 +98,12 @@ class CampaignMongoDaoTest {
 	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
-		String originalName = campaignDTO.getName();
+		String slug = campaignDTO.getSlug();
 
 		campaignDTO.setName("updated");
 
 		// When
-		campaignMongoDao.update(campaignDTO, originalName);
+		campaignMongoDao.update(campaignDTO, slug);
 
 		// Then
 		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("username");
