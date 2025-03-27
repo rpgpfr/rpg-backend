@@ -9,8 +9,10 @@ public record UserProfileViewModel(
 	String lastName,
 	String signedUpAt,
 	@JsonInclude(JsonInclude.Include.NON_NULL) String description,
-	@JsonInclude(JsonInclude.Include.NON_NULL) String rpgKnowledge, long campaignCount,
-	long mapCount, long characterCount,
+	@JsonInclude(JsonInclude.Include.NON_NULL) String rpgKnowledge,
+	long campaignCount,
+	long mapCount,
+	long characterCount,
 	long resourceCount
 ) {
 
