@@ -29,7 +29,14 @@ public class CampaignMongoRepository implements CampaignRepository {
 	private List<Campaign> mapToCampaigns(List<CampaignDTO> campaignDTOs) {
 		return campaignDTOs
 			.stream()
-			.map(dto -> new Campaign(dto.getOwner(), dto.getName()))
+			.map(dto -> new Campaign(
+				dto.getOwner(),
+				dto.getName(),
+				dto.getSlug(),
+				dto.getDescription(),
+				dto.getType(),
+				dto.getMood()
+			))
 			.toList();
 	}
 
@@ -62,9 +69,10 @@ public class CampaignMongoRepository implements CampaignRepository {
 		return new CampaignDTO(
 			campaign.owner(),
 			campaign.name(),
-			null,
-			null,
-			null
+			campaign.slug(),
+			campaign.description(),
+			campaign.type(),
+			campaign.mood()
 		);
 	}
 

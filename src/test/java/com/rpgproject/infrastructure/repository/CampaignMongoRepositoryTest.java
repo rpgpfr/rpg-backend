@@ -76,14 +76,14 @@ class CampaignMongoRepositoryTest {
 	@DisplayName("Given a campaign, when saving it, then it is saved")
 	void givenACampaign_whenSavingTheCampaign_thenCampaignIsSaved() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "myCampaign");
+		Campaign campaign = new Campaign("alvin", "myCampaign", "mycampaign");
 
 		// When
 		campaignMongoRepository.save(campaign);
 
 		// Then
 		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("alvin");
-		List<Campaign> expectedCampaigns = List.of(new Campaign("alvin", "myCampaign"));
+		List<Campaign> expectedCampaigns = List.of(new Campaign("alvin", "myCampaign", "mycampaign"));
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
 	}
@@ -91,11 +91,8 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a campaign, when saving fails, then an exception is thrown")
 	void givenACampaign_whenSavingFails_thenAnExceptionIsThrown() {
-		// Given
-		Campaign campaign = null;
-
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.save(campaign)).isInstanceOf(CampaignCreationFailedException.class);
+		assertThatCode(() -> campaignMongoRepository.save(null)).isInstanceOf(CampaignCreationFailedException.class);
 	}
 
 	@Test
@@ -103,7 +100,7 @@ class CampaignMongoRepositoryTest {
 	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
 		// Given
 		Campaign oldCampaign = createCampaigns().getFirst();
-		Campaign campaign = new Campaign(oldCampaign.owner(), "updated");
+		Campaign campaign = new Campaign(oldCampaign.owner(), "updated name", "updated-name");
 		String originalName = oldCampaign.name();
 
 		// When
@@ -112,7 +109,7 @@ class CampaignMongoRepositoryTest {
 		// Then
 		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("username");
 
-		Campaign expectedCampaign = new Campaign(createCampaignDTOs().getFirst().getOwner(), "updated");
+		Campaign expectedCampaign = new Campaign(createCampaignDTOs().getFirst().getOwner(), "updated name", "updated-name");
 
 		assertThat(actualCampaigns).contains(expectedCampaign);
 	}
@@ -120,11 +117,8 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
-		// Given
-		Campaign campaign = null;
-
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.update(campaign, null)).isInstanceOf(CampaignUpdateFailedException.class);
+		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(CampaignUpdateFailedException.class);
 	}
 
 }

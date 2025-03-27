@@ -27,7 +27,13 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 	private List<CampaignViewModel> mapToViewModels(List<Campaign> campaigns) {
 		return campaigns
 			.stream()
-			.map(campaign -> new CampaignViewModel(campaign.name()))
+			.map(campaign -> new CampaignViewModel(
+				campaign.name(),
+				campaign.slug(),
+				campaign.description(),
+				campaign.type(),
+				campaign.mood()
+			))
 			.toList();
 	}
 

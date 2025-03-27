@@ -34,12 +34,14 @@ class CreateCampaignTest {
 	@DisplayName("Given a campaign, when creating it, then it is saved")
 	void givenACampaign_whenCreatingIt_thenItIsSaved() {
 		// Given
-		Campaign campaign = createCampaign();
+		String owner = "alvin";
+		String name = "myCampaign";
 
 		// When
-		createCampaign.execute(campaign);
+		createCampaign.execute(owner, name);
 
 		// Then
+		Campaign campaign = new Campaign(owner, name, "mycampaign");
 		verify(campaignRepository).save(campaign);
 		verify(presenter, times(1)).ok();
 	}
@@ -48,16 +50,19 @@ class CreateCampaignTest {
 	@DisplayName("Given a campaign, when creation fails, then an exception is thrown")
 	void givenACampaign_whenCreationFails_thenAnExceptionIsThrown() {
 		// Given
-		Campaign campaign = createCampaign();
+		String owner = "alvin";
+		String name = "myCampaign";
+		Campaign campaign = new Campaign(owner, name, "mycampaign");
 		CampaignCreationFailedException exception = new CampaignCreationFailedException();
 
 		doThrow(exception).when(campaignRepository).save(campaign);
 
 		// When
-		createCampaign.execute(campaign);
+		createCampaign.execute(owner, name);
 
 		// Then
-		verify(campaignRepository).save(campaign);
+		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign");
+		verify(campaignRepository).save(expectedCampaign);
 		verify(presenter, times(1)).error(exception);
 	}
 

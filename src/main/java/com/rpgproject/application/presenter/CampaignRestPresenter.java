@@ -18,7 +18,16 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 	@Override
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> ok(Campaign campaign) {
 		return ResponseEntity.ok(
-			new ResponseViewModel<>(new CampaignViewModel(campaign.name()), null)
+			new ResponseViewModel<>(
+				new CampaignViewModel(
+					campaign.name(),
+					campaign.slug(),
+					campaign.description(),
+					campaign.type(),
+					campaign.mood()
+				),
+				null
+			)
 		);
 	}
 

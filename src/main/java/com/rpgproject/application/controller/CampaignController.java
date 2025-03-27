@@ -37,9 +37,7 @@ public class CampaignController {
 	@PostMapping("/")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
-		Campaign campaign = new Campaign(owner, campaignRequestBody.name());
-
-		return createCampaign.execute(campaign);
+		return createCampaign.execute(owner, campaignRequestBody.name());
 	}
 
 }

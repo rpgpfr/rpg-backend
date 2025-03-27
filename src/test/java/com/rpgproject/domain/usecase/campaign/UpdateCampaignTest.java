@@ -33,7 +33,7 @@ class UpdateCampaignTest {
 	@DisplayName("Given a campaign and its original name, when updating it, then it is updated")
 	void givenACampaignAndItsOriginalName_whenUpdatingIt_thenItIsUpdated() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
 		String originalName = "originalName";
 
 		// When
@@ -48,7 +48,7 @@ class UpdateCampaignTest {
 	@DisplayName("Given a campaign and its original name, when update fails, then an error is presented")
 	void givenACampaignAndItsOriginalName_whenUpdateFails_thenAnErrorIsPresented() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
 		String originalName = "originalName";
 		CampaignUpdateFailedException exception = new CampaignUpdateFailedException();
 

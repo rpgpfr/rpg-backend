@@ -15,8 +15,10 @@ public class CreateCampaign<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(Campaign campaign) {
+	public T execute(String owner, String name) {
 		try {
+			String slug = name.toLowerCase().replace(" ", "-");
+			Campaign campaign = new Campaign(owner, name, slug);
 			campaignRepository.save(campaign);
 
 			return presenter.ok();

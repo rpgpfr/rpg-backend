@@ -78,38 +78,38 @@ public class CreationTestUtils {
 
 	public static List<CampaignViewModel> createCampaignViewModels() {
 		return List.of(
-			new CampaignViewModel("campagne 1"),
-			new CampaignViewModel("campagne 2"),
-			new CampaignViewModel("campagne 3")
+			new CampaignViewModel("campagne 1", "campagne-1"),
+			new CampaignViewModel("campagne 2", "campagne-2"),
+			new CampaignViewModel("campagne 3", "campagne-3")
 		);
 	}
 
 	public static List<Campaign> createCampaigns() {
 		return List.of(
-			new Campaign("username", "campagne 1"),
-			new Campaign("username", "campagne 2"),
-			new Campaign("username", "campagne 3")
+			new Campaign("username", "campagne 1", "campagne-1"),
+			new Campaign("username", "campagne 2", "campagne-2"),
+			new Campaign("username", "campagne 3", "campagne-3")
 		);
 	}
 
 	public static List<CampaignDTO> createCampaignDTOs() {
 		return List.of(
-			new CampaignDTO("username", "campagne 1", "description", "type", "mood"),
-			new CampaignDTO("username", "campagne 2", "description", "type", "mood"),
-			new CampaignDTO("username", "campagne 3", "description", "type", "mood")
+			new CampaignDTO("username", "campagne 1", "campagne-1", null, null, null),
+			new CampaignDTO("username", "campagne 2", "campagne-2", null, null, null),
+			new CampaignDTO("username", "campagne 3", "campagne-3", null, null, null)
 		);
 	}
 
 	public static CampaignViewModel createCampaignViewModel() {
-		return new CampaignViewModel("My campaign");
+		return new CampaignViewModel("My campaign", "my-campaign");
 	}
 
 	public static Campaign createCampaign() {
-		return new Campaign("alvin", "My campaign");
+		return new Campaign("alvin", "My campaign", "my-campaign");
 	}
 
 	public static CampaignDTO createCampaignDTO() {
-		return new CampaignDTO("alvin", "My campaign", "description", "type", "mood");
+		return new CampaignDTO("alvin", "My campaign", "my-campaign", "description", "type", "mood");
 	}
 
 	public static List<MapDTO> createMapDTOs() {

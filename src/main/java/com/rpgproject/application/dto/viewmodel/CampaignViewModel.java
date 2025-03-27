@@ -9,4 +9,8 @@ public record CampaignViewModel(
 	@JsonInclude(JsonInclude.Include.NON_NULL) String type,
 	@JsonInclude(JsonInclude.Include.NON_NULL) String mood) {
 
+	public CampaignViewModel(String name, String slug) {
+		this(name, slug, null, null, null);
+	}
+
 }
