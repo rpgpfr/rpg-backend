@@ -41,7 +41,7 @@ class UpdateCampaignTest {
 
 		// Then
 		verify(campaignRepository).update(campaign, originalName);
-		verify(presenter, times(1)).ok();
+		verify(presenter, times(1)).ok(campaign);
 	}
 
 	@Test

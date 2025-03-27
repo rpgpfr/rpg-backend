@@ -22,13 +22,15 @@ public class CampaignDTO {
 
 	private String owner;
 	private String name;
+	private String slug;
 	private String description;
 	private String type;
 	private String mood;
 
-	public CampaignDTO(String owner, String name, String description, String type, String mood) {
+	public CampaignDTO(String owner, String name, String slug, String description, String type, String mood) {
 		this.owner = owner;
 		this.name = name;
+		this.slug = slug;
 		this.description = description;
 		this.type = type;
 		this.mood = mood;
@@ -39,13 +41,13 @@ public class CampaignDTO {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		CampaignDTO that = (CampaignDTO) o;
-		return Objects.equals(getOwner(), that.getOwner()) && Objects.equals(getName(), that.getName()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getType(), that.getType()) && Objects.equals(getMood(), that.getMood());
+		return Objects.equals(getOwner(), that.getOwner()) && Objects.equals(getName(), that.getName()) && Objects.equals(getSlug(), that.getSlug()) && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getType(), that.getType()) && Objects.equals(getMood(), that.getMood());
 	}
 
 	@Override
 	@IgnoreCoverage
 	public int hashCode() {
-		return Objects.hash(getOwner(), getName(), getDescription(), getType(), getMood());
+		return Objects.hash(getOwner(), getName(), getSlug(), getDescription(), getType(), getMood());
 	}
 
 }

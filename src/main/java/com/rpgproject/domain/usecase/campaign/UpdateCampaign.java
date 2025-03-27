@@ -18,11 +18,10 @@ public class UpdateCampaign<T> {
 	public void execute(Campaign campaign, String originalName) {
 		try {
 			campaignRepository.update(campaign, originalName);
-			presenter.ok();
+			presenter.ok(campaign);
 		} catch (CampaignUpdateFailedException e) {
 			presenter.error(e);
 		}
-
 	}
 
 }
