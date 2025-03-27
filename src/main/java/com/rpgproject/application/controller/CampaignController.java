@@ -6,7 +6,6 @@ import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
-import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.usecase.campaign.CreateCampaign;
 import com.rpgproject.domain.usecase.campaign.GetAllCampaignsByOwner;

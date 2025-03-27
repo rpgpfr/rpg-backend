@@ -77,7 +77,12 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
+			new ResponseViewModel<>(
+				new CampaignViewModel("my campaign", "my-campaign"),
+				null
+			)
+		);
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

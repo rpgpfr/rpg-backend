@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaign;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,9 +40,10 @@ class CreateCampaignTest {
 		createCampaign.execute(owner, name);
 
 		// Then
-		Campaign campaign = new Campaign(owner, name, "mycampaign");
-		verify(campaignRepository).save(campaign);
-		verify(presenter, times(1)).ok();
+		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign");
+
+		verify(campaignRepository).save(expectedCampaign);
+		verify(presenter, times(1)).ok(expectedCampaign);
 	}
 
 	@Test
@@ -62,6 +62,7 @@ class CreateCampaignTest {
 
 		// Then
 		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign");
+
 		verify(campaignRepository).save(expectedCampaign);
 		verify(presenter, times(1)).error(exception);
 	}

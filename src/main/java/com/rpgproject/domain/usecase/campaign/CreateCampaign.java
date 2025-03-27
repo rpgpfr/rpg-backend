@@ -21,7 +21,7 @@ public class CreateCampaign<T> {
 			Campaign campaign = new Campaign(owner, name, slug);
 			campaignRepository.save(campaign);
 
-			return presenter.ok();
+			return presenter.ok(campaign);
 		} catch (CampaignCreationFailedException e) {
 			return presenter.error(e);
 		}
