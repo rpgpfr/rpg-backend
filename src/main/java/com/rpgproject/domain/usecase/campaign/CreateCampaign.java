@@ -19,6 +19,7 @@ public class CreateCampaign<T> {
 		try {
 			String slug = name.toLowerCase().replace(" ", "-");
 			Campaign campaign = new Campaign(owner, name, slug);
+
 			campaignRepository.save(campaign);
 
 			return presenter.ok(campaign);
