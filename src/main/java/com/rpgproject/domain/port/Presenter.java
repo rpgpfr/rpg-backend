@@ -8,5 +8,4 @@ public interface Presenter<INPUT, OUTPUT> {
 
 	OUTPUT error(Exception exception);
 
-
 }
