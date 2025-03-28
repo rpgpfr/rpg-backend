@@ -7,9 +7,11 @@ import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
+import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.usecase.campaign.CreateCampaign;
 import com.rpgproject.domain.usecase.campaign.GetAllCampaignsByOwner;
+import com.rpgproject.domain.usecase.campaign.UpdateCampaign;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,12 @@ public class CampaignController {
 
 	private final GetAllCampaignsByOwner<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getAllCampaignsByOwner;
 	private final CreateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> createCampaign;
+	private final UpdateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> updateCampaign;
 
 	public CampaignController(CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter) {
 		this.getAllCampaignsByOwner = new GetAllCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
 		this.createCampaign = new CreateCampaign<>(campaignRepository, campaignRestPresenter);
+		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
 	}
 
 	@GetMapping("/")
@@ -43,7 +47,16 @@ public class CampaignController {
 	@PutMapping("/{slug}")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> updateCampaign(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CampaignUpdateRequestBody campaignUpdateRequestBody) {
-		return null;
+		Campaign campaign = new Campaign(
+			owner,
+			campaignUpdateRequestBody.name(),
+			slug,
+			campaignUpdateRequestBody.description(),
+			campaignUpdateRequestBody.type(),
+			campaignUpdateRequestBody.mood()
+		);
+
+		return updateCampaign.execute(campaign, slug);
 	}
 
 }

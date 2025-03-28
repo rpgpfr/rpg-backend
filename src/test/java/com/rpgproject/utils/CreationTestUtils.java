@@ -78,9 +78,9 @@ public class CreationTestUtils {
 
 	public static List<CampaignViewModel> createCampaignViewModels() {
 		return List.of(
-			new CampaignViewModel("campagne 1", "campagne-1"),
-			new CampaignViewModel("campagne 2", "campagne-2"),
-			new CampaignViewModel("campagne 3", "campagne-3")
+			new CampaignViewModel("campagne 1", "campagne-1", null, null, null),
+			new CampaignViewModel("campagne 2", "campagne-2", null, null, null),
+			new CampaignViewModel("campagne 3", "campagne-3", null, null, null)
 		);
 	}
 
@@ -101,7 +101,7 @@ public class CreationTestUtils {
 	}
 
 	public static CampaignViewModel createCampaignViewModel() {
-		return new CampaignViewModel("My campaign", "my-campaign");
+		return new CampaignViewModel("My campaign", "my-campaign", null, null, null);
 	}
 
 	public static Campaign createCampaign() {

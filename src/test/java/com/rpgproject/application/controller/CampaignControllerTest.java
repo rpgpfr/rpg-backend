@@ -1,6 +1,7 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
+import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
@@ -67,7 +68,7 @@ class CampaignControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	@DisplayName("Given an owner and a campaign request body, when creating it, then the campaign is saved")
 	void givenAnOwnerAndACampaignRequestBody_whenCreatingIt_thenTheCampaignIsSaved() {
 		// Given
 		String owner = "username";
@@ -79,7 +80,29 @@ class CampaignControllerTest {
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(
-				new CampaignViewModel("my campaign", "my-campaign"),
+				new CampaignViewModel("my campaign", "my-campaign", null, null, null),
+				null
+			)
+		);
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given an owner with a slug and a campaign update request body, when updating it, then the new slug is returned")
+	void givenAnOwnerWithASlugAndACampaignUpdateRequestBody_whenUpdatingIt_thenTheNewSlugIsReturned() {
+		// Given
+		String owner = "username";
+		String slug = "my-campaign";
+		CampaignUpdateRequestBody campaignUpdateRequestBody = new CampaignUpdateRequestBody("my updated campaign", "description", "type", "mood");
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.updateCampaign(owner, slug, campaignUpdateRequestBody);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
+			new ResponseViewModel<>(
+				new CampaignViewModel(null, "my-updated-campaign", null, null, null),
 				null
 			)
 		);
