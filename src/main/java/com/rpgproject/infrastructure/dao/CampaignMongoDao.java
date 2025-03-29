@@ -3,6 +3,7 @@ package com.rpgproject.infrastructure.dao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,8 +23,33 @@ public class CampaignMongoDao {
 	public List<CampaignDTO> findAllCampaignsByOwner(String owner) {
 		return mongoTemplate
 			.query(CampaignDTO.class)
-			.matching(query(where("owner").is(owner)))
+			.matching(buildCampaignsByOwnerQuery(owner))
 			.all();
+	}
+
+	private Query buildCampaignsByOwnerQuery(String owner) {
+		return query(where("owner").is(owner));
+	}
+
+	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
+		try {
+			Query query = buildCampaignIdBySlugAndOwnerQuery(slug, owner);
+
+			return mongoTemplate.findOne(query, CampaignDTO.class).getId();
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Error finding campaign by slug and owner", e);
+		}
+	}
+
+	private Query buildCampaignIdBySlugAndOwnerQuery(String slug, String owner) {
+		return query(
+			where("slug")
+				.is(slug)
+				.and("owner")
+				.is(owner)
+		);
 	}
 
 	public long getCountByOwner(String owner) {
@@ -45,19 +71,33 @@ public class CampaignMongoDao {
 
 	public void update(CampaignDTO campaignDTO, String slug) {
 		try {
-			Query query = new Query(
-				where("slug")
-					.is(slug)
-					.and("owner")
-					.is(campaignDTO.getOwner())
-			);
+			Query query = buildQuery(campaignDTO, slug);
+			Update update = buildUpdate(campaignDTO);
 
-			mongoTemplate.findAndReplace(query, campaignDTO);
+			mongoTemplate.findAndModify(query, update, CampaignDTO.class);
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
 			throw new RuntimeException("Error updating campaign", e);
 		}
+	}
+
+	private Query buildQuery(CampaignDTO campaignDTO, String slug) {
+		return new Query(
+			where("slug")
+				.is(slug)
+				.and("owner")
+				.is(campaignDTO.getOwner())
+		);
+	}
+
+	private Update buildUpdate(CampaignDTO campaignDTO) {
+		return new Update()
+			.set("name", campaignDTO.getName())
+			.set("description", campaignDTO.getDescription())
+			.set("slug", campaignDTO.getSlug())
+			.set("type", campaignDTO.getType())
+			.set("mood", campaignDTO.getMood());
 	}
 
 }
