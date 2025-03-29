@@ -18,7 +18,6 @@ public class QuestMongoDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
-
 	public QuestDTO findMainQuestByCampaignId(String campaignId) {
 		Query query = buildMainQuestByCampaignIdQuery(campaignId);
 

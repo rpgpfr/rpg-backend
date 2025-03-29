@@ -46,10 +46,10 @@ public class DTOCreationTestUtils {
 		campaign1.setId("id1");
 
 		CampaignDTO campaign2 = new CampaignDTO("username", "campagne 2", "campagne-2", null, null, null);
-		campaign1.setId("id2");
+		campaign2.setId("id2");
 
 		CampaignDTO campaign3 = new CampaignDTO("username", "campagne 3", "campagne-3", null, null, null);
-		campaign1.setId("id3");
+		campaign3.setId("id3");
 
 		return List.of(campaign1, campaign2, campaign3);
 	}

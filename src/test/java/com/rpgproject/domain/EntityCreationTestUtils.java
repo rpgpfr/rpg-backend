@@ -11,6 +11,14 @@ public class EntityCreationTestUtils {
 		return new Quest("title", "main", "description", List.of(new Goal("goal", false)));
 	}
 
+	public static List<Quest> createQuests() {
+		return List.of(
+			new Quest("title", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("title", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("title", "main", "description", List.of(new Goal("goal", false)))
+		);
+	}
+
 	public static Campaign createCampaign() {
 		return new Campaign("alvin", "My campaign", "my-campaign");
 	}

@@ -39,7 +39,7 @@ public class CampaignMongoDao {
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error finding campaign by slug and owner", e);
+			throw new RuntimeException("Error finding campaign id by slug and owner", e);
 		}
 	}
 

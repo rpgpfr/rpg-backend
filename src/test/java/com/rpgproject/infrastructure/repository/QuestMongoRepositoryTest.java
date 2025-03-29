@@ -1,6 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Quest;
+import com.rpgproject.domain.exception.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
@@ -14,7 +15,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import static com.rpgproject.domain.EntityCreationTestUtils.createQuest;
+import static com.rpgproject.domain.EntityCreationTestUtils.createQuests;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -24,8 +28,6 @@ class QuestMongoRepositoryTest {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	@Autowired
-	private QuestMongoDao questMongoDao;
 
 	@BeforeEach
 	public void setUp() {
@@ -51,10 +53,12 @@ class QuestMongoRepositoryTest {
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 
 		// When
-		Quest actualQuest = questMongoRepository.findMainQuestByOwnerAndSlug(campaignDTO.getOwner(), campaignDTO.getSlug());
+		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(campaignDTO.getSlug(), campaignDTO.getOwner());
 
 		// Then
-//		Quest expectedQuest = createQuestDTOs().getFirst();
+		Quest expectedQuest = createQuests().getFirst();
+
+		assertThat(actualQuest).isEqualTo(expectedQuest);
 	}
 
 	@Test
@@ -67,9 +71,20 @@ class QuestMongoRepositoryTest {
 		Quest quest = createQuest();
 
 		// When
-		questMongoRepository.editMainQuest(quest, owner, slug);
+		questMongoRepository.editMainQuest(quest, slug, owner);
 
 		// Then
+		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(slug, owner);
+		Quest expectedQuest = createQuest();
+
+		assertThat(actualQuest).isEqualTo(expectedQuest);
+	}
+
+	@Test
+	@DisplayName("Given a quest with owner and a campaign slug, when editing it, then an exception is thrown")
+	void givenAQuestWithOwnerAndACampaignSlug_whenEditingIt_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> questMongoRepository.editMainQuest(null, null, null)).isInstanceOf(QuestEditFailedException.class);
 	}
 
 }
