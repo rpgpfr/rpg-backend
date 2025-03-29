@@ -15,8 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
-import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 

@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-import static com.rpgproject.utils.CreationTestUtils.createCharacterDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCharacterDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest

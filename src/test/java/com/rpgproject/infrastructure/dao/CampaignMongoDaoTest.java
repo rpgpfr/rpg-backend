@@ -12,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTO;
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTO;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -53,6 +53,29 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
+	@DisplayName("Given a slug and an owner, when getting the campaign id, then the id is returned")
+	void givenASlugAndAnOwner_whenGettingTheCampaignId_thenTheIdIsReturned() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
+
+		// When
+		String actualId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
+
+		// Then
+		System.out.println(actualId);
+		assertThat(actualId).isNotNull();
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when getting the campaign id, then an exception is thrown")
+	void givenACampaignDTO_whenGettingTheCampaignId_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.findCampaignIdBySlugAndOwner(null, null)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
 	@DisplayName("Given an owner, when getting the number of campaigns created by the user, then the count is returned")
 	void givenAnOwner_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
 		// Given
@@ -86,11 +109,8 @@ class CampaignMongoDaoTest {
 	@Test
 	@DisplayName("Given a campaignDTO, when saving fails, then an exception is thrown")
 	void givenACampaignDTO_whenSavingFails_thenAnExceptionIsThrown() {
-		// Given
-		CampaignDTO campaignDTO = null;
-
-		// When & Then
-		assertThatCode(() -> campaignMongoDao.save(campaignDTO)).isInstanceOf(RuntimeException.class);
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.save(null)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
@@ -117,11 +137,8 @@ class CampaignMongoDaoTest {
 	@Test
 	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
-		// Given
-		CampaignDTO campaignDTO = null;
-
-		// When & Then
-		assertThatCode(() -> campaignMongoDao.update(campaignDTO, null)).isInstanceOf(RuntimeException.class);
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.update(null, null)).isInstanceOf(RuntimeException.class);
 	}
 
 }

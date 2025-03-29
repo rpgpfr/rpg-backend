@@ -1,10 +1,9 @@
-package com.rpgproject.domain.usecase;
+package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.exception.UserLoginFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
-import com.rpgproject.domain.usecase.user.LogUserIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.rpgproject.utils.CreationTestUtils.createUser;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

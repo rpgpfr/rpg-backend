@@ -18,8 +18,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.rpgproject.utils.CreationTestUtils.createUser;
-import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createUserDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

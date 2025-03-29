@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUserProfile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserProfileRestPresenterTest {

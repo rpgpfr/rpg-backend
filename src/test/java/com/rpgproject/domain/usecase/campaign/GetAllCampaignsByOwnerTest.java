@@ -1,9 +1,8 @@
-package com.rpgproject.domain.usecase;
+package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
-import com.rpgproject.domain.usecase.campaign.GetAllCampaignsByOwner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

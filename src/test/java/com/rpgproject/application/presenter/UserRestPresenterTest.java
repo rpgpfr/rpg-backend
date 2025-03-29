@@ -9,8 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import static com.rpgproject.utils.CreationTestUtils.createUser;
-import static com.rpgproject.utils.CreationTestUtils.createUserViewModel;
+import static com.rpgproject.application.DTOCreationTestUtils.createUserViewModel;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRestPresenterTest {

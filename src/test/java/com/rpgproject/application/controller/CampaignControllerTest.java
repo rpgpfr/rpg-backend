@@ -21,8 +21,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
-import static com.rpgproject.utils.CreationTestUtils.createCampaignViewModels;
+import static com.rpgproject.application.DTOCreationTestUtils.createCampaignViewModels;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
