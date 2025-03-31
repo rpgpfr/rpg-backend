@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 

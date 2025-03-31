@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.UserNotFoundException;
+import com.rpgproject.domain.exception.user.UserNotFoundException;
 import com.rpgproject.domain.port.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

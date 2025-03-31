@@ -1,7 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.QuestEditFailedException;
+import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;

@@ -1,10 +1,10 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserLoginFailedException;
-import com.rpgproject.domain.exception.UserNotFoundException;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.UserUpdateFailedException;
+import com.rpgproject.domain.exception.user.UserLoginFailedException;
+import com.rpgproject.domain.exception.user.UserNotFoundException;
+import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.user.UserUpdateFailedException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.dto.UserDTO;

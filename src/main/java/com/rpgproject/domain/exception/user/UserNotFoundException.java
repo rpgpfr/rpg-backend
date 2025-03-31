@@ -1,4 +1,4 @@
-package com.rpgproject.domain.exception;
+package com.rpgproject.domain.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
 

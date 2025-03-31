@@ -1,8 +1,8 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.CampaignCreationFailedException;
-import com.rpgproject.domain.exception.CampaignUpdateFailedException;
+import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

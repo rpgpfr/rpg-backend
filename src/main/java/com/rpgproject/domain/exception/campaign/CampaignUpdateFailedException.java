@@ -1,4 +1,4 @@
-package com.rpgproject.domain.exception;
+package com.rpgproject.domain.exception.campaign;
 
 public class CampaignUpdateFailedException extends RuntimeException {
 
