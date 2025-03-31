@@ -1,6 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Quest;
+import com.rpgproject.domain.exception.quest.CannotFindMainQuestException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
@@ -59,6 +60,13 @@ class QuestMongoRepositoryTest {
 		Quest expectedQuest = createQuests().getFirst();
 
 		assertThat(actualQuest).isEqualTo(expectedQuest);
+	}
+
+	@Test
+	@DisplayName("Given an owner and a slug, when finding the main quest, then an exception is thrown")
+	void givenAnOwnerAndASlug_whenFindingTheMainQuest_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> questMongoRepository.findMainQuestBySlugAndOwner(null, null)).isInstanceOf(CannotFindMainQuestException.class);
 	}
 
 	@Test

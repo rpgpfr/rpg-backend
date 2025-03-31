@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
+import com.rpgproject.domain.exception.quest.CannotFindMainQuestException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
@@ -23,10 +24,14 @@ public class QuestMongoRepository {
 	}
 
 	public Quest findMainQuestBySlugAndOwner(String slug, String owner) {
-		String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
-		QuestDTO questDTO = questMongoDao.findMainQuestByCampaignId(campaignId);
+		try {
+			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
+			QuestDTO questDTO = questMongoDao.findMainQuestByCampaignId(campaignId);
 
-		return mapToQuest(questDTO);
+			return mapToQuest(questDTO);
+		} catch (RuntimeException e) {
+			throw new CannotFindMainQuestException();
+		}
 	}
 
 	private Quest mapToQuest(QuestDTO questDTO) {
