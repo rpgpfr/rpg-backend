@@ -31,25 +31,35 @@ public class CampaignMongoDao {
 		return query(where("owner").is(owner));
 	}
 
-	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
+	public CampaignDTO findCampaignBySlugAndOwner(String slug, String owner) {
 		try {
-			Query query = buildCampaignIdBySlugAndOwnerQuery(slug, owner);
+			Query query = buildCampaignBySlugAndOwnerQuery(slug, owner);
 
-			return mongoTemplate.findOne(query, CampaignDTO.class).getId();
+			CampaignDTO campaignDTO = mongoTemplate.findOne(query, CampaignDTO.class);
+
+			if (campaignDTO == null) {
+				throw new RuntimeException();
+			}
+
+			return campaignDTO;
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error finding campaign id by slug and owner", e);
+			throw new RuntimeException("Error finding campaign by slug and owner", e);
 		}
 	}
 
-	private Query buildCampaignIdBySlugAndOwnerQuery(String slug, String owner) {
+	private Query buildCampaignBySlugAndOwnerQuery(String slug, String owner) {
 		return query(
 			where("slug")
 				.is(slug)
 				.and("owner")
 				.is(owner)
 		);
+	}
+
+	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
+		return findCampaignBySlugAndOwner(slug, owner).getId();
 	}
 
 	public long getCountByOwner(String owner) {
