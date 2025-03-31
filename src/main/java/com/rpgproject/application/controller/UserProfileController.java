@@ -30,16 +30,16 @@ public class UserProfileController {
 		updateUser = new UpdateUser<>(userRepository, userRestPresenter);
 	}
 
-	@GetMapping("/")
+	@GetMapping("")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> getUserProfile(@CurrentOwner String username) {
 		return getUserProfile.execute(username);
 	}
 
-	@PatchMapping("/")
+	@PatchMapping("")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> update(@CurrentOwner String username, @RequestBody UserUpdateRequestBody userUpdateRequestBody) {
-		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), null, userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge(), null);
+		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), "password", userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge(), null);
 
 		return updateUser.execute(user);
 	}

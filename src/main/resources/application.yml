@@ -2,6 +2,8 @@ spring.application.name: rpg-project
 logging.level.root: trace
 
 spring:
+  cache:
+    type: none
   config:
     import: "optional:file:.env[.properties],optional:file:/etc/secrets/.env[.properties]"
   datasource:

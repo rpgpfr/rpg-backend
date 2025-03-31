@@ -89,7 +89,7 @@ public class UserJdbcRepository implements UserRepository {
 			user.email(),
 			user.firstName(),
 			user.lastName(),
-			user.password(),
+			bCryptPasswordEncoder.encode(user.password()),
 			user.description(),
 			user.rpgKnowledge(),
 			null
