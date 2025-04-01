@@ -64,8 +64,8 @@ class CampaignMongoRepositoryTest {
 	void givenASlugAndAnOwner_whenGettingACampaign_thenItIsReturned() {
 		// Given
 		Campaign campaign = createCampaigns().getFirst();
-		String owner = campaign.owner();
-		String slug = campaign.slug();
+		String owner = campaign.getOwner();
+		String slug = campaign.getSlug();
 
 		// When
 		Campaign actualCampaign = campaignMongoRepository.getCampaignBySlugAndOwner(slug, owner);
@@ -126,8 +126,8 @@ class CampaignMongoRepositoryTest {
 	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
 		// Given
 		Campaign oldCampaign = createCampaigns().getFirst();
-		Campaign campaign = new Campaign(oldCampaign.owner(), "updated name", "updated-name");
-		String slug = oldCampaign.slug();
+		Campaign campaign = new Campaign(oldCampaign.getOwner(), "updated name", "updated-name");
+		String slug = oldCampaign.getSlug();
 
 		// When
 		campaignMongoRepository.update(campaign, slug);

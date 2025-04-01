@@ -18,7 +18,7 @@ public class UpdateCampaign<T> {
 	public T execute(Campaign campaign, String slug) {
 		try {
 			campaignRepository.update(campaign, slug);
-			String newSlug = campaign.name().toLowerCase().replace(" ", "-");
+			String newSlug = campaign.getName().toLowerCase().replace(" ", "-");
 			campaign = new Campaign(newSlug);
 
 			return presenter.ok(campaign);

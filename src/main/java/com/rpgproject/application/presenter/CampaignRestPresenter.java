@@ -20,11 +20,11 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 		return ResponseEntity.ok(
 			new ResponseViewModel<>(
 				new CampaignViewModel(
-					campaign.name(),
-					campaign.slug(),
-					campaign.description(),
-					campaign.type(),
-					campaign.mood()
+					campaign.getName(),
+					campaign.getSlug(),
+					campaign.getDescription(),
+					campaign.getType(),
+					campaign.getMood()
 				),
 				null
 			)

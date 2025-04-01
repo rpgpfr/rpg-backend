@@ -27,7 +27,7 @@ public class CampaignMongoRepository implements CampaignRepository {
 		return mapToCampaigns(campaignDTOs);
 	}
 
-//	@Override
+	@Override
 	public Campaign getCampaignBySlugAndOwner(String slug, String owner) {
 		CampaignDTO campaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
 
@@ -52,7 +52,8 @@ public class CampaignMongoRepository implements CampaignRepository {
 			campaignDTO.getSlug(),
 			campaignDTO.getDescription(),
 			campaignDTO.getType(),
-			campaignDTO.getMood()
+			campaignDTO.getMood(),
+			null
 		);
 	}
 
@@ -83,12 +84,12 @@ public class CampaignMongoRepository implements CampaignRepository {
 
 	private CampaignDTO mapToCampaignDTO(Campaign campaign) {
 		return new CampaignDTO(
-			campaign.owner(),
-			campaign.name(),
-			campaign.slug(),
-			campaign.description(),
-			campaign.type(),
-			campaign.mood()
+			campaign.getOwner(),
+			campaign.getName(),
+			campaign.getSlug(),
+			campaign.getDescription(),
+			campaign.getType(),
+			campaign.getMood()
 		);
 	}
 

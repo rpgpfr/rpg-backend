@@ -23,6 +23,10 @@ public class EntityCreationTestUtils {
 		return new Campaign("alvin", "My campaign", "my-campaign");
 	}
 
+	public static Campaign createFullCampaign() {
+		return new Campaign("alvin", "My campaign", "my-campaign");
+	}
+
 	public static List<Campaign> createCampaigns() {
 		return List.of(
 			new Campaign("username", "campagne 1", "campagne-1"),

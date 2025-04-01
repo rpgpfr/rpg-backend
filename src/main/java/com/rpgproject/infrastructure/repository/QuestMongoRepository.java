@@ -4,6 +4,7 @@ import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.quest.CannotFindMainQuestException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
+import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.GoalDTO;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class QuestMongoRepository {
+public class QuestMongoRepository implements QuestRepository {
 
 	private final QuestMongoDao questMongoDao;
 	private final CampaignMongoDao campaignMongoDao;
@@ -23,6 +24,7 @@ public class QuestMongoRepository {
 		this.campaignMongoDao = campaignMongoDao;
 	}
 
+	@Override
 	public Quest findMainQuestBySlugAndOwner(String slug, String owner) {
 		try {
 			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
@@ -53,6 +55,7 @@ public class QuestMongoRepository {
 			.toList();
 	}
 
+	@Override
 	public void editMainQuest(Quest quest, String slug, String owner) {
 		try {
 			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);

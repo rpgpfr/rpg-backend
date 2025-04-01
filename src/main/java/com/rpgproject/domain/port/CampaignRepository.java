@@ -8,6 +8,8 @@ public interface CampaignRepository {
 
 	List<Campaign> getCampaignsByOwner(String owner);
 
+	Campaign getCampaignBySlugAndOwner(String slug, String owner);
+
 	long getCountByOwner(String owner);
 
 	void save(Campaign campaign);

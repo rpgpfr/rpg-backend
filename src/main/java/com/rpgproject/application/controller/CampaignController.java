@@ -53,7 +53,8 @@ public class CampaignController {
 			slug,
 			campaignUpdateRequestBody.description(),
 			campaignUpdateRequestBody.type(),
-			campaignUpdateRequestBody.mood()
+			campaignUpdateRequestBody.mood(),
+			null
 		);
 
 		return updateCampaign.execute(campaign, slug);

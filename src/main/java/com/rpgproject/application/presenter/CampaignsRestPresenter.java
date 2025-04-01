@@ -28,11 +28,11 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 		return campaigns
 			.stream()
 			.map(campaign -> new CampaignViewModel(
-				campaign.name(),
-				campaign.slug(),
-				campaign.description(),
-				campaign.type(),
-				campaign.mood()
+				campaign.getName(),
+				campaign.getSlug(),
+				campaign.getDescription(),
+				campaign.getType(),
+				campaign.getMood()
 			))
 			.toList();
 	}
