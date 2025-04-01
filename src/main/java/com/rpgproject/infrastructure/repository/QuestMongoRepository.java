@@ -2,7 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.quest.CannotFindMainQuestException;
+import com.rpgproject.domain.exception.quest.MainQuestNotFoundException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
@@ -32,7 +32,7 @@ public class QuestMongoRepository implements QuestRepository {
 
 			return mapToQuest(questDTO);
 		} catch (RuntimeException e) {
-			throw new CannotFindMainQuestException();
+			throw new MainQuestNotFoundException();
 		}
 	}
 

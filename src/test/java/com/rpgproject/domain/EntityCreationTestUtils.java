@@ -24,7 +24,7 @@ public class EntityCreationTestUtils {
 	}
 
 	public static Campaign createFullCampaign() {
-		return new Campaign("alvin", "My campaign", "my-campaign");
+		return new Campaign("alvin", "My campaign", "my-campaign", null, null, null, createQuest());
 	}
 
 	public static List<Campaign> createCampaigns() {
