@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
 import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
@@ -26,18 +27,33 @@ public class CampaignMongoRepository implements CampaignRepository {
 		return mapToCampaigns(campaignDTOs);
 	}
 
+//	@Override
+	public Campaign getCampaignBySlugAndOwner(String slug, String owner) {
+		CampaignDTO campaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
+
+		if (campaignDTO == null) {
+			throw new CampaignNotFoundException();
+		}
+
+		return mapToCampaign(campaignDTO);
+	}
+
 	private List<Campaign> mapToCampaigns(List<CampaignDTO> campaignDTOs) {
 		return campaignDTOs
 			.stream()
-			.map(dto -> new Campaign(
-				dto.getOwner(),
-				dto.getName(),
-				dto.getSlug(),
-				dto.getDescription(),
-				dto.getType(),
-				dto.getMood()
-			))
+			.map(this::mapToCampaign)
 			.toList();
+	}
+
+	private Campaign mapToCampaign(CampaignDTO campaignDTO) {
+		return new Campaign(
+			campaignDTO.getOwner(),
+			campaignDTO.getName(),
+			campaignDTO.getSlug(),
+			campaignDTO.getDescription(),
+			campaignDTO.getType(),
+			campaignDTO.getMood()
+		);
 	}
 
 	@Override

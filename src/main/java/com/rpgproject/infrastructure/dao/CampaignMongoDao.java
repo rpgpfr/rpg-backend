@@ -32,21 +32,9 @@ public class CampaignMongoDao {
 	}
 
 	public CampaignDTO findCampaignBySlugAndOwner(String slug, String owner) {
-		try {
-			Query query = buildCampaignBySlugAndOwnerQuery(slug, owner);
+		Query query = buildCampaignBySlugAndOwnerQuery(slug, owner);
 
-			CampaignDTO campaignDTO = mongoTemplate.findOne(query, CampaignDTO.class);
-
-			if (campaignDTO == null) {
-				throw new RuntimeException();
-			}
-
-			return campaignDTO;
-		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
-
-			throw new RuntimeException("Error finding campaign by slug and owner", e);
-		}
+		return mongoTemplate.findOne(query, CampaignDTO.class);
 	}
 
 	private Query buildCampaignBySlugAndOwnerQuery(String slug, String owner) {

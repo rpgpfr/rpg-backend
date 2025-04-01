@@ -2,8 +2,10 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
 import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
+import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +45,7 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user id, when looking for users campaigns, then all of its campaigns are returned")
+	@DisplayName("Given an owner, when looking for users campaigns, then all of its campaigns are returned")
 	void givenAnOwner_whenLookingForUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
 		String owner = "username";
@@ -55,6 +57,30 @@ class CampaignMongoRepositoryTest {
 		List<Campaign> expectedCampaigns = createCampaigns();
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
+	@DisplayName("Given a slug and an owner, when getting a campaign, then it is returned")
+	void givenASlugAndAnOwner_whenGettingACampaign_thenItIsReturned() {
+		// Given
+		Campaign campaign = createCampaigns().getFirst();
+		String owner = campaign.owner();
+		String slug = campaign.slug();
+
+		// When
+		Campaign actualCampaign = campaignMongoRepository.getCampaignBySlugAndOwner(slug, owner);
+
+		// Then
+		Campaign expectedCampaign = createCampaigns().getFirst();
+
+		assertThat(actualCampaign).isEqualTo(expectedCampaign);
+	}
+
+	@Test
+	@DisplayName("Given a slug and an owner, when getting a campain, then an exception is thrown")
+	void givenASlugAndAnOwner_whenGettingACampaign_thenAnExceptionIsThrown() {
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.getCampaignBySlugAndOwner(null, null)).isInstanceOf(CampaignNotFoundException.class);
 	}
 
 	@Test

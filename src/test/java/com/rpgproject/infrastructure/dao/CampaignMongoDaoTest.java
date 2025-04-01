@@ -70,13 +70,6 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when getting the campaign, then an exception is thrown")
-	void givenACampaignDTO_whenGettingTheCampaign_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> campaignMongoDao.findCampaignBySlugAndOwner(null, null)).isInstanceOf(RuntimeException.class);
-	}
-
-	@Test
 	@DisplayName("Given a slug and an owner, when getting the campaign id, then the id is returned")
 	void givenASlugAndAnOwner_whenGettingTheCampaignId_thenTheIdIsReturned() {
 		// Given
