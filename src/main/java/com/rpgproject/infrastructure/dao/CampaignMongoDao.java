@@ -68,15 +68,13 @@ public class CampaignMongoDao {
 	}
 
 	public void update(CampaignDTO campaignDTO, String slug) {
-		try {
-			Query query = buildQuery(campaignDTO, slug);
-			Update update = buildUpdate(campaignDTO);
+		Query query = buildQuery(campaignDTO, slug);
+		Update update = buildUpdate(campaignDTO);
 
-			mongoTemplate.findAndModify(query, update, CampaignDTO.class);
-		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+		CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
 
-			throw new RuntimeException("Error updating campaign", e);
+		if (updatedCampaignDTO == null) {
+			throw new RuntimeException("Error updating campaign");
 		}
 	}
 
