@@ -24,7 +24,8 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 					campaign.getSlug(),
 					campaign.getDescription(),
 					campaign.getType(),
-					campaign.getMood()
+					campaign.getMood(),
+					null
 				),
 				null
 			)

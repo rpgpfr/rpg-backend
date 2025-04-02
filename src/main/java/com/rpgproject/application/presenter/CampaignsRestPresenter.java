@@ -32,7 +32,8 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 				campaign.getSlug(),
 				campaign.getDescription(),
 				campaign.getType(),
-				campaign.getMood()
+				campaign.getMood(),
+				null
 			))
 			.toList();
 	}
