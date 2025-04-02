@@ -6,6 +6,7 @@ import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
+import com.rpgproject.infrastructure.dto.QuestDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +38,6 @@ class QuestMongoRepositoryTest {
 		questMongoRepository = new QuestMongoRepository(questMongoDao, campaignMongoDao);
 
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
-		mongoTemplate.insert(createCampaignDTO(), "Campaign");
 		mongoTemplate.insert(createQuestDTOs(), "Quest");
 	}
 
@@ -74,12 +74,17 @@ class QuestMongoRepositoryTest {
 	void givenAQuestWithOwnerAndACampaignSlug_whenEditingIt_thenItIsEdited() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
-		String owner = campaignDTO.getOwner();
-		String slug = campaignDTO.getSlug();
+		QuestDTO questDTO = createQuestDTO();
 		Quest quest = createQuest();
 
+		mongoTemplate.insert(campaignDTO, "Campaign");
+		mongoTemplate.insert(questDTO, "Quest");
+
+		String owner = campaignDTO.getOwner();
+		String slug = campaignDTO.getSlug();
+
 		// When
-		questMongoRepository.editMainQuest(quest, slug, owner);
+		questMongoRepository.updateMainQuest(quest, slug, owner);
 
 		// Then
 		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(slug, owner);
@@ -92,7 +97,7 @@ class QuestMongoRepositoryTest {
 	@DisplayName("Given a quest with owner and a campaign slug, when editing it, then an exception is thrown")
 	void givenAQuestWithOwnerAndACampaignSlug_whenEditingIt_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoRepository.editMainQuest(null, null, null)).isInstanceOf(QuestEditFailedException.class);
+		assertThatCode(() -> questMongoRepository.updateMainQuest(null, null, null)).isInstanceOf(QuestEditFailedException.class);
 	}
 
 }

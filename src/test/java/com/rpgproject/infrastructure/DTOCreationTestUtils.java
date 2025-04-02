@@ -38,7 +38,10 @@ public class DTOCreationTestUtils {
 	}
 
 	public static CampaignDTO createCampaignDTO() {
-		return new CampaignDTO("alvin", "My campaign", "my-campaign", "description", "type", "mood");
+		CampaignDTO campaignDTO = new CampaignDTO("alvin", "My campaign", "my-campaign", "description", "type", "mood");
+		campaignDTO.setId("newId");
+
+		return campaignDTO;
 	}
 
 	public static List<CampaignDTO> createCampaignDTOs() {

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import static java.util.Collections.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
@@ -24,29 +25,31 @@ public class QuestMongoDao {
 		return mongoTemplate.findOne(query, QuestDTO.class);
 	}
 
-	public void editMainQuest(QuestDTO questDTO) {
+	public void save(QuestDTO questDTO) {
 		try {
-			updateOrSaveMainQuest(questDTO);
+			mongoTemplate.save(questDTO);
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error saving quest", e);
+			throw new RuntimeException("Error saving campaign", e);
 		}
 	}
 
-	private void updateOrSaveMainQuest(QuestDTO questDTO) {
-		if (findMainQuestByCampaignId(questDTO.getCampaignId()) != null) {
-			updateMainQuest(questDTO);
-		} else {
-			mongoTemplate.save(questDTO);
+	public void update(QuestDTO questDTO) {
+		try {
+			Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
+			Update update = buildUpdate(questDTO);
+
+			QuestDTO updatedQuest = mongoTemplate.findAndModify(query, update, QuestDTO.class);
+
+			if (updatedQuest == null) {
+				throw new RuntimeException();
+			}
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Error updating quest", e);
 		}
-	}
-
-	private void updateMainQuest(QuestDTO questDTO) {
-		Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
-		Update update = buildUpdate(questDTO);
-
-		mongoTemplate.findAndModify(query, update, QuestDTO.class);
 	}
 
 	private Update buildUpdate(QuestDTO questDTO) {

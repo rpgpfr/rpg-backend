@@ -56,12 +56,12 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public void editMainQuest(Quest quest, String slug, String owner) {
+	public void updateMainQuest(Quest quest, String slug, String owner) {
 		try {
 			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
 			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
 
-			questMongoDao.editMainQuest(questDTO);
+			questMongoDao.update(questDTO);
 		} catch (RuntimeException e) {
 			throw new QuestEditFailedException();
 		}

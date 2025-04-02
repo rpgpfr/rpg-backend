@@ -75,7 +75,7 @@ public class CampaignMongoDao {
 			CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
 
 			if (updatedCampaignDTO == null) {
-				throw new RuntimeException("Error updating campaign");
+				throw new RuntimeException();
 			}
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());

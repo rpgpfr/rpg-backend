@@ -151,6 +151,30 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
+	@DisplayName("Given a campaignDTO with wrong owner, when updating, then an exception is thrown")
+	void givenACampaignDTOWithWrongOwner_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+		String slug = campaignDTO.getSlug();
+
+		campaignDTO.setOwner("wrong owner");
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO with wrong slug, when updating, then an exception is thrown")
+	void givenACampaignDTOWithWrongSlug_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+		String slug = "wrong slug";
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
 	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then

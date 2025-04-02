@@ -51,19 +51,26 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a questDTO, when editing it, then it is saved")
-	void givenAQuestDTO_whenEditingIt_thenItIsSaved() {
+	@DisplayName("Given a questDTO, when saving it, then it is saved")
+	void givenAQuestDTO_whenSavingIt_thenItIsSaved() {
 		// Given
 		QuestDTO questDTO = createQuestDTO();
 
 		// When
-		questMongoDao.editMainQuest(questDTO);
+		questMongoDao.save(questDTO);
 
 		// Then
 		QuestDTO actualQuest = questMongoDao.findMainQuestByCampaignId(questDTO.getCampaignId());
 		QuestDTO expectedQuest = createQuestDTO();
 
 		assertThat(actualQuest).isEqualTo(expectedQuest);
+	}
+
+	@Test
+	@DisplayName("Given a questDTO, when saving fails, then an exception is thrown")
+	void givenAQuestDTO_whenSavingFails_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> questMongoDao.save(null)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
@@ -74,7 +81,7 @@ class QuestMongoDaoTest {
 		questDTO.setTitle("updated title");
 
 		// When
-		questMongoDao.editMainQuest(questDTO);
+		questMongoDao.update(questDTO);
 
 		// Then
 		QuestDTO actualQuest = questMongoDao.findMainQuestByCampaignId(questDTO.getCampaignId());
@@ -85,10 +92,21 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a questDTO, when saving fails, then an exception is thrown")
-	void givenAQuestDTO_whenSavingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a questDTO with wrong campaignId, when updating, then an exception is thrown")
+	void givenAQuestDTOWithWrongCampaignId_whenUpdating_thenAnExceptionIsThrown() {
+		// Given
+		QuestDTO questDTO = createQuestDTO();
+		questDTO.setCampaignId("wrongCampaignId");
+
+		// When & Then
+		assertThatCode(() -> questMongoDao.update(questDTO)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a questDTO, when updating fails, then an exception is thrown")
+	void givenAQuestDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoDao.editMainQuest(null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.update(null)).isInstanceOf(RuntimeException.class);
 	}
 
 }
