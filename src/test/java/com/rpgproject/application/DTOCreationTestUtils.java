@@ -28,6 +28,10 @@ public class DTOCreationTestUtils {
 		);
 	}
 
+	public static QuestViewModel createQuestViewModel() {
+		return new QuestViewModel("title", "main", "description", List.of(new GoalViewModel("goal", false)));
+	}
+
 	public static List<CampaignViewModel> createCampaignViewModels() {
 		return List.of(
 			new CampaignViewModel("campagne 1", "campagne-1", null, null, null, null),
@@ -47,6 +51,10 @@ public class DTOCreationTestUtils {
 
 	public static CampaignViewModel createCampaignViewModel() {
 		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, null);
+	}
+
+	public static CampaignViewModel createFullCampaignViewModel() {
+		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, createQuestViewModel());
 	}
 
 }

@@ -4,10 +4,13 @@ import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
+import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
+import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
+import com.rpgproject.infrastructure.repository.QuestMongoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +25,10 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static com.rpgproject.application.DTOCreationTestUtils.createCampaignViewModels;
+import static com.rpgproject.application.DTOCreationTestUtils.createFullCampaignViewModels;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createQuestDTOs;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
@@ -31,7 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 	CampaignController.class,
 	CampaignsRestPresenter.class,
 	CampaignRestPresenter.class,
+	QuestMongoRepository.class,
 	CampaignMongoRepository.class,
+	QuestMongoDao.class,
 	CampaignMongoDao.class
 })
 class CampaignControllerTest {
@@ -45,11 +53,13 @@ class CampaignControllerTest {
 	@BeforeEach
 	public void setUp() {
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
+		mongoTemplate.insert(createQuestDTOs(), "Quest");
 	}
 
 	@AfterEach
 	public void tearDown() {
 		mongoTemplate.dropCollection("Campaign");
+		mongoTemplate.dropCollection("Quest");
 	}
 
 	@Test
@@ -80,7 +90,28 @@ class CampaignControllerTest {
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(
-				new CampaignViewModel("my campaign", "my-campaign", null, null, null),
+				new CampaignViewModel("my campaign", "my-campaign", null, null, null, new QuestViewModel("", "main", "", emptyList())),
+				null
+			)
+		);
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given a slug and an owner, when getting a campaign, then it is returned")
+	void givenASlugAndAnOwner_whenGettingACampaign_thenItIsReturned() {
+		// Given
+		String owner = "username";
+		String slug = "campagne-1";
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.getCampaign(owner, slug);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
+			new ResponseViewModel<>(
+				createFullCampaignViewModels().getFirst(),
 				null
 			)
 		);
@@ -93,7 +124,7 @@ class CampaignControllerTest {
 	void givenAnOwnerWithASlugAndACampaignUpdateRequestBody_whenUpdatingIt_thenTheNewSlugIsReturned() {
 		// Given
 		String owner = "username";
-		String slug = "my-campaign";
+		String slug = "campagne-1";
 		CampaignUpdateRequestBody campaignUpdateRequestBody = new CampaignUpdateRequestBody("my updated campaign", "description", "type", "mood");
 
 		// When
@@ -102,7 +133,7 @@ class CampaignControllerTest {
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(
-				new CampaignViewModel(null, "my-updated-campaign", null, null, null),
+				new CampaignViewModel(null, "my-updated-campaign", null, null, null, null),
 				null
 			)
 		);

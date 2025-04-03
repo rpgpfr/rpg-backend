@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
 import static com.rpgproject.application.DTOCreationTestUtils.createCampaignViewModel;
+import static com.rpgproject.application.DTOCreationTestUtils.createFullCampaignViewModel;
 import static com.rpgproject.domain.EntityCreationTestUtils.createCampaign;
+import static com.rpgproject.domain.EntityCreationTestUtils.createFullCampaign;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CampaignRestPresenterTest {
@@ -44,6 +46,21 @@ class CampaignRestPresenterTest {
 
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(new ResponseViewModel<>(createCampaignViewModel(), null));
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given a campaign with main quest, when presenting it, then return a response entity containing the campaigns view model")
+	void givenACampaignWithMainQuest_whenPresentingIt_thenReturnAResponseEntityContainingTheCampaignsViewModel() {
+		// Given
+		Campaign campaign = createFullCampaign();
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = presenter.ok(campaign);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(new ResponseViewModel<>(createFullCampaignViewModel(), null));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
