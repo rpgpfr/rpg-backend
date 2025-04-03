@@ -81,7 +81,7 @@ class QuestMongoDaoTest {
 		questDTO.setTitle("updated title");
 
 		// When
-		questMongoDao.update(questDTO);
+		questMongoDao.updateMainQuest(questDTO);
 
 		// Then
 		QuestDTO actualQuest = questMongoDao.findMainQuestByCampaignId(questDTO.getCampaignId());
@@ -99,14 +99,14 @@ class QuestMongoDaoTest {
 		questDTO.setCampaignId("wrongCampaignId");
 
 		// When & Then
-		assertThatCode(() -> questMongoDao.update(questDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.updateMainQuest(questDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
 	@DisplayName("Given a questDTO, when updating fails, then an exception is thrown")
 	void givenAQuestDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoDao.update(null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.updateMainQuest(null)).isInstanceOf(RuntimeException.class);
 	}
 
 }

@@ -6,6 +6,8 @@ public interface QuestRepository {
 
 	Quest findMainQuestBySlugAndOwner(String slug, String owner);
 
+	void save(Quest quest, String slug, String owner);
+
 	void updateMainQuest(Quest quest, String slug, String owner);
 
 }

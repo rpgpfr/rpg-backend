@@ -13,9 +13,9 @@ public class EntityCreationTestUtils {
 
 	public static List<Quest> createQuests() {
 		return List.of(
-			new Quest("title", "main", "description", List.of(new Goal("goal", false))),
-			new Quest("title", "main", "description", List.of(new Goal("goal", false))),
-			new Quest("title", "main", "description", List.of(new Goal("goal", false)))
+			new Quest("quest 1", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("quest 2", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("quest 3", "main", "description", List.of(new Goal("goal", false)))
 		);
 	}
 

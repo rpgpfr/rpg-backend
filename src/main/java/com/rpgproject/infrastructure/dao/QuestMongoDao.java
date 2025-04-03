@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import static java.util.Collections.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
@@ -35,7 +34,7 @@ public class QuestMongoDao {
 		}
 	}
 
-	public void update(QuestDTO questDTO) {
+	public void updateMainQuest(QuestDTO questDTO) {
 		try {
 			Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
 			Update update = buildUpdate(questDTO);

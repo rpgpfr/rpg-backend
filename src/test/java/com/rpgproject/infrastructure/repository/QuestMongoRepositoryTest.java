@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.quest.MainQuestNotFoundException;
+import com.rpgproject.domain.exception.quest.QuestCreationException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
@@ -70,18 +71,53 @@ class QuestMongoRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Given a quest with a slug and an owner, when saving it, then it is saved")
+	void givenAQuestWithASlugAndAnOwner_whenSavingAQuest_thenItIsSaved() {
+		CampaignDTO campaignDTO = createCampaignDTO();
+		Quest quest = createQuest();
+
+		mongoTemplate.insert(campaignDTO, "Campaign");
+
+		String owner = campaignDTO.getOwner();
+		String slug = campaignDTO.getSlug();
+
+		// When
+		questMongoRepository.save(quest, slug, owner);
+
+		// Then
+		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(slug, owner);
+		Quest expectedQuest = createQuest();
+
+		assertThat(actualQuest).isEqualTo(expectedQuest);
+	}
+
+	@Test
+	@DisplayName("Given a quest with owner and a wrong campaign slug, when saving it, then an exception is thrown")
+	void givenAQuestWithOwnerAndAWrongCampaignSlug_whenSavingIt_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+		Quest quest = createQuest();
+		String owner = campaignDTO.getOwner();
+		String slug = "wrong slug";
+
+		// When & Then
+		assertThatCode(() -> questMongoRepository.save(quest, slug, owner)).isInstanceOf(QuestCreationException.class);
+	}
+
+	@Test
 	@DisplayName("Given a quest with owner and a campaign slug, when editing it, then it is edited")
 	void givenAQuestWithOwnerAndACampaignSlug_whenEditingIt_thenItIsEdited() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 		QuestDTO questDTO = createQuestDTO();
-		Quest quest = createQuest();
+		questDTO.setTitle("Old title");
 
 		mongoTemplate.insert(campaignDTO, "Campaign");
 		mongoTemplate.insert(questDTO, "Quest");
 
 		String owner = campaignDTO.getOwner();
 		String slug = campaignDTO.getSlug();
+		Quest quest = createQuest();
 
 		// When
 		questMongoRepository.updateMainQuest(quest, slug, owner);

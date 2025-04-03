@@ -3,6 +3,7 @@ package com.rpgproject.infrastructure.repository;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.quest.MainQuestNotFoundException;
+import com.rpgproject.domain.exception.quest.QuestCreationException;
 import com.rpgproject.domain.exception.quest.QuestEditFailedException;
 import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
@@ -56,12 +57,24 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
+	public void save(Quest quest, String slug, String owner) {
+		try {
+			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
+			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
+
+			questMongoDao.save(questDTO);
+		} catch (RuntimeException e) {
+			throw new QuestCreationException();
+		}
+	}
+
+	@Override
 	public void updateMainQuest(Quest quest, String slug, String owner) {
 		try {
 			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
 			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
 
-			questMongoDao.update(questDTO);
+			questMongoDao.updateMainQuest(questDTO);
 		} catch (RuntimeException e) {
 			throw new QuestEditFailedException();
 		}

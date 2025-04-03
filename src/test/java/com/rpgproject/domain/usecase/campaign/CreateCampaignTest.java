@@ -1,9 +1,11 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
+import com.rpgproject.domain.port.QuestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +24,14 @@ class CreateCampaignTest {
 	private CampaignRepository campaignRepository;
 
 	@Mock
+	private QuestRepository questRepository;
+
+	@Mock
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
 	public void setUp() {
-		createCampaign = new CreateCampaign<>(campaignRepository, presenter);
+		createCampaign = new CreateCampaign<>(campaignRepository, questRepository, presenter);
 	}
 
 	@Test
@@ -40,10 +45,12 @@ class CreateCampaignTest {
 		createCampaign.execute(owner, name);
 
 		// Then
-		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign");
+		Quest expectedQuest = Quest.createDefaultMainQuest();
+		Campaign expectedCampaignWithQuest = new Campaign(owner, name, "mycampaign", null, null, null, expectedQuest);
 
-		verify(campaignRepository).save(expectedCampaign);
-		verify(presenter, times(1)).ok(expectedCampaign);
+		verify(campaignRepository, times(1)).save(any(Campaign.class));
+		verify(questRepository, times(1)).save(expectedQuest, "mycampaign", owner);
+		verify(presenter, times(1)).ok(expectedCampaignWithQuest);
 	}
 
 	@Test

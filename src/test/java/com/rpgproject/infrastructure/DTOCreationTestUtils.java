@@ -21,13 +21,13 @@ public class DTOCreationTestUtils {
 	}
 
 	public static List<QuestDTO> createQuestDTOs() {
-		QuestDTO quest1 = new QuestDTO("id1", "main", "title", "description", List.of(new GoalDTO("goal", false)));
+		QuestDTO quest1 = new QuestDTO("id1", "main", "quest 1", "description", List.of(new GoalDTO("goal", false)));
 		quest1.setId("idQuest1");
 
-		QuestDTO quest2 = new QuestDTO("id2", "main", "title", "description", List.of(new GoalDTO("goal", false)));
+		QuestDTO quest2 = new QuestDTO("id2", "main", "quest 2", "description", List.of(new GoalDTO("goal", false)));
 		quest2.setId("idQuest2");
 
-		QuestDTO quest3 = new QuestDTO("id3", "main", "title", "description", List.of(new GoalDTO("goal", false)));
+		QuestDTO quest3 = new QuestDTO("id3", "main", "quest 3", "description", List.of(new GoalDTO("goal", false)));
 		quest3.setId("idQuest3");
 
 		return List.of(quest1, quest2, quest3);
