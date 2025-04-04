@@ -1,0 +1,49 @@
+package com.rpgproject.application.presenter;
+
+import com.rpgproject.application.dto.responsebody.ResponseViewModel;
+import com.rpgproject.application.dto.viewmodel.GoalViewModel;
+import com.rpgproject.application.dto.viewmodel.QuestViewModel;
+import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.entity.Goal;
+import com.rpgproject.domain.entity.Quest;
+import com.rpgproject.domain.port.Presenter;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public class QuestRestPresenter implements Presenter<Quest, ResponseEntity<ResponseViewModel<QuestViewModel>>> {
+
+
+	@Override
+	public ResponseEntity<ResponseViewModel<QuestViewModel>> ok() {
+		return ResponseEntity.ok().build();
+	}
+
+	@Override
+	public ResponseEntity<ResponseViewModel<QuestViewModel>> ok(Quest quest) {
+		return ResponseEntity.ok(
+			new ResponseViewModel<>(
+				new QuestViewModel(
+					quest.title(),
+					quest.type(),
+					quest.description(),
+					mapToGoalViewModels(quest.goals())
+				),
+				null
+			)
+		);
+	}
+
+	private List<GoalViewModel> mapToGoalViewModels(List<Goal> goals) {
+		return goals.stream()
+			.map(goal -> new GoalViewModel(goal.name(), goal.completed()))
+			.toList();
+	}
+
+	@Override
+	public ResponseEntity<ResponseViewModel<QuestViewModel>> error(Exception exception) {
+		return ResponseEntity.badRequest().body(new ResponseViewModel<>(null, exception.getMessage()));
+	}
+}

@@ -2,11 +2,13 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
+import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
+import com.rpgproject.application.presenter.QuestRestPresenter;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
@@ -37,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 	CampaignController.class,
 	CampaignsRestPresenter.class,
 	CampaignRestPresenter.class,
+	QuestRestPresenter.class,
 	QuestMongoRepository.class,
 	CampaignMongoRepository.class,
 	QuestMongoDao.class,
@@ -137,6 +140,28 @@ class CampaignControllerTest {
 				null
 			)
 		);
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
+	@DisplayName("Given an owner with a slug and a quest update request body, when updating it, then an empty responseEntity is returned")
+	void givenAnOwnerWithASlugAndAQuestUpdateRequestBody_whenUpdatingIt_thenAnEmptyResponseEntityIsReturned() {
+		// Given
+		String owner = "username";
+		String slug = "campagne-1";
+		QuestUpdateRequestBody questUpdateRequestBody = new QuestUpdateRequestBody(
+			"AAAAAH",
+			"main",
+			"All work and no play makes Jack a dull boy",
+			emptyList()
+		);
+
+		// When
+		ResponseEntity<ResponseViewModel<QuestViewModel>> actualResponseEntity = campaignController.updateQuest(owner, slug, questUpdateRequestBody);
+
+		// Then
+		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

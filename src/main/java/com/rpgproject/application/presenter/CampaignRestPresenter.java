@@ -5,6 +5,8 @@ import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.entity.Goal;
+import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.Presenter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 		QuestViewModel mainQuestViewModel = null;
 
 		if (campaign.getMainQuest() != null) {
-			mainQuestViewModel = mapToQuestViewModel(campaign);
+			mainQuestViewModel = mapToQuestViewModel(campaign.getMainQuest());
 		}
 
 		return ResponseEntity.ok(
@@ -42,17 +44,17 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 		);
 	}
 
-	private QuestViewModel mapToQuestViewModel(Campaign campaign) {
+	private QuestViewModel mapToQuestViewModel(Quest quest) {
 		return new QuestViewModel(
-			campaign.getMainQuest().title(),
-			campaign.getMainQuest().type(),
-			campaign.getMainQuest().description(),
-			mapToGoalViewModels(campaign)
+			quest.title(),
+			quest.type(),
+			quest.description(),
+			mapToGoalViewModels(quest.goals())
 		);
 	}
 
-	private List<GoalViewModel> mapToGoalViewModels(Campaign campaign) {
-		return campaign.getMainQuest().goals().stream()
+	private List<GoalViewModel> mapToGoalViewModels(List<Goal> goals) {
+		return goals.stream()
 			.map(goal -> new GoalViewModel(goal.name(), goal.completed()))
 			.toList();
 	}
