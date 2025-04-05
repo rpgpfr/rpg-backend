@@ -3,13 +3,13 @@ package com.rpgproject.application.presenter;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import static com.rpgproject.utils.CreationTestUtils.createUserProfile;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUserProfile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserProfileRestPresenterTest {

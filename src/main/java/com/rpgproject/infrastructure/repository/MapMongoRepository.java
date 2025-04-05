@@ -14,8 +14,8 @@ public class MapMongoRepository implements MapRepository {
 	}
 
 	@Override
-	public long getCountByOwner(String userId) {
-		return mapMongoDao.getCountByUserId(userId);
+	public long getCountByOwner(String owner) {
+		return mapMongoDao.getCountByOwner(owner);
 	}
 
 }

@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignViewModels;
-import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
+import static com.rpgproject.application.DTOCreationTestUtils.createCampaignViewModels;
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CampaignsRestPresenterTest {

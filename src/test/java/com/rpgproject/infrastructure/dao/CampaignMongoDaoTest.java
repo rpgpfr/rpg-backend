@@ -12,8 +12,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTO;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -36,13 +38,13 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when looking for all the user's campaigns, then all of its campaigns are returned")
-	void givenAUserId_whenLookingForAllTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
+	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	void givenAnOwner_whenLookingForAllTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByUserId(userId);
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner(owner);
 
 		// Then
 		List<CampaignDTO> expectedCampaigns = createCampaignDTOs();
@@ -51,18 +53,132 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when getting the number of campaigns created by the user, then the count is returned")
-	void givenAUserId_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
+	@DisplayName("Given a slug and an owner, when getting the campaign, then it is returned")
+	void givenASlugAndAnOwner_whenGettingTheCampaign_thenItIsReturned() {
 		// Given
-		String userId = "username";
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
 
 		// When
-		long actualCount = campaignMongoDao.getCountByUserId(userId);
+		CampaignDTO actualCampaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
+
+		// Then
+		CampaignDTO expectedCampaignDTO = createCampaignDTOs().getFirst();
+
+		assertThat(actualCampaignDTO).isEqualTo(expectedCampaignDTO);
+	}
+
+	@Test
+	@DisplayName("Given a slug and an owner, when getting the campaign id, then the id is returned")
+	void givenASlugAndAnOwner_whenGettingTheCampaignId_thenTheIdIsReturned() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
+
+		// When
+		String actualId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
+
+		// Then
+		assertThat(actualId).isNotNull();
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when getting the campaign id, then an exception is thrown")
+	void givenACampaignDTO_whenGettingTheCampaignId_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.findCampaignIdBySlugAndOwner(null, null)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given an owner, when getting the number of campaigns created by the user, then the count is returned")
+	void givenAnOwner_whenGettingTheNumberOfCampaignsCreatedByTheUser_thenTheCountIsReturned() {
+		// Given
+		String owner = "username";
+
+		// When
+		long actualCount = campaignMongoDao.getCountByOwner(owner);
 
 		// Then
 		long expectedCount = 3;
 
 		assertThat(actualCount).isEqualTo(expectedCount);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when saving it, then it is saved")
+	void givenACampaignDTO_whenSavingIt_thenItIsSaved() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+
+		// When
+		campaignMongoDao.save(campaignDTO);
+
+		// Then
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("alvin");
+		List<CampaignDTO> expectedCampaigns = List.of(createCampaignDTO());
+
+		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when saving fails, then an exception is thrown")
+	void givenACampaignDTO_whenSavingFails_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.save(null)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when updating it, then it is updated")
+	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+
+		campaignDTO.setName("updated");
+
+		// When
+		campaignMongoDao.update(campaignDTO, slug);
+
+		// Then
+		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("username");
+
+		CampaignDTO expectedCampaignDTO = createCampaignDTOs().getFirst();
+		expectedCampaignDTO.setName("updated");
+
+		assertThat(actualCampaigns).contains(expectedCampaignDTO);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO with wrong owner, when updating, then an exception is thrown")
+	void givenACampaignDTOWithWrongOwner_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+		String slug = campaignDTO.getSlug();
+
+		campaignDTO.setOwner("wrong owner");
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO with wrong slug, when updating, then an exception is thrown")
+	void givenACampaignDTOWithWrongSlug_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTO();
+		String slug = "wrong slug";
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
+	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.update(null, null)).isInstanceOf(RuntimeException.class);
 	}
 
 }

@@ -12,8 +12,8 @@ import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.MapRepository;
 import com.rpgproject.domain.port.UserRepository;
-import com.rpgproject.domain.usecase.GetUserProfile;
-import com.rpgproject.domain.usecase.UpdateUser;
+import com.rpgproject.domain.usecase.user.GetUserProfile;
+import com.rpgproject.domain.usecase.user.UpdateUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +30,16 @@ public class UserProfileController {
 		updateUser = new UpdateUser<>(userRepository, userRestPresenter);
 	}
 
-	@GetMapping("/")
+	@GetMapping("")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserProfileViewModel>> getUserProfile(@CurrentOwner String username) {
 		return getUserProfile.execute(username);
 	}
 
-	@PatchMapping("/")
+	@PatchMapping("")
 	@CrossOrigin(origins = "*")
 	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> update(@CurrentOwner String username, @RequestBody UserUpdateRequestBody userUpdateRequestBody) {
-		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), null, userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge(), null);
+		User user = new User(username, null, userUpdateRequestBody.firstName(), userUpdateRequestBody.lastName(), "password", userUpdateRequestBody.description(), userUpdateRequestBody.rpgKnowledge(), null);
 
 		return updateUser.execute(user);
 	}

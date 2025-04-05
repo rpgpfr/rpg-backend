@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-import static com.rpgproject.utils.CreationTestUtils.createCharacterDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCharacterDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
@@ -34,13 +34,13 @@ class CharacterMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a userId, when getting the number of characters created by the user, then the count is returned")
-	void givenAUserId_whenGettingTheNumberOfCharactersCreatedByTheUser_thenTheCountIsReturned() {
+	@DisplayName("Given an owner, when getting the number of characters created by the user, then the count is returned")
+	void givenAnOwner_whenGettingTheNumberOfCharactersCreatedByTheUser_thenTheCountIsReturned() {
 		// Given
-		String userId = "username";
+		String owner = "username";
 
 		// When
-		long actualCount = characterMongoDao.getCountByOwner(userId);
+		long actualCount = characterMongoDao.getCountByOwner(owner);
 
 		// Then
 		long expectedCount = 3;

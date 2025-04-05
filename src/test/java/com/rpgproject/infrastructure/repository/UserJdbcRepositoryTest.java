@@ -1,10 +1,10 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserLoginFailedException;
-import com.rpgproject.domain.exception.UserNotFoundException;
-import com.rpgproject.domain.exception.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.UserUpdateFailedException;
+import com.rpgproject.domain.exception.user.UserLoginFailedException;
+import com.rpgproject.domain.exception.user.UserNotFoundException;
+import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.user.UserUpdateFailedException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +18,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.rpgproject.utils.CreationTestUtils.createUser;
-import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
+import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createUserDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

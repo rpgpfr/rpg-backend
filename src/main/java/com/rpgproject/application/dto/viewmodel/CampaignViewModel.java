@@ -1,5 +1,14 @@
 package com.rpgproject.application.dto.viewmodel;
 
-public record CampaignViewModel(String name) {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+public record CampaignViewModel(
+	@JsonInclude(JsonInclude.Include.NON_NULL) String name,
+	@JsonInclude(JsonInclude.Include.NON_NULL) String slug,
+	@JsonInclude(JsonInclude.Include.NON_NULL) String description,
+	@JsonInclude(JsonInclude.Include.NON_NULL) String type,
+	@JsonInclude(JsonInclude.Include.NON_NULL) String mood,
+	@JsonInclude(JsonInclude.Include.NON_NULL) QuestViewModel mainQuest
+) {
 
 }

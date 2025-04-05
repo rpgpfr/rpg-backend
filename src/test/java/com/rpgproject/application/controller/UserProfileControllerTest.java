@@ -35,7 +35,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaignDTOs;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-import static com.rpgproject.utils.CreationTestUtils.createUserDTO;
+import static com.rpgproject.infrastructure.DTOCreationTestUtils.createUserDTO;
 import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;

@@ -2,6 +2,6 @@ package com.rpgproject.domain.port;
 
 public interface MapRepository {
 
-	long getCountByOwner(String userId);
+	long getCountByOwner(String owner);
 
 }

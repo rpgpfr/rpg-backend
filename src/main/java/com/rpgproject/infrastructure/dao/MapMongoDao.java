@@ -16,10 +16,10 @@ public class MapMongoDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	public long getCountByUserId(String userId) {
+	public long getCountByOwner(String owner) {
 		return mongoTemplate
 			.query(MapDTO.class)
-			.matching(query(where("userId").is(userId)))
+			.matching(query(where("owner").is(owner)))
 			.count();
 	}
 

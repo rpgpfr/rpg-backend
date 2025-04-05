@@ -1,4 +1,4 @@
-package com.rpgproject.domain.usecase;
+package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.CampaignRepository;
@@ -12,14 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.rpgproject.utils.CreationTestUtils.createCampaigns;
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GetAllCampaignsByUserIdTest {
+class GetAllCampaignsByOwnerTest {
 
-	private GetAllCampaignsByUserId<?> getAllCampaignsByUserId;
+	private GetAllCampaignsByOwner<?> getAllCampaignsByOwner;
 
 	@Mock
 	private CampaignRepository campaignRepository;
@@ -29,23 +29,23 @@ class GetAllCampaignsByUserIdTest {
 
 	@BeforeEach
 	public void setUp() {
-		getAllCampaignsByUserId = new GetAllCampaignsByUserId<>(campaignRepository, campaignsPresenter);
+		getAllCampaignsByOwner = new GetAllCampaignsByOwner<>(campaignRepository, campaignsPresenter);
 	}
 
 	@Test
-	@DisplayName("Given a userId, when getting all the users campaigns Then all of its campaigns are presented")
-	void givenAUserId_whenGettingAllTheUsersCampaigns_thenAllOfItsCampaignsArePresented() {
+	@DisplayName("Given an owner, when getting all the users campaigns Then all of its campaigns are presented")
+	void givenAnOwner_whenGettingAllTheUsersCampaigns_thenAllOfItsCampaignsArePresented() {
 		// Given
-		String userId = "userId";
+		String owner = "owner";
 		List<Campaign> campaigns = createCampaigns();
 
-		when(campaignRepository.getCampaignsByOwner(userId)).thenReturn(campaigns);
+		when(campaignRepository.getCampaignsByOwner(owner)).thenReturn(campaigns);
 
 		// When
-		getAllCampaignsByUserId.execute(userId);
+		getAllCampaignsByOwner.execute(owner);
 
 		// Then
-		verify(campaignRepository).getCampaignsByOwner(userId);
+		verify(campaignRepository).getCampaignsByOwner(owner);
 		verify(campaignsPresenter).ok(campaigns);
 	}
 
