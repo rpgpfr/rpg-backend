@@ -82,6 +82,20 @@ public class CampaignMongoRepository implements CampaignRepository {
 		}
 	}
 
+	@Override
+	public void delete(Campaign campaign) {
+		try {
+			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
+			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(campaign.getSlug(), campaign.getOwner());
+
+			campaignDTO.setId(campaignId);
+
+			campaignMongoDao.delete(campaignDTO);
+		} catch (RuntimeException e) {
+			throw new CampaignNotFoundException();
+		}
+	}
+
 	private CampaignDTO mapToCampaignDTO(Campaign campaign) {
 		return new CampaignDTO(
 			campaign.getOwner(),

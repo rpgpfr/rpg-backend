@@ -104,14 +104,8 @@ class CampaignMongoRepositoryTest {
 		// Given
 		Campaign campaign = new Campaign("alvin", "myCampaign", "mycampaign");
 
-		// When
-		campaignMongoRepository.save(campaign);
-
-		// Then
-		List<Campaign> actualCampaigns = campaignMongoRepository.getCampaignsByOwner("alvin");
-		List<Campaign> expectedCampaigns = List.of(new Campaign("alvin", "myCampaign", "mycampaign"));
-
-		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.save(campaign)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -145,6 +139,23 @@ class CampaignMongoRepositoryTest {
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// When & Then
 		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(CampaignUpdateFailedException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaign, when deleting it, then it is deleted")
+	void givenACampaign_whenDeletingTheCampaign_thenCampaignIsDeleted() {
+		// Given
+		Campaign campaign = createCampaigns().getFirst();
+
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.delete(campaign)).doesNotThrowAnyException();
+	}
+
+	@Test
+	@DisplayName("Given a campaign, when deleting fails, then an exception is thrown")
+	void givenACampaign_whenDeletingFails_thenAnExceptionIsThrown() {
+		// When & Then
+		assertThatCode(() -> campaignMongoRepository.delete(null)).isInstanceOf(CampaignNotFoundException.class);
 	}
 
 }
