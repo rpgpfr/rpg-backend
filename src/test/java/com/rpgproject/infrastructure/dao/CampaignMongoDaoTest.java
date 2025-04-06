@@ -181,4 +181,32 @@ class CampaignMongoDaoTest {
 		assertThatCode(() -> campaignMongoDao.update(null, null)).isInstanceOf(RuntimeException.class);
 	}
 
+	@Test
+	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
+	void givenACampaignDTO_whenDeletingIt_thenItIsDeleted() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
+
+		// When
+		campaignMongoDao.delete(campaignDTO);
+
+		// Then
+		CampaignDTO actualCampaigns = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
+
+		assertThat(actualCampaigns).isNull();
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
+	void givenAWrongCampaignDTO_whenDeletingIt_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = new CampaignDTO("wrong owner", "wrong name", "wrong slug", "description", "type", "mood");
+		campaignDTO.setId("wrong id");
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.delete(campaignDTO)).isInstanceOf(RuntimeException.class);
+	}
+
 }

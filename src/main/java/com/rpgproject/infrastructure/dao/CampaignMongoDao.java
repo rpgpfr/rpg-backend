@@ -1,5 +1,6 @@
 package com.rpgproject.infrastructure.dao;
 
+import com.mongodb.client.result.DeleteResult;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -37,15 +38,6 @@ public class CampaignMongoDao {
 		return mongoTemplate.findOne(query, CampaignDTO.class);
 	}
 
-	private Query buildCampaignBySlugAndOwnerQuery(String slug, String owner) {
-		return query(
-			where("slug")
-				.is(slug)
-				.and("owner")
-				.is(owner)
-		);
-	}
-
 	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
 		return findCampaignBySlugAndOwner(slug, owner).getId();
 	}
@@ -69,7 +61,7 @@ public class CampaignMongoDao {
 
 	public void update(CampaignDTO campaignDTO, String slug) {
 		try {
-			Query query = buildQuery(campaignDTO, slug);
+			Query query = buildCampaignBySlugAndOwnerQuery(slug, campaignDTO.getOwner());
 			Update update = buildUpdate(campaignDTO);
 
 			CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
@@ -84,12 +76,12 @@ public class CampaignMongoDao {
 		}
 	}
 
-	private Query buildQuery(CampaignDTO campaignDTO, String slug) {
-		return new Query(
+	private Query buildCampaignBySlugAndOwnerQuery(String slug, String owner) {
+		return query(
 			where("slug")
 				.is(slug)
 				.and("owner")
-				.is(campaignDTO.getOwner())
+				.is(owner)
 		);
 	}
 
@@ -100,6 +92,20 @@ public class CampaignMongoDao {
 			.set("slug", campaignDTO.getSlug())
 			.set("type", campaignDTO.getType())
 			.set("mood", campaignDTO.getMood());
+	}
+
+	public void delete(CampaignDTO campaignDTO) {
+		try {
+			DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
+
+			if (removeResult.getDeletedCount() == 0) {
+				throw new RuntimeException();
+			}
+		} catch (RuntimeException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Error deleting campaign", e);
+		}
 	}
 
 }
