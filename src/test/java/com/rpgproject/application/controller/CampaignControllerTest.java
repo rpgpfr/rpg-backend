@@ -2,6 +2,7 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
+import com.rpgproject.application.dto.requestbody.GoalUpdateRequestBody;
 import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
@@ -154,7 +155,9 @@ class CampaignControllerTest {
 			"AAAAAH",
 			"main",
 			"All work and no play makes Jack a dull boy",
-			emptyList()
+			List.of(
+				new GoalUpdateRequestBody("goal 1", false)
+			)
 		);
 
 		// When
