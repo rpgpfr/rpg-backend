@@ -2,6 +2,7 @@ package com.rpgproject.application.controller;
 
 import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
+import com.rpgproject.application.dto.requestbody.GoalUpdateRequestBody;
 import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
@@ -145,6 +146,22 @@ class CampaignControllerTest {
 	}
 
 	@Test
+	@DisplayName("Given When Then")
+	void givenAnOwnerAndASlug_whenDeletingACampaign_thenAResponseEntityIsReturned() {
+		// Given
+		String owner = "username";
+		String slug = "campagne-1";
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.deleteCampaign(owner, slug);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
 	@DisplayName("Given an owner with a slug and a quest update request body, when updating it, then an empty responseEntity is returned")
 	void givenAnOwnerWithASlugAndAQuestUpdateRequestBody_whenUpdatingIt_thenAnEmptyResponseEntityIsReturned() {
 		// Given
@@ -154,7 +171,9 @@ class CampaignControllerTest {
 			"AAAAAH",
 			"main",
 			"All work and no play makes Jack a dull boy",
-			emptyList()
+			List.of(
+				new GoalUpdateRequestBody("goal 1", false)
+			)
 		);
 
 		// When

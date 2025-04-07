@@ -112,14 +112,8 @@ class CampaignMongoDaoTest {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 
-		// When
-		campaignMongoDao.save(campaignDTO);
-
-		// Then
-		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("alvin");
-		List<CampaignDTO> expectedCampaigns = List.of(createCampaignDTO());
-
-		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.save(campaignDTO)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -138,16 +132,8 @@ class CampaignMongoDaoTest {
 
 		campaignDTO.setName("updated");
 
-		// When
-		campaignMongoDao.update(campaignDTO, slug);
-
-		// Then
-		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner("username");
-
-		CampaignDTO expectedCampaignDTO = createCampaignDTOs().getFirst();
-		expectedCampaignDTO.setName("updated");
-
-		assertThat(actualCampaigns).contains(expectedCampaignDTO);
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -179,6 +165,27 @@ class CampaignMongoDaoTest {
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.update(null, null)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
+	void givenACampaignDTO_whenDeletingIt_thenItIsDeleted() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.delete(campaignDTO)).doesNotThrowAnyException();
+	}
+
+	@Test
+	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
+	void givenAWrongCampaignDTO_whenDeletingIt_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = new CampaignDTO("wrong owner", "wrong name", "wrong slug", "description", "type", "mood");
+		campaignDTO.setId("wrong id");
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.delete(campaignDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 }

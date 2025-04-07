@@ -15,10 +15,7 @@ import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.QuestRepository;
-import com.rpgproject.domain.usecase.campaign.CreateCampaign;
-import com.rpgproject.domain.usecase.campaign.GetAllCampaignsByOwner;
-import com.rpgproject.domain.usecase.campaign.GetCampaignBySlugAndOwner;
-import com.rpgproject.domain.usecase.campaign.UpdateCampaign;
+import com.rpgproject.domain.usecase.campaign.*;
 import com.rpgproject.domain.usecase.quest.EditMainQuest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,6 +31,7 @@ public class CampaignController {
 	private final CreateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> createCampaign;
 	private final GetCampaignBySlugAndOwner<ResponseEntity<ResponseViewModel<CampaignViewModel>>> getCampaignBySlugAndOwner;
 	private final UpdateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> updateCampaign;
+	private final DeleteCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> deleteCampaign;
 	private final EditMainQuest<ResponseEntity<ResponseViewModel<QuestViewModel>>> editMainQuest;
 
 	public CampaignController(QuestRepository questRepository, CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter, QuestRestPresenter questRestPresenter) {
@@ -41,6 +39,7 @@ public class CampaignController {
 		this.createCampaign = new CreateCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
+		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, campaignRestPresenter);
 		this.editMainQuest = new EditMainQuest<>(questRepository, questRestPresenter);
 	}
 
@@ -76,6 +75,12 @@ public class CampaignController {
 		);
 
 		return updateCampaign.execute(campaign, slug);
+	}
+
+	@DeleteMapping("/{slug}")
+	@CrossOrigin(origins = "*")
+	public ResponseEntity<ResponseViewModel<CampaignViewModel>> deleteCampaign(@CurrentOwner String owner, @PathVariable String slug) {
+		return deleteCampaign.execute(slug, owner);
 	}
 
 	@PatchMapping("/{slug}/mainQuest")
