@@ -146,6 +146,22 @@ class CampaignControllerTest {
 	}
 
 	@Test
+	@DisplayName("Given When Then")
+	void givenAnOwnerAndASlug_whenDeletingACampaign_thenAResponseEntityIsReturned() {
+		// Given
+		String owner = "username";
+		String slug = "campagne-1";
+
+		// When
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.deleteCampaign(owner, slug);
+
+		// Then
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+
+		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
+	}
+
+	@Test
 	@DisplayName("Given an owner with a slug and a quest update request body, when updating it, then an empty responseEntity is returned")
 	void givenAnOwnerWithASlugAndAQuestUpdateRequestBody_whenUpdatingIt_thenAnEmptyResponseEntityIsReturned() {
 		// Given
