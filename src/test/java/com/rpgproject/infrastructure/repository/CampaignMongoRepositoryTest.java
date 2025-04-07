@@ -146,16 +146,18 @@ class CampaignMongoRepositoryTest {
 	void givenACampaign_whenDeletingTheCampaign_thenCampaignIsDeleted() {
 		// Given
 		Campaign campaign = createCampaigns().getFirst();
+		String slug = campaign.getSlug();
+		String owner = campaign.getOwner();
 
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.delete(campaign)).doesNotThrowAnyException();
+		assertThatCode(() -> campaignMongoRepository.delete(slug, owner)).doesNotThrowAnyException();
 	}
 
 	@Test
 	@DisplayName("Given a campaign, when deleting fails, then an exception is thrown")
 	void givenACampaign_whenDeletingFails_thenAnExceptionIsThrown() {
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.delete(null)).isInstanceOf(CampaignNotFoundException.class);
+		assertThatCode(() -> campaignMongoRepository.delete(null, null)).isInstanceOf(CampaignNotFoundException.class);
 	}
 
 }

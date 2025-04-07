@@ -39,13 +39,15 @@ class DeleteCampaignTest {
 	void givenACampaign_whenCreatingIt_thenItIsSaved() {
 		// Given
 		Campaign campaign = createCampaign();
+		String slug = campaign.getSlug();
+		String owner = campaign.getOwner();
 
 		// When
-		deleteCampaign.execute(campaign);
+		deleteCampaign.execute(slug, owner);
 
 		// Then
 
-		verify(campaignRepository, times(1)).delete(campaign);
+		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).ok();
 	}
 
@@ -54,16 +56,18 @@ class DeleteCampaignTest {
 	void givenACampaign_whenCreationFails_thenAnExceptionIsThrown() {
 		// Given
 		Campaign campaign = createCampaign();
+		String slug = campaign.getSlug();
+		String owner = campaign.getOwner();
 		CampaignNotFoundException exception = new CampaignNotFoundException();
 
-		doThrow(exception).when(campaignRepository).delete(campaign);
+		doThrow(exception).when(campaignRepository).delete(slug, owner);
 
 		// When
-		deleteCampaign.execute(campaign);
+		deleteCampaign.execute(slug, owner);
 
 		// Then
 
-		verify(campaignRepository).delete(campaign);
+		verify(campaignRepository).delete(slug, owner);
 		verify(presenter, times(1)).error(exception);
 	}
 

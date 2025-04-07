@@ -14,9 +14,9 @@ public class DeleteCampaign<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(Campaign campaign) {
+	public T execute(String slug, String owner) {
 		try {
-			campaignRepository.delete(campaign);
+			campaignRepository.delete(slug, owner);
 
 			return presenter.ok();
 		} catch (Exception e) {

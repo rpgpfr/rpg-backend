@@ -16,5 +16,5 @@ public interface CampaignRepository {
 
 	void update(Campaign campaign, String slug);
 
-	void delete(Campaign campaign);
+	void delete(String slug, String owner);
 }
