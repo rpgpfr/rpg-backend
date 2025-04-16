@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
+import com.rpgproject.domain.exception.UserException;
 import com.rpgproject.domain.port.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +72,7 @@ public class GetUserProfileTest {
 	void givenAUsername_whenTheUserDoesNotExist_thenAnErrorIsSent() {
 		// Given
 		String username = "username";
-		UserNotFoundException exception = new UserNotFoundException();
+		UserException exception = new UserException("error");
 
 		when(userRepository.getUserByIdentifier(username)).thenThrow(exception);
 

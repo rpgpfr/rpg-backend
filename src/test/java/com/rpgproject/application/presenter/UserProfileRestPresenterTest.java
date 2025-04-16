@@ -3,7 +3,7 @@ package com.rpgproject.application.presenter;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.UserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,13 +66,13 @@ class UserProfileRestPresenterTest {
 	@DisplayName("Should return a response with an error message")
 	void shouldReturnA400ResponseEntityWithAnErrorMessage() {
 		// Arrange
-		UserRegistrationFailedException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
+		UserException exception = new UserException("error");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "L'utilisateur ou le mail associé est déjà utilisé."));
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "error"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

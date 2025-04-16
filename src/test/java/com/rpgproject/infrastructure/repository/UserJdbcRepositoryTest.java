@@ -1,10 +1,7 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserLoginFailedException;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.UserException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +64,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When
-		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserNotFoundException.class);
+		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserException.class);
 	}
 
 	@Test
@@ -91,7 +88,7 @@ class UserJdbcRepositoryTest {
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(UserRegistrationFailedException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(UserException.class);
 	}
 
 	@Test
@@ -124,7 +121,7 @@ class UserJdbcRepositoryTest {
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserException.class);
 	}
 
 	@Test
@@ -137,7 +134,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserException.class);
 	}
 
 	@Test
@@ -161,7 +158,7 @@ class UserJdbcRepositoryTest {
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(UserUpdateFailedException.class);
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(UserException.class);
 	}
 
 }

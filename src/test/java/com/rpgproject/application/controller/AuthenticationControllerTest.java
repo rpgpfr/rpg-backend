@@ -83,7 +83,7 @@ class AuthenticationControllerTest {
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "Le nom d'utilisateur ou le mail associé est déjà utilisé."));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "Le nom d'utilisateur ou l'email est déjà utilisé."));
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}

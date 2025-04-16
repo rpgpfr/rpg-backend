@@ -1,10 +1,8 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserLoginFailedException;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.infrastructure.exception.user.UserLoginFailedException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.dto.UserDTO;
@@ -29,7 +27,7 @@ public class UserJdbcRepository implements UserRepository {
 
 			return mapToUser(userDTO);
 		} catch (RuntimeException e) {
-			throw new UserNotFoundException();
+			throw new UserException(e.getMessage());
 		}
 	}
 
@@ -42,7 +40,7 @@ public class UserJdbcRepository implements UserRepository {
 				return mapToUser(userDTO);
 			}
 
-			throw new UserLoginFailedException();
+			throw new RuntimeException();
 		} catch (RuntimeException e) {
 			throw new UserLoginFailedException();
 		}
@@ -68,7 +66,7 @@ public class UserJdbcRepository implements UserRepository {
 
 			userJdbcDao.register(userDTO);
 		} catch (RuntimeException e) {
-			throw new UserRegistrationFailedException("Le nom d'utilisateur ou le mail associé est déjà utilisé.");
+			throw new UserException(e.getMessage());
 		}
 	}
 
@@ -79,7 +77,7 @@ public class UserJdbcRepository implements UserRepository {
 
 			userJdbcDao.update(userDTO);
 		} catch (RuntimeException e) {
-			throw new UserUpdateFailedException();
+			throw new UserException(e.getMessage());
 		}
 	}
 

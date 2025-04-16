@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.UserException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class UpdateUserTest {
 	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
 		// Given
 		User user = createUser();
-		RuntimeException exception = new UserUpdateFailedException();
+		UserException exception = new UserException("error");
 
 		doThrow(exception).when(userRepository).update(user);
 

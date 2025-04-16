@@ -3,7 +3,7 @@ package com.rpgproject.application.presenter;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.UserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class UserRestPresenterTest {
 	}
 
 	@Test
-	@DisplayName("Should When")
+	@DisplayName("Should return a response with a userViewModel")
 	void shouldReturnAResponseWithAUserViewModel() {
 		// Arrange
 		User user = createUser();
@@ -45,19 +45,21 @@ class UserRestPresenterTest {
 
 		// Assert
 		ResponseEntity<ResponseViewModel<UserViewModel>> expectdResponseEntity = ResponseEntity.ok(new ResponseViewModel<>(createUserViewModel(), null));
+
+		assertThat(actualResponseEntity).isEqualTo(expectdResponseEntity);
 	}
 
 	@Test
 	@DisplayName("Should return a response with an error message")
 	void shouldReturnAResponseWithAnErrorMessage() {
 		// Arrange
-		UserRegistrationFailedException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
+		UserException exception = new UserException("error");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "L'utilisateur ou le mail associé est déjà utilisé."));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "error"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

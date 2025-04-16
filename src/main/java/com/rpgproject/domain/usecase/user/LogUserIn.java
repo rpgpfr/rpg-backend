@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserLoginFailedException;
+import com.rpgproject.domain.exception.UserException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 
@@ -19,7 +19,7 @@ public class LogUserIn<T> {
 		try {
 			User loggedUser = userRepository.logIn(identifier, password);
 			return presenter.ok(loggedUser);
-		} catch (UserLoginFailedException e) {
+		} catch (UserException e) {
 			return presenter.error(e);
 		}
 	}

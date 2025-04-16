@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.UserException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 
@@ -20,7 +20,7 @@ public class UpdateUser<T> {
 			userRepository.update(user);
 
 			return presenter.ok(user);
-		} catch (UserUpdateFailedException e) {
+		} catch (UserException e) {
 			return presenter.error(e);
 		}
 	}
