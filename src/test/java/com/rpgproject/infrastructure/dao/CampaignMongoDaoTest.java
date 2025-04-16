@@ -1,5 +1,7 @@
 package com.rpgproject.infrastructure.dao;
 
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,21 @@ class CampaignMongoDaoTest {
 	@BeforeEach
 	public void setUp() {
 		campaignMongoDao = new CampaignMongoDao(mongoTemplate);
+		initializeMongoDB();
+	}
+
+	private void initializeMongoDB() {
+		IndexOptions indexOptions = new IndexOptions().unique(true);
+
+		mongoTemplate.createCollection("Campaign")
+			.createIndex(
+				Indexes.compoundIndex(
+					Indexes.ascending("slug"),
+					Indexes.ascending("owner")
+				),
+				indexOptions
+			);
+
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
 	}
 
@@ -132,10 +149,21 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
+	@DisplayName("Given a campaignDTO, when saving fails because of a duplicate key, then an exception is thrown")
+	void givenACampaignDTO_whenSavingFailsBecauseOfADuplicateKey_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoDao.save(createCampaignDTOs().getFirst()))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Le nom de cette campagne est déjà utilisé.");
+	}
+
+	@Test
 	@DisplayName("Given a campaignDTO, when saving fails, then an exception is thrown")
 	void givenACampaignDTO_whenSavingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> campaignMongoDao.save(null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.save(null))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la création de la campagne.");
 	}
 
 	@Test
@@ -161,7 +189,10 @@ class CampaignMongoDaoTest {
 		campaignDTO.setOwner("wrong owner");
 
 		// When & Then
-		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations");
+		;
 	}
 
 	@Test
@@ -172,14 +203,19 @@ class CampaignMongoDaoTest {
 		String slug = "wrong slug";
 
 		// When & Then
-		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.update(campaignDTO, slug))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations");
+		;
 	}
 
 	@Test
 	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> campaignMongoDao.update(null, null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.update(null, null))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations");
 	}
 
 	@Test
@@ -200,7 +236,9 @@ class CampaignMongoDaoTest {
 		campaignDTO.setId("wrong id");
 
 		// When & Then
-		assertThatCode(() -> campaignMongoDao.delete(campaignDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.delete(campaignDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Nous n'avons pas trouvé la campagne à supprimer");
 	}
 
 }

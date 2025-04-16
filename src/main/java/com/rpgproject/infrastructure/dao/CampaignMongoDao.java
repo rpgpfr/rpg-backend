@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -54,28 +55,36 @@ public class CampaignMongoDao {
 
 	public void save(CampaignDTO campaignDTO) {
 		try {
-			mongoTemplate.save(campaignDTO);
+			mongoTemplate.insert(campaignDTO);
+		} catch (DuplicateKeyException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Le nom de cette campagne est déjà utilisé.", e);
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error saving campaign", e);
+			throw new RuntimeException("Une erreur est survenue lors de la création de la campagne.", e);
 		}
 	}
 
 	public void update(CampaignDTO campaignDTO, String slug) {
 		try {
-			Query query = buildCampaignBySlugAndOwnerQuery(slug, campaignDTO.getOwner());
-			Update update = buildUpdate(campaignDTO);
-
-			CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
-
-			if (updatedCampaignDTO == null) {
-				throw new RuntimeException();
-			}
+			updateToDatabase(campaignDTO, slug);
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error updating campaign", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations", e);
+		}
+	}
+
+	private void updateToDatabase(CampaignDTO campaignDTO, String slug) {
+		Query query = buildCampaignBySlugAndOwnerQuery(slug, campaignDTO.getOwner());
+		Update update = buildUpdate(campaignDTO);
+
+		CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
+
+		if (updatedCampaignDTO == null) {
+			throw new RuntimeException();
 		}
 	}
 
@@ -105,7 +114,7 @@ public class CampaignMongoDao {
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Error deleting campaign", e);
+			throw new RuntimeException("Nous n'avons pas trouvé la campagne à supprimer", e);
 		}
 	}
 

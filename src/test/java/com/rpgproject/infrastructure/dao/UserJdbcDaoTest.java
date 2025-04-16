@@ -9,10 +9,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.file.Paths;
+import java.sql.SQLDataException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -119,8 +121,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when register fails, then an exception is thrown")
-	void givenAUserDTO_whenRegisterFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a UserDTO, when register fails because of data integrity violation, then RuntimeException is thrown")
+	void givenAUserDTO_whenRegisterFailsBecauseOfDataIntegrityViolation_thenRuntimeExceptionIsThrown() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
@@ -130,7 +132,26 @@ class UserJdbcDaoTest {
 		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.register(userDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.register(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Le nom d'utilisateur ou l'email est déjà utilisé.");
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when register fails because of data access exception, then RuntimeException is thrown")
+	void givenAUserDTO_whenRegisterFailsBecauseOfDataAccessException_thenRuntimeExceptionIsThrown() {
+		// Given
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
+		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+
+		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
+
+		doThrow(new BadSqlGrammarException("error", "", new SQLDataException())).when(mockJdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.register(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la création du compte.");
 	}
 
 	@Test
@@ -154,10 +175,10 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when update fails, then an exception is thrown")
-	void givenAUserDTO_whenUpdateFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a UserDTO, when update fails because of data integrity violation, then RuntimeException is thrown")
+	void givenAUserDTO_whenUpdateFailsBecauseOfDataIntegrityViolation_thenRuntimeExceptionIsThrown() {
 		// Given
-		UserDTO userDTO = createUserDTO("goulou", "lastName", null, null, null);
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
@@ -165,7 +186,26 @@ class UserJdbcDaoTest {
 		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.update(userDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.update(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Le nom d'utilisateur ou l'email est déjà utilisé.");
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when register fails because of data access exception, then RuntimeException is thrown")
+	void givenAUserDTO_whenUpdateFailsBecauseOfDataAccessException_thenRuntimeExceptionIsThrown() {
+		// Given
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
+		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+
+		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
+
+		doThrow(new BadSqlGrammarException("error", "", new SQLDataException())).when(mockJdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.update(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations.");
 	}
 
 	@SneakyThrows

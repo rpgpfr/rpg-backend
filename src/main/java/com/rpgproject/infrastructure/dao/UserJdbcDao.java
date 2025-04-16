@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,7 +32,7 @@ public class UserJdbcDao {
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_IDENTIFIER, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
 		} catch (EmptyResultDataAccessException e) {
-			throw new RuntimeException("User not found");
+			throw new RuntimeException("L'utilisateur n'a pas été trouvé", e);
 		}
 	}
 
@@ -42,16 +43,12 @@ public class UserJdbcDao {
 		parameters.put("firstName", userDTO.getFirstName());
 		parameters.put("lastName", userDTO.getLastName());
 
-		String registerQuery = buildQuery(userDTO, parameters);
+		String registerQuery = buildRegisterQuery(userDTO, parameters);
 
-		try {
-			jdbcTemplate.update(registerQuery, parameters);
-		} catch (DataAccessException e) {
-			throw new RuntimeException("Error registering user", e);
-		}
+		saveToDatabase(registerQuery, parameters);
 	}
 
-	private String buildQuery(UserDTO userDTO, Map<String, String> parameters) {
+	private String buildRegisterQuery(UserDTO userDTO, Map<String, String> parameters) {
 		String registerQuery = REGISTER_START;
 
 		if (userDTO.getPassword() != null) {
@@ -59,6 +56,7 @@ public class UserJdbcDao {
 		} else {
 			registerQuery += ") " + REGISTER_END + ");";
 		}
+
 		return registerQuery;
 	}
 
@@ -69,12 +67,32 @@ public class UserJdbcDao {
 		return registerQuery;
 	}
 
+	private void saveToDatabase(String registerQuery, Map<String, String> parameters) {
+		try {
+			jdbcTemplate.update(registerQuery, parameters);
+		} catch (DataIntegrityViolationException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
+		} catch (DataAccessException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Une erreur est survenue lors de la création du compte.", e);
+		}
+	}
+
 	public void update(UserDTO userDTO) {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("username", userDTO.getUsername());
 		parameters.put("firstName", userDTO.getFirstName());
 		parameters.put("lastName", userDTO.getLastName());
 
+		String updateQuery = buildUpdateQuery(userDTO, parameters);
+
+		updateToDatabase(updateQuery, parameters);
+	}
+
+	private String buildUpdateQuery(UserDTO userDTO, Map<String, String> parameters) {
 		String updateQuery = UPDATE_START;
 
 		if (userDTO.getDescription() != null) {
@@ -88,12 +106,20 @@ public class UserJdbcDao {
 		}
 
 		updateQuery += UPDATE_END;
+		return updateQuery;
+	}
 
+	private void updateToDatabase(String updateQuery, Map<String, String> parameters) {
 		try {
 			jdbcTemplate.update(updateQuery, parameters);
+		} catch (DataIntegrityViolationException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
 		} catch (DataAccessException e) {
-			System.out.println(e.getMessage());
-			throw new RuntimeException("Error updating user", e);
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
 		}
 	}
 

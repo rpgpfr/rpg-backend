@@ -1,5 +1,7 @@
 package com.rpgproject.infrastructure.dao;
 
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.rpgproject.infrastructure.dto.QuestDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +29,22 @@ class QuestMongoDaoTest {
 	@BeforeEach
 	public void setUp() {
 		questMongoDao = new QuestMongoDao(mongoTemplate);
+		initializeMongoDB();
+	}
+
+	private void initializeMongoDB() {
+		IndexOptions indexOptions = new IndexOptions().unique(true);
+
+		mongoTemplate
+			.createCollection("Quest")
+			.createIndex(
+				Indexes.compoundIndex(
+					Indexes.ascending("campaignId"),
+					Indexes.ascending("title")
+				),
+				indexOptions
+			);
+
 		mongoTemplate.insert(createQuestDTOs(), "Quest");
 	}
 
@@ -61,10 +79,21 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
+	@DisplayName("Given a questDTO, when saving fails because of a duplicate key, then an exception is thrown")
+	void givenAQuestDTO_whenSavingFailsBecauseOfADuplicateKey_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> questMongoDao.save(createQuestDTOs().getFirst()))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Le nom de cette quête est déjà utilisé.");
+	}
+
+	@Test
 	@DisplayName("Given a questDTO, when saving fails, then an exception is thrown")
 	void givenAQuestDTO_whenSavingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoDao.save(null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.save(null))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la création de la quête.");
 	}
 
 	@Test
@@ -93,7 +122,9 @@ class QuestMongoDaoTest {
 	@DisplayName("Given a questDTO, when updating fails, then an exception is thrown")
 	void givenAQuestDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoDao.updateMainQuest(null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.updateMainQuest(null))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations");
 	}
 
 	@Test
