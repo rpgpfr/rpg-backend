@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/campaign")
+@RequestMapping("/campaigns")
 @Controller
 public class CampaignController {
 
