@@ -5,6 +5,7 @@ import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class DTOCreationTestUtils {
@@ -34,27 +35,27 @@ public class DTOCreationTestUtils {
 
 	public static List<CampaignViewModel> createCampaignViewModels() {
 		return List.of(
-			new CampaignViewModel("campagne 1", "campagne-1", null, null, null, null),
-			new CampaignViewModel("campagne 2", "campagne-2", null, null, null, null),
-			new CampaignViewModel("campagne 3", "campagne-3", null, null, null, null)
+			new CampaignViewModel("campagne 1", "campagne-1", null, null, null, null, LocalDate.of(2025, 1, 1)),
+			new CampaignViewModel("campagne 2", "campagne-2", null, null, null, null, LocalDate.of(2025, 1, 1)),
+			new CampaignViewModel("campagne 3", "campagne-3", null, null, null, null, LocalDate.of(2025, 1, 1))
 		);
 	}
 
 	public static List<CampaignViewModel> createFullCampaignViewModels() {
 		List<QuestViewModel> questViewModels = createQuestViewModels();
 		return List.of(
-			new CampaignViewModel("campagne 1", "campagne-1", null, null, null, questViewModels.getFirst()),
-			new CampaignViewModel("campagne 2", "campagne-2", null, null, null, questViewModels.get(1)),
-			new CampaignViewModel("campagne 3", "campagne-3", null, null, null, questViewModels.getLast())
+			new CampaignViewModel("campagne 1", "campagne-1", null, null, null, questViewModels.getFirst(), LocalDate.of(2025, 1, 1)),
+			new CampaignViewModel("campagne 2", "campagne-2", null, null, null, questViewModels.get(1), LocalDate.of(2025, 1, 1)),
+			new CampaignViewModel("campagne 3", "campagne-3", null, null, null, questViewModels.getLast(), LocalDate.of(2025, 1, 1))
 		);
 	}
 
 	public static CampaignViewModel createCampaignViewModel() {
-		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, null);
+		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, null, LocalDate.of(2025, 1, 1));
 	}
 
 	public static CampaignViewModel createFullCampaignViewModel() {
-		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, createQuestViewModel());
+		return new CampaignViewModel("My campaign", "my-campaign", null, null, null, createQuestViewModel(), LocalDate.of(2025, 1, 1));
 	}
 
 }

@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,11 +48,10 @@ class CreateCampaignTest {
 
 		// Then
 		Quest expectedQuest = Quest.createDefaultMainQuest();
-		Campaign expectedCampaignWithQuest = new Campaign(owner, name, "mycampaign", null, null, null, expectedQuest);
 
 		verify(campaignRepository, times(1)).save(any(Campaign.class));
 		verify(questRepository, times(1)).save(expectedQuest, "mycampaign", owner);
-		verify(presenter, times(1)).ok(expectedCampaignWithQuest);
+		verify(presenter, times(1)).ok();
 	}
 
 	@Test
@@ -59,7 +60,7 @@ class CreateCampaignTest {
 		// Given
 		String owner = "alvin";
 		String name = "myCampaign";
-		Campaign campaign = new Campaign(owner, name, "mycampaign");
+		Campaign campaign = new Campaign(owner, name, "mycampaign", LocalDate.now());
 		CampaignCreationFailedException exception = new CampaignCreationFailedException();
 
 		doThrow(exception).when(campaignRepository).save(campaign);
@@ -68,7 +69,7 @@ class CreateCampaignTest {
 		createCampaign.execute(owner, name);
 
 		// Then
-		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign");
+		Campaign expectedCampaign = new Campaign(owner, name, "mycampaign", LocalDate.now());
 
 		verify(campaignRepository).save(expectedCampaign);
 		verify(presenter, times(1)).error(exception);

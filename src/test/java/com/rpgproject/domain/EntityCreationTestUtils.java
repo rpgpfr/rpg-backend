@@ -20,18 +20,18 @@ public class EntityCreationTestUtils {
 	}
 
 	public static Campaign createCampaign() {
-		return new Campaign("alvin", "My campaign", "my-campaign");
+		return new Campaign("alvin", "My campaign", "my-campaign", null, null, null, null, LocalDate.of(2025, 1, 1));
 	}
 
 	public static Campaign createFullCampaign() {
-		return new Campaign("alvin", "My campaign", "my-campaign", null, null, null, createQuest());
+		return new Campaign("alvin", "My campaign", "my-campaign", null, null, null, createQuest(), LocalDate.of(2025, 1, 1));
 	}
 
 	public static List<Campaign> createCampaigns() {
 		return List.of(
-			new Campaign("username", "campagne 1", "campagne-1"),
-			new Campaign("username", "campagne 2", "campagne-2"),
-			new Campaign("username", "campagne 3", "campagne-3")
+			new Campaign("username", "campagne 1", "campagne-1", null, null, null, null, LocalDate.of(2025, 1, 1)),
+			new Campaign("username", "campagne 2", "campagne-2", null, null, null, null, LocalDate.of(2025, 1, 1)),
+			new Campaign("username", "campagne 3", "campagne-3", null, null, null, null, LocalDate.of(2025, 1, 1))
 		);
 	}
 

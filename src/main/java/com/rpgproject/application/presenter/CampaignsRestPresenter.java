@@ -33,7 +33,8 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 				campaign.getDescription(),
 				campaign.getType(),
 				campaign.getMood(),
-				null
+				null,
+				campaign.getCreatedAt()
 			))
 			.toList();
 	}

@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTO;
@@ -38,8 +39,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
-	void givenAnOwner_whenLookingForAllTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
+	@DisplayName("Given an owner, when gettinh the user's campaigns, then all of its campaigns are returned")
+	void givenAnOwner_whenGettingTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
 		String owner = "username";
 
@@ -47,14 +48,28 @@ class CampaignMongoDaoTest {
 		List<CampaignDTO> actualCampaigns = campaignMongoDao.findAllCampaignsByOwner(owner);
 
 		// Then
-		List<CampaignDTO> expectedCampaigns = createCampaignDTOs();
+		List<CampaignDTO> expectedFullCampaigns = createCampaignDTOs();
+		List<CampaignDTO> expectedCampaigns = expectedFullCampaigns
+			.stream()
+			.map(campaignDTO ->
+				new CampaignDTO(
+					null,
+					campaignDTO.getName(),
+					campaignDTO.getSlug(),
+					null,
+					null,
+					null,
+					campaignDTO.getCreatedAt()
+				)
+			)
+			.toList();
 
 		assertThat(actualCampaigns).isEqualTo(expectedCampaigns);
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when getting the campaign, then it is returned")
-	void givenASlugAndAnOwner_whenGettingTheCampaign_thenItIsReturned() {
+	@DisplayName("Given a slug and an owner, when the campaign exists, then it is returned")
+	void givenASlugAndAnOwner_whenTheCampaignExists_thenItIsReturned() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = campaignDTO.getSlug();
@@ -70,8 +85,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when getting the campaign id, then the id is returned")
-	void givenASlugAndAnOwner_whenGettingTheCampaignId_thenTheIdIsReturned() {
+	@DisplayName("Given a slug and an owner, when the campaign exists, then the id is returned")
+	void givenASlugAndAnOwner_whenTheCampaignExists_thenTheIdIsReturned() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = campaignDTO.getSlug();
@@ -85,8 +100,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when getting the campaign id, then an exception is thrown")
-	void givenACampaignDTO_whenGettingTheCampaignId_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when the campaign does not exist, then an exception is thrown")
+	void givenACampaignDTO_whenTheCampaignDoesNotExist_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.findCampaignIdBySlugAndOwner(null, null)).isInstanceOf(RuntimeException.class);
 	}
@@ -178,10 +193,10 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
+	@DisplayName("Given a campaignDTO, when deleting it, then an exception is thrown")
 	void givenAWrongCampaignDTO_whenDeletingIt_thenAnExceptionIsThrown() {
 		// Given
-		CampaignDTO campaignDTO = new CampaignDTO("wrong owner", "wrong name", "wrong slug", "description", "type", "mood");
+		CampaignDTO campaignDTO = new CampaignDTO("wrong owner", "wrong name", "wrong slug", "description", "type", "mood", LocalDate.of(2025, 1, 1));
 		campaignDTO.setId("wrong id");
 
 		// When & Then

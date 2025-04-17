@@ -37,7 +37,8 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 					campaign.getDescription(),
 					campaign.getType(),
 					campaign.getMood(),
-					mainQuestViewModel
+					mainQuestViewModel,
+					campaign.getCreatedAt()
 				),
 				null
 			)

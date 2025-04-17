@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.rpgproject.application.DTOCreationTestUtils.createCampaignViewModels;
@@ -92,12 +93,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
-			new ResponseViewModel<>(
-				new CampaignViewModel("my campaign", "my-campaign", null, null, null, new QuestViewModel("", "main", "", emptyList())),
-				null
-			)
-		);
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -137,7 +133,7 @@ class CampaignControllerTest {
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
 			new ResponseViewModel<>(
-				new CampaignViewModel(null, "my-updated-campaign", null, null, null, null),
+				new CampaignViewModel(null, "my-updated-campaign", null, null, null, null, null),
 				null
 			)
 		);

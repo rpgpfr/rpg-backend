@@ -33,7 +33,7 @@ class UpdateCampaignTest {
 	@DisplayName("Given a campaign and its slug, when updating it, then it is updated")
 	void givenACampaignAndItsSlug_whenUpdatingIt_thenItIsUpdated() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "camapgne-1";
 
 		// When
@@ -50,7 +50,7 @@ class UpdateCampaignTest {
 	@DisplayName("Given a campaign and its slug, when update fails, then an error is presented")
 	void givenACampaignAndItsSlug_whenUpdateFails_thenAnErrorIsPresented() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "slug";
 		CampaignUpdateFailedException exception = new CampaignUpdateFailedException();
 

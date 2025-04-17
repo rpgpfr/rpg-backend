@@ -27,7 +27,7 @@ import java.util.List;
 @Controller
 public class CampaignController {
 
-	private final GetAllCampaignsByOwner<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getAllCampaignsByOwner;
+	private final GetCampaignsByOwner<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getCampaignsByOwner;
 	private final CreateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> createCampaign;
 	private final GetCampaignBySlugAndOwner<ResponseEntity<ResponseViewModel<CampaignViewModel>>> getCampaignBySlugAndOwner;
 	private final UpdateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> updateCampaign;
@@ -35,7 +35,7 @@ public class CampaignController {
 	private final EditMainQuest<ResponseEntity<ResponseViewModel<QuestViewModel>>> editMainQuest;
 
 	public CampaignController(QuestRepository questRepository, CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter, QuestRestPresenter questRestPresenter) {
-		this.getAllCampaignsByOwner = new GetAllCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
+		this.getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
 		this.createCampaign = new CreateCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
@@ -43,13 +43,13 @@ public class CampaignController {
 		this.editMainQuest = new EditMainQuest<>(questRepository, questRestPresenter);
 	}
 
-	@GetMapping("/")
+	@GetMapping("")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> getAllCampaignsByOwner(@CurrentOwner String owner) {
-		return getAllCampaignsByOwner.execute(owner);
+		return getCampaignsByOwner.execute(owner);
 	}
 
-	@PostMapping("/")
+	@PostMapping("")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
 		return createCampaign.execute(owner, campaignRequestBody.name());
@@ -71,6 +71,7 @@ public class CampaignController {
 			campaignUpdateRequestBody.description(),
 			campaignUpdateRequestBody.type(),
 			campaignUpdateRequestBody.mood(),
+			null,
 			null
 		);
 
