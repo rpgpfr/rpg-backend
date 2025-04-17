@@ -80,7 +80,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.register(user));
+		assertThatCode(() -> userJdbcRepository.register(user)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -150,7 +150,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.update(user));
+		assertThatCode(() -> userJdbcRepository.update(user)).doesNotThrowAnyException();
 	}
 
 	@Test

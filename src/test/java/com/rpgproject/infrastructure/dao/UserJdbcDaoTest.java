@@ -89,8 +89,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist then an error is thrown")
-	void givenAUsername_whenGettingUserByUsername_thenUserIsReturned() {
+	@DisplayName("Given a username, when user does not exist, then an exception is thrown")
+	void givenAUsername_whenUserDoesNotExist_thenAnExceptionIsThrown() {
 		// Given
 		String username = "usernaaaaame";
 
@@ -119,8 +119,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when register fails, then RuntimeException is thrown")
-	void givenAUserDTO_whenRegisterFails_thenRuntimeExceptionIsThrown() {
+	@DisplayName("Given a UserDTO, when register fails, then an exception is thrown")
+	void givenAUserDTO_whenRegisterFails_thenAnExceptionIsThrown() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
@@ -154,8 +154,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when update fails, then RuntimeException is thrown")
-	void givenAUserDTO_whenUpdateFails_thenRuntimeExceptionIsThrown() {
+	@DisplayName("Given a UserDTO, when update fails, then an exception is thrown")
+	void givenAUserDTO_whenUpdateFails_thenAnExceptionIsThrown() {
 		// Given
 		UserDTO userDTO = createUserDTO("goulou", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
