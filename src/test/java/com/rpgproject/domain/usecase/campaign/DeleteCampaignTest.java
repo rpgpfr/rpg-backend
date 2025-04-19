@@ -26,17 +26,19 @@ class DeleteCampaignTest {
 	@Mock
 	private CampaignRepository campaignRepository;
 
+	@Mock QuestRepository questRepository;
+
 	@Mock
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
 	public void setUp() {
-		deleteCampaign = new DeleteCampaign<>(campaignRepository, presenter);
+		deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when creating it, then it is saved")
-	void givenACampaign_whenCreatingIt_thenItIsSaved() {
+	@DisplayName("Given a campaign, when deleting it, then it is deleted")
+	void givenACampaign_whenDeletingIt_thenItIsDeleted() {
 		// Given
 		Campaign campaign = createCampaign();
 		String slug = campaign.getSlug();
@@ -46,14 +48,14 @@ class DeleteCampaignTest {
 		deleteCampaign.execute(slug, owner);
 
 		// Then
-
+		verify(questRepository, times(1)).deleteBySlugAndOwner(slug, owner);
 		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).ok();
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when creation fails, then an exception is thrown")
-	void givenACampaign_whenCreationFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when delete fails, then an exception is thrown")
+	void givenACampaign_whenDeleteFails_thenAnExceptionIsThrown() {
 		// Given
 		Campaign campaign = createCampaign();
 		String slug = campaign.getSlug();
@@ -66,8 +68,8 @@ class DeleteCampaignTest {
 		deleteCampaign.execute(slug, owner);
 
 		// Then
-
-		verify(campaignRepository).delete(slug, owner);
+		verify(questRepository, times(1)).deleteBySlugAndOwner(slug, owner);
+		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).error(exception);
 	}
 

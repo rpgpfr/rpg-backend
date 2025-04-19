@@ -124,4 +124,16 @@ class QuestMongoRepositoryTest {
 		assertThatCode(() -> questMongoRepository.updateMainQuest(null, null, null)).isInstanceOf(QuestEditFailedException.class);
 	}
 
+	@Test
+	@DisplayName("Should delete all quests related to campaignId")
+	void shouldDeleteAllQuestsRelatedToCampaignId() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
+
+		// When & Then
+		assertThatCode(() -> questMongoRepository.deleteBySlugAndOwner(slug, owner)).doesNotThrowAnyException();
+	}
+
 }

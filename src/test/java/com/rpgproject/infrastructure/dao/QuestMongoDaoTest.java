@@ -36,8 +36,8 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignId, when looking for the campaign's main quest, then its main quest is returned")
-	void givenACampaignId_whenLookingForTheCampaignsMainQuest_thenItsMainQuestIsReturned() {
+	@DisplayName("Given a campaignId, when a main quest exists, then it is returned")
+	void givenACampaignId_whenAMainQuestExists_thenItIsReturned() {
 		// Given
 		String campaignId = "id1";
 
@@ -68,8 +68,8 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given an existing questDTO, when editing it, then it is updated")
-	void givenAnExistingQuestDTO_whenEditingIt_thenItIsUpdated() {
+	@DisplayName("Given an existing questDTO, when quest exists, then it is updated")
+	void givenAnExistingQuestDTO_whenQuestExists_thenItIsUpdated() {
 		// Given
 		QuestDTO questDTO = createQuestDTOs().getFirst();
 		questDTO.setTitle("updated title");
@@ -79,8 +79,8 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a questDTO with wrong campaignId, when updating, then an exception is thrown")
-	void givenAQuestDTOWithWrongCampaignId_whenUpdating_thenAnExceptionIsThrown() {
+	@DisplayName("Given a questDTO with wrong campaignId, when updating and quest does not exist, then an exception is thrown")
+	void givenAQuestDTOWithWrongCampaignId_whenUpdatingAndQuestDoesNotExist_thenAnExceptionIsThrown() {
 		// Given
 		QuestDTO questDTO = createQuestDTO();
 		questDTO.setCampaignId("wrongCampaignId");
@@ -94,6 +94,16 @@ class QuestMongoDaoTest {
 	void givenAQuestDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> questMongoDao.updateMainQuest(null)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	@DisplayName("Should delete all quests related to campaignId")
+	void shouldDeleteAllQuestsRelatedToCampaignId() {
+		// Given
+		String campaignId = "id1";
+
+		// When & Then
+		assertThatCode(() -> questMongoDao.deleteByCampaignId(campaignId)).doesNotThrowAnyException();
 	}
 
 }

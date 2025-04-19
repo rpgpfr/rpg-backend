@@ -39,7 +39,7 @@ public class CampaignController {
 		this.createCampaign = new CreateCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
-		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, campaignRestPresenter);
+		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.editMainQuest = new EditMainQuest<>(questRepository, questRestPresenter);
 	}
 
@@ -52,7 +52,9 @@ public class CampaignController {
 	@PostMapping("")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
-		return createCampaign.execute(owner, campaignRequestBody.name());
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> execute = createCampaign.execute(owner, campaignRequestBody.name());
+		System.out.println("Execute: " + execute);
+		return execute;
 	}
 
 	@GetMapping("/{slug}")

@@ -72,6 +72,7 @@ public class Campaign {
 	}
 
 	@Override
+	@IgnoreCoverage
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		Campaign campaign = (Campaign) o;

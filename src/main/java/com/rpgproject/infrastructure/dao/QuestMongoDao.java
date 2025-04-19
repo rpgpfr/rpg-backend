@@ -66,4 +66,17 @@ public class QuestMongoDao {
 				.is("main")
 		);
 	}
+
+	public void deleteByCampaignId(String campaignId) {
+		Query query = buildQuestByCampaignIdQuery(campaignId);
+
+		mongoTemplate.remove(query, QuestDTO.class);
+	}
+
+	private Query buildQuestByCampaignIdQuery(String campaignId) {
+		return query(
+			where("campaignId")
+				.is(campaignId)
+		);
+	}
 }
