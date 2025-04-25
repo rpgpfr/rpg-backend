@@ -68,7 +68,7 @@ public class CampaignController {
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> updateCampaign(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CampaignUpdateRequestBody campaignUpdateRequestBody) {
 		Campaign campaign = new Campaign(
 			owner,
-			campaignUpdateRequestBody.name(),
+			null,
 			slug,
 			campaignUpdateRequestBody.description(),
 			campaignUpdateRequestBody.type(),

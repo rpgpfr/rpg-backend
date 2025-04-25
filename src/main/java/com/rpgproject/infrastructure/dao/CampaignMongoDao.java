@@ -90,9 +90,7 @@ public class CampaignMongoDao {
 
 	private Update buildUpdate(CampaignDTO campaignDTO) {
 		return new Update()
-			.set("name", campaignDTO.getName())
 			.set("description", campaignDTO.getDescription())
-			.set("slug", campaignDTO.getSlug())
 			.set("type", campaignDTO.getType())
 			.set("mood", campaignDTO.getMood());
 	}

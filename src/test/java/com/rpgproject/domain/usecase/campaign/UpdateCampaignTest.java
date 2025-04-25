@@ -40,10 +40,8 @@ class UpdateCampaignTest {
 		updateCampaign.execute(campaign, slug);
 
 		// Then
-		Campaign expectedCampaign = new Campaign("updated-name");
-
 		verify(campaignRepository).update(campaign, slug);
-		verify(presenter, times(1)).ok(expectedCampaign);
+		verify(presenter, times(1)).ok();
 	}
 
 	@Test

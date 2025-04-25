@@ -18,10 +18,8 @@ public class UpdateCampaign<T> {
 	public T execute(Campaign campaign, String slug) {
 		try {
 			campaignRepository.update(campaign, slug);
-			String newSlug = campaign.getName().toLowerCase().replace(" ", "-");
-			campaign = new Campaign(newSlug);
 
-			return presenter.ok(campaign);
+			return presenter.ok();
 		} catch (CampaignUpdateFailedException e) {
 			return presenter.error(e);
 		}
