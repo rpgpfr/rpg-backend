@@ -5,7 +5,6 @@ import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
 import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
 import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
-import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;

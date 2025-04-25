@@ -2,6 +2,7 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
+import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.port.Presenter;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,11 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 			.map(campaign -> new CampaignViewModel(
 				campaign.getName(),
 				campaign.getSlug(),
-				campaign.getDescription(),
-				campaign.getType(),
-				campaign.getMood(),
+				new InfoViewModel(
+					campaign.getDescription(),
+					campaign.getType(),
+					campaign.getMood()
+				),
 				null,
 				campaign.getCreatedAt()
 			))

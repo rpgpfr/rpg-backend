@@ -8,7 +8,6 @@ import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 
 import java.time.LocalDate;
-import java.util.Collections;
 
 public class CreateCampaign<T> {
 

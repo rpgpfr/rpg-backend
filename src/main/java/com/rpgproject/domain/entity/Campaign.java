@@ -27,10 +27,6 @@ public class Campaign {
 		this.createdAt = createdAt;
 	}
 
-	public Campaign(String slug) {
-		this(null, null, slug, null, null, null, null, null);
-	}
-
 	public Campaign(String owner, String name, String slug, LocalDate createdAt) {
 		this(owner, name, slug, null, null, null, null, createdAt);
 	}

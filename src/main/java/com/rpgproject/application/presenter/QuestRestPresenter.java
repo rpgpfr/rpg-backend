@@ -3,7 +3,6 @@ package com.rpgproject.application.presenter;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
-import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.Presenter;

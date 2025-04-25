@@ -4,6 +4,7 @@ import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
+import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
@@ -34,9 +35,11 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 				new CampaignViewModel(
 					campaign.getName(),
 					campaign.getSlug(),
-					campaign.getDescription(),
-					campaign.getType(),
-					campaign.getMood(),
+					new InfoViewModel(
+						campaign.getDescription(),
+						campaign.getType(),
+						campaign.getMood()
+					),
 					mainQuestViewModel,
 					campaign.getCreatedAt()
 				),

@@ -1,8 +1,6 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
 import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
@@ -15,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.rpgproject.domain.EntityCreationTestUtils.createCampaign;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +23,8 @@ class DeleteCampaignTest {
 	@Mock
 	private CampaignRepository campaignRepository;
 
-	@Mock QuestRepository questRepository;
+	@Mock
+	QuestRepository questRepository;
 
 	@Mock
 	private Presenter<Campaign, ?> presenter;

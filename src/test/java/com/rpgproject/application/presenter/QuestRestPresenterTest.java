@@ -1,7 +1,6 @@
 package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
-import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.domain.entity.Quest;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,12 +8,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 import static com.rpgproject.application.DTOCreationTestUtils.createQuestViewModel;
 import static com.rpgproject.domain.EntityCreationTestUtils.createQuest;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class QuestRestPresenterTest {
 
