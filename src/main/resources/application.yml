@@ -1,5 +1,5 @@
 spring.application.name: rpg-project
-logging.level.root: trace
+logging.level.root: debug
 
 spring:
   cache:
