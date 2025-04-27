@@ -9,6 +9,7 @@ import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -53,7 +54,8 @@ public class CampaignMongoRepository implements CampaignRepository {
 			campaignDTO.getDescription(),
 			campaignDTO.getType(),
 			campaignDTO.getMood(),
-			null
+			null,
+			campaignDTO.getCreatedAt()
 		);
 	}
 
@@ -65,7 +67,7 @@ public class CampaignMongoRepository implements CampaignRepository {
 	@Override
 	public void save(Campaign campaign) {
 		try {
-			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
+			CampaignDTO campaignDTO = mapToCampaignDTO(campaign, LocalDate.now());
 			campaignMongoDao.save(campaignDTO);
 		} catch (RuntimeException e) {
 			throw new CampaignCreationFailedException();
@@ -100,7 +102,20 @@ public class CampaignMongoRepository implements CampaignRepository {
 			campaign.getSlug(),
 			campaign.getDescription(),
 			campaign.getType(),
-			campaign.getMood()
+			campaign.getMood(),
+			null
+		);
+	}
+
+	private CampaignDTO mapToCampaignDTO(Campaign campaign, LocalDate createdAt) {
+		return new CampaignDTO(
+			campaign.getOwner(),
+			campaign.getName(),
+			campaign.getSlug(),
+			campaign.getDescription(),
+			campaign.getType(),
+			campaign.getMood(),
+			createdAt
 		);
 	}
 

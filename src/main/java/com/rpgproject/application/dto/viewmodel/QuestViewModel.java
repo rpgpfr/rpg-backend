@@ -8,6 +8,6 @@ public record QuestViewModel(
 	String title,
 	String type,
 	@JsonInclude(JsonInclude.Include.NON_NULL) String description,
-	@JsonInclude(JsonInclude.Include.NON_NULL) List<GoalViewModel> goals
+	List<GoalViewModel> goals
 ) {
 }

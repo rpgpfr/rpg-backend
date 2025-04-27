@@ -17,9 +17,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GetAllCampaignsByOwnerTest {
+class GetCampaignsByOwnerTest {
 
-	private GetAllCampaignsByOwner<?> getAllCampaignsByOwner;
+	private GetCampaignsByOwner<?> getCampaignsByOwner;
 
 	@Mock
 	private CampaignRepository campaignRepository;
@@ -29,7 +29,7 @@ class GetAllCampaignsByOwnerTest {
 
 	@BeforeEach
 	public void setUp() {
-		getAllCampaignsByOwner = new GetAllCampaignsByOwner<>(campaignRepository, campaignsPresenter);
+		getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsPresenter);
 	}
 
 	@Test
@@ -42,7 +42,7 @@ class GetAllCampaignsByOwnerTest {
 		when(campaignRepository.getCampaignsByOwner(owner)).thenReturn(campaigns);
 
 		// When
-		getAllCampaignsByOwner.execute(owner);
+		getCampaignsByOwner.execute(owner);
 
 		// Then
 		verify(campaignRepository).getCampaignsByOwner(owner);

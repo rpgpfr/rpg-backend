@@ -6,12 +6,12 @@ import com.rpgproject.domain.port.Presenter;
 
 import java.util.List;
 
-public class GetAllCampaignsByOwner<T> {
+public class GetCampaignsByOwner<T> {
 
 	private final CampaignRepository campaignRepository;
 	private final Presenter<List<Campaign>, T> campaignsPresenter;
 
-	public GetAllCampaignsByOwner(CampaignRepository campaignRepository, Presenter<List<Campaign>, T> campaignsPresenter) {
+	public GetCampaignsByOwner(CampaignRepository campaignRepository, Presenter<List<Campaign>, T> campaignsPresenter) {
 		this.campaignRepository = campaignRepository;
 		this.campaignsPresenter = campaignsPresenter;
 	}

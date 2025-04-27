@@ -100,4 +100,11 @@ public class QuestMongoRepository implements QuestRepository {
 			.toList();
 	}
 
+	@Override
+	public void deleteBySlugAndOwner(String slug, String owner) {
+		String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
+
+		questMongoDao.deleteByCampaignId(campaignId);
+	}
+
 }

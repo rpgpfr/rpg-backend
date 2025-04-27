@@ -7,6 +7,7 @@ import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
+import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.application.presenter.QuestRestPresenter;
@@ -31,7 +32,6 @@ import static com.rpgproject.application.DTOCreationTestUtils.createCampaignView
 import static com.rpgproject.application.DTOCreationTestUtils.createFullCampaignViewModels;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createQuestDTOs;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
@@ -92,12 +92,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
-			new ResponseViewModel<>(
-				new CampaignViewModel("my campaign", "my-campaign", null, null, null, new QuestViewModel("", "main", "", emptyList())),
-				null
-			)
-		);
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -129,18 +124,13 @@ class CampaignControllerTest {
 		// Given
 		String owner = "username";
 		String slug = "campagne-1";
-		CampaignUpdateRequestBody campaignUpdateRequestBody = new CampaignUpdateRequestBody("my updated campaign", "description", "type", "mood");
+		CampaignUpdateRequestBody campaignUpdateRequestBody = new CampaignUpdateRequestBody("description", "type", "mood");
 
 		// When
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.updateCampaign(owner, slug, campaignUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok(
-			new ResponseViewModel<>(
-				new CampaignViewModel(null, "my-updated-campaign", null, null, null, null),
-				null
-			)
-		);
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

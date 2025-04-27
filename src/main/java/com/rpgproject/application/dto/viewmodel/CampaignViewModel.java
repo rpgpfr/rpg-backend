@@ -1,14 +1,16 @@
 package com.rpgproject.application.dto.viewmodel;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
+
+import java.time.LocalDate;
 
 public record CampaignViewModel(
-	@JsonInclude(JsonInclude.Include.NON_NULL) String name,
-	@JsonInclude(JsonInclude.Include.NON_NULL) String slug,
-	@JsonInclude(JsonInclude.Include.NON_NULL) String description,
-	@JsonInclude(JsonInclude.Include.NON_NULL) String type,
-	@JsonInclude(JsonInclude.Include.NON_NULL) String mood,
-	@JsonInclude(JsonInclude.Include.NON_NULL) QuestViewModel mainQuest
+	String name,
+	String slug,
+	@JsonInclude(JsonInclude.Include.NON_NULL) InfoViewModel info,
+	@JsonInclude(JsonInclude.Include.NON_NULL) QuestViewModel mainQuest,
+	LocalDate createdAt
 ) {
 
 }

@@ -29,7 +29,10 @@ public class CampaignMongoDao {
 	}
 
 	private Query buildCampaignsByOwnerQuery(String owner) {
-		return query(where("owner").is(owner));
+		Query query = query(where("owner").is(owner));
+		query.fields().include("name", "slug", "createdAt");
+
+		return query;
 	}
 
 	public CampaignDTO findCampaignBySlugAndOwner(String slug, String owner) {
@@ -87,9 +90,7 @@ public class CampaignMongoDao {
 
 	private Update buildUpdate(CampaignDTO campaignDTO) {
 		return new Update()
-			.set("name", campaignDTO.getName())
 			.set("description", campaignDTO.getDescription())
-			.set("slug", campaignDTO.getSlug())
 			.set("type", campaignDTO.getType())
 			.set("mood", campaignDTO.getMood());
 	}

@@ -33,24 +33,22 @@ class UpdateCampaignTest {
 	@DisplayName("Given a campaign and its slug, when updating it, then it is updated")
 	void givenACampaignAndItsSlug_whenUpdatingIt_thenItIsUpdated() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "camapgne-1";
 
 		// When
 		updateCampaign.execute(campaign, slug);
 
 		// Then
-		Campaign expectedCampaign = new Campaign("updated-name");
-
 		verify(campaignRepository).update(campaign, slug);
-		verify(presenter, times(1)).ok(expectedCampaign);
+		verify(presenter, times(1)).ok();
 	}
 
 	@Test
 	@DisplayName("Given a campaign and its slug, when update fails, then an error is presented")
 	void givenACampaignAndItsSlug_whenUpdateFails_thenAnErrorIsPresented() {
 		// Given
-		Campaign campaign = new Campaign("alvin", "updated name", "updated-name");
+		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "slug";
 		CampaignUpdateFailedException exception = new CampaignUpdateFailedException();
 

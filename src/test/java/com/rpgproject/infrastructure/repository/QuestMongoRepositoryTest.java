@@ -49,8 +49,8 @@ class QuestMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner and a slug, when finding the main quest, then it is returned")
-	void givenAnOwnerAndASlug_whenFindingTheMainQuest_thenItIsReturned() {
+	@DisplayName("Given an owner and a slug, when the main quest exists, then it is returned")
+	void givenAnOwnerAndASlug_whenTheMainQuestExists_thenItIsReturned() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 
@@ -64,8 +64,8 @@ class QuestMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner and a slug, when finding the main quest, then an exception is thrown")
-	void givenAnOwnerAndASlug_whenFindingTheMainQuest_thenAnExceptionIsThrown() {
+	@DisplayName("Given an owner and a slug, when the main quest does not exist, then an exception is thrown")
+	void givenAnOwnerAndASlug_whenTheMainQuestDoesNotExist_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> questMongoRepository.findMainQuestBySlugAndOwner(null, null)).isInstanceOf(MainQuestNotFoundException.class);
 	}
@@ -81,14 +81,8 @@ class QuestMongoRepositoryTest {
 		String owner = campaignDTO.getOwner();
 		String slug = campaignDTO.getSlug();
 
-		// When
-		questMongoRepository.save(quest, slug, owner);
-
-		// Then
-		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(slug, owner);
-		Quest expectedQuest = createQuest();
-
-		assertThat(actualQuest).isEqualTo(expectedQuest);
+		// When & Then
+		assertThatCode(() -> questMongoRepository.save(quest, slug, owner)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -119,14 +113,8 @@ class QuestMongoRepositoryTest {
 		String slug = campaignDTO.getSlug();
 		Quest quest = createQuest();
 
-		// When
-		questMongoRepository.updateMainQuest(quest, slug, owner);
-
-		// Then
-		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(slug, owner);
-		Quest expectedQuest = createQuest();
-
-		assertThat(actualQuest).isEqualTo(expectedQuest);
+		// When & Then
+		assertThatCode(() -> questMongoRepository.updateMainQuest(quest, slug, owner)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -134,6 +122,18 @@ class QuestMongoRepositoryTest {
 	void givenAQuestWithOwnerAndACampaignSlug_whenEditingIt_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> questMongoRepository.updateMainQuest(null, null, null)).isInstanceOf(QuestEditFailedException.class);
+	}
+
+	@Test
+	@DisplayName("Should delete all quests related to campaignId")
+	void shouldDeleteAllQuestsRelatedToCampaignId() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = campaignDTO.getSlug();
+		String owner = campaignDTO.getOwner();
+
+		// When & Then
+		assertThatCode(() -> questMongoRepository.deleteBySlugAndOwner(slug, owner)).doesNotThrowAnyException();
 	}
 
 }

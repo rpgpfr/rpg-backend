@@ -1,5 +1,5 @@
 spring.application.name: rpg-project
-logging.level.root: trace
+logging.level.root: debug
 
 spring:
   cache:
@@ -13,7 +13,7 @@ spring:
     password: ${POSTGRE_PASSWORD}
   data:
     mongodb:
-      uri: ${MONGO_URL}/rpg?retryWrites=true&w=majority&appName=rpg-project
+      uri: ${MONGO_URL}/RPG?retryWrites=true&w=majority&appName=rpg-project
   security:
     oauth2:
       resourceserver:

@@ -7,7 +7,7 @@ import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 
-import java.util.Collections;
+import java.time.LocalDate;
 
 public class CreateCampaign<T> {
 
@@ -24,7 +24,7 @@ public class CreateCampaign<T> {
 	public T execute(String owner, String name) {
 		try {
 			String slug = name.toLowerCase().replace(" ", "-");
-			Campaign campaign = new Campaign(owner, name, slug);
+			Campaign campaign = new Campaign(owner, name, slug, LocalDate.now());
 
 			campaignRepository.save(campaign);
 
@@ -34,7 +34,7 @@ public class CreateCampaign<T> {
 
 			campaign.setMainQuest(quest);
 
-			return presenter.ok(campaign);
+			return presenter.ok();
 		} catch (CampaignCreationFailedException e) {
 			return presenter.error(e);
 		}

@@ -22,7 +22,6 @@ import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createUserDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,7 +79,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.register(user));
+		assertThatCode(() -> userJdbcRepository.register(user)).doesNotThrowAnyException();
 	}
 
 	@Test
@@ -150,7 +149,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
 		// When & Then
-		assertDoesNotThrow(() -> userJdbcRepository.update(user));
+		assertThatCode(() -> userJdbcRepository.update(user)).doesNotThrowAnyException();
 	}
 
 	@Test
