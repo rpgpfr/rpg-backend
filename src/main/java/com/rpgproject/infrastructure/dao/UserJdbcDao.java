@@ -37,6 +37,20 @@ public class UserJdbcDao {
 	}
 
 	public void register(UserDTO userDTO) {
+		try {
+			saveToDatabase(userDTO);
+		} catch (DataIntegrityViolationException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
+		} catch (DataAccessException e) {
+			System.err.println(e.getMessage());
+
+			throw new RuntimeException("Une erreur est survenue lors de la création du compte.", e);
+		}
+	}
+
+	private void saveToDatabase(UserDTO userDTO) {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("username", userDTO.getUsername());
 		parameters.put("email", userDTO.getEmail());
@@ -45,7 +59,7 @@ public class UserJdbcDao {
 
 		String registerQuery = buildRegisterQuery(userDTO, parameters);
 
-		saveToDatabase(registerQuery, parameters);
+		jdbcTemplate.update(registerQuery, parameters);
 	}
 
 	private String buildRegisterQuery(UserDTO userDTO, Map<String, String> parameters) {
@@ -65,20 +79,6 @@ public class UserJdbcDao {
 		parameters.put("password", userDTO.getPassword());
 
 		return registerQuery;
-	}
-
-	private void saveToDatabase(String registerQuery, Map<String, String> parameters) {
-		try {
-			jdbcTemplate.update(registerQuery, parameters);
-		} catch (DataIntegrityViolationException e) {
-			System.err.println(e.getMessage());
-
-			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
-		} catch (DataAccessException e) {
-			System.err.println(e.getMessage());
-
-			throw new RuntimeException("Une erreur est survenue lors de la création du compte.", e);
-		}
 	}
 
 	public void update(UserDTO userDTO) {
