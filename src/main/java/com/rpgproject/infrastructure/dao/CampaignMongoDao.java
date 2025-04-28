@@ -73,7 +73,7 @@ public class CampaignMongoDao {
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
 		}
 	}
 
@@ -106,15 +106,19 @@ public class CampaignMongoDao {
 
 	public void delete(CampaignDTO campaignDTO) {
 		try {
-			DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
-
-			if (removeResult.getDeletedCount() == 0) {
-				throw new RuntimeException();
-			}
+			deleteToDatabase(campaignDTO);
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Nous n'avons pas trouvé la campagne à supprimer", e);
+			throw new RuntimeException("Nous n'avons pas trouvé la campagne à supprimer.", e);
+		}
+	}
+
+	private void deleteToDatabase(CampaignDTO campaignDTO) {
+		DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
+
+		if (removeResult.getDeletedCount() == 0) {
+			throw new RuntimeException();
 		}
 	}
 

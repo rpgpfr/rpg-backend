@@ -45,7 +45,7 @@ public class QuestMongoDao {
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
 		}
 	}
 

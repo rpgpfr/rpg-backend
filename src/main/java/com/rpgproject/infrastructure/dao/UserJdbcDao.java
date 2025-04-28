@@ -32,7 +32,7 @@ public class UserJdbcDao {
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_IDENTIFIER, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
 		} catch (EmptyResultDataAccessException e) {
-			throw new RuntimeException("L'utilisateur n'a pas été trouvé", e);
+			throw new RuntimeException("L'utilisateur n'a pas été trouvé.", e);
 		}
 	}
 
