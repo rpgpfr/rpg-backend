@@ -1,6 +1,8 @@
 package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
+import com.rpgproject.infrastructure.exception.userjdbc.UserNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,7 +34,7 @@ public class UserJdbcDao {
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_IDENTIFIER, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
 		} catch (EmptyResultDataAccessException e) {
-			throw new RuntimeException("L'utilisateur n'a pas été trouvé.", e);
+			throw new UserNotFoundException();
 		}
 	}
 
@@ -42,7 +44,7 @@ public class UserJdbcDao {
 		} catch (DataIntegrityViolationException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
+			throw new DuplicateUserCredentialsException();
 		} catch (DataAccessException e) {
 			System.err.println(e.getMessage());
 
@@ -115,7 +117,7 @@ public class UserJdbcDao {
 		} catch (DataIntegrityViolationException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Le nom d'utilisateur ou l'email est déjà utilisé.", e);
+			throw new DuplicateUserCredentialsException();
 		} catch (DataAccessException e) {
 			System.err.println(e.getMessage());
 

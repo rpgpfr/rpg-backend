@@ -1,11 +1,12 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserException;
-import com.rpgproject.infrastructure.exception.user.UserLoginFailedException;
+import com.rpgproject.domain.exception.*;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.dto.UserDTO;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
+import com.rpgproject.infrastructure.exception.userjdbc.UserNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -26,8 +27,8 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = userJdbcDao.getUserByIdentifier(identifier);
 
 			return mapToUser(userDTO);
-		} catch (RuntimeException e) {
-			throw new UserException(e.getMessage());
+		} catch (UserNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		}
 	}
 
@@ -42,7 +43,7 @@ public class UserJdbcRepository implements UserRepository {
 
 			throw new RuntimeException();
 		} catch (RuntimeException e) {
-			throw new UserLoginFailedException();
+			throw new WrongEntryException("Le mot de passe ou l'identifiant est incorrect.");
 		}
 	}
 
@@ -65,8 +66,10 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = mapToUserDTO(user);
 
 			userJdbcDao.register(userDTO);
+		} catch (DuplicateUserCredentialsException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new UserException(e.getMessage());
+			throw new InternalException(e.getMessage());
 		}
 	}
 
@@ -76,8 +79,10 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = mapToUserDTO(user);
 
 			userJdbcDao.update(userDTO);
+		} catch (DuplicateUserCredentialsException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new UserException(e.getMessage());
+			throw new InternalException(e.getMessage());
 		}
 	}
 

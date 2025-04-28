@@ -1,8 +1,9 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.domain.exception.*;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When
-		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserException.class);
+		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
@@ -88,7 +89,7 @@ class UserJdbcRepositoryTest {
 		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(UserException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(DuplicateException.class);
 	}
 
 	@Test
@@ -121,7 +122,7 @@ class UserJdbcRepositoryTest {
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(WrongEntryException.class);
 	}
 
 	@Test
@@ -134,7 +135,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(WrongEntryException.class);
 	}
 
 	@Test
@@ -150,15 +151,27 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Given a user, when update fails because of duplicate key, then exception is thrown")
+	void givenAUser_whenUpdateFailsBecauseOfDuplicateKey_thenExceptionIsThrown() {
+		// Given
+		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
+
+		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(DuplicateException.class);
+	}
+
+	@Test
 	@DisplayName("Given a user, when update fails, then exception is thrown")
 	void givenAUser_whenUpdateFails_thenExceptionIsThrown() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
-		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new RuntimeException("error")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(UserException.class);
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(InternalException.class);
 	}
 
 }

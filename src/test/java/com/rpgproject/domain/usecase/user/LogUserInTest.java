@@ -1,7 +1,6 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.infrastructure.exception.user.UserLoginFailedException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +52,7 @@ class LogUserInTest {
 		// Given
 		String identifier = "username";
 		String password = "password";
-		UserLoginFailedException exception = new UserLoginFailedException();
+		RuntimeException exception = new RuntimeException();
 
 		when(userRepository.logIn(identifier, password)).thenThrow(exception);
 
