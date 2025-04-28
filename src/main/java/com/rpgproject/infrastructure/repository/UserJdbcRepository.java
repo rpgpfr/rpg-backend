@@ -43,7 +43,7 @@ public class UserJdbcRepository implements UserRepository {
 
 			throw new RuntimeException();
 		} catch (RuntimeException e) {
-			throw new WrongEntryException("Le mot de passe ou l'identifiant est incorrect.");
+			throw new InvalidCredentialsException("Le mot de passe ou l'identifiant est incorrect.");
 		}
 	}
 

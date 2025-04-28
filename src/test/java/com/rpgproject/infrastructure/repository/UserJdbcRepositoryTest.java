@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -57,8 +56,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist, then an error is thrown")
-	void givenAUsername_whenUserDoesNotExist_thenAnErrorIsThrown() {
+	@DisplayName("Given a username, when user does not exist, then an exception is thrown")
+	void givenAUsername_whenUserDoesNotExist_thenAnExceptionIsThrown() {
 		// Given
 		String username = "usernaaaame";
 
@@ -81,15 +80,27 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Given a user, when register fails because of duplicateCredentials, then exception is thrown")
+	void givenAUser_whenRegisterFailsBecauseOfDuplicateCredentials_thenExceptionIsThrown() {
+		// Given
+		User user = createUser();
+
+		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(DuplicateException.class);
+	}
+
+	@Test
 	@DisplayName("Given a user, when register fails, then exception is thrown")
 	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
 		// Given
 		User user = createUser();
 
-		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new RuntimeException()).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(DuplicateException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -112,8 +123,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when password does not match, then login error is thrown")
-	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginErrorIsThrown() {
+	@DisplayName("Given an identifier and a password, when password does not match, then login exception is thrown")
+	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -122,12 +133,12 @@ class UserJdbcRepositoryTest {
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(WrongEntryException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(InvalidCredentialsException.class);
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when user is not found on login, then login error is thrown")
-	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginErrorIsThrown() {
+	@DisplayName("Given an identifier and a password, when user is not found on login, then login exception is thrown")
+	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -135,7 +146,7 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(WrongEntryException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(InvalidCredentialsException.class);
 	}
 
 	@Test
@@ -168,7 +179,7 @@ class UserJdbcRepositoryTest {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
-		doThrow(new RuntimeException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new RuntimeException("exception")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(InternalException.class);
