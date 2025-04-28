@@ -3,6 +3,7 @@ package com.rpgproject.infrastructure.dao;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.rpgproject.infrastructure.dto.QuestDTO;
+import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -82,9 +83,7 @@ class QuestMongoDaoTest {
 	@DisplayName("Given a questDTO, when saving fails because of a duplicate key, then an exception is thrown")
 	void givenAQuestDTO_whenSavingFailsBecauseOfADuplicateKey_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoDao.save(createQuestDTOs().getFirst()))
-			.isInstanceOf(RuntimeException.class)
-			.hasMessage("Le nom de cette quête est déjà utilisé.");
+		assertThatCode(() -> questMongoDao.save(createQuestDTOs().getFirst())).isInstanceOf(DuplicateQuestNameException.class);
 	}
 
 	@Test
@@ -115,7 +114,9 @@ class QuestMongoDaoTest {
 		questDTO.setCampaignId("wrongCampaignId");
 
 		// When & Then
-		assertThatCode(() -> questMongoDao.updateMainQuest(questDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> questMongoDao.updateMainQuest(questDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations.");
 	}
 
 	@Test
@@ -124,7 +125,7 @@ class QuestMongoDaoTest {
 		// Given & When & Then
 		assertThatCode(() -> questMongoDao.updateMainQuest(null))
 			.isInstanceOf(RuntimeException.class)
-			.hasMessage("Une erreur est survenue lors de la mise à jour des informations");
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations.");
 	}
 
 	@Test

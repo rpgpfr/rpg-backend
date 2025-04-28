@@ -1,6 +1,7 @@
 package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.QuestDTO;
+import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,7 +32,7 @@ public class QuestMongoDao {
 		} catch (DuplicateKeyException e) {
 			System.err.println(e.getMessage());
 
-			throw new RuntimeException("Le nom de cette quête est déjà utilisé.", e);
+			throw new DuplicateQuestNameException();
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
