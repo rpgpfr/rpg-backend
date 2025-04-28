@@ -1,12 +1,14 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
-import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
-import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
+import com.rpgproject.infrastructure.exception.campaignmongo.CampaignNotFoundException;
+import com.rpgproject.infrastructure.exception.campaignmongo.DuplicateCampaignNameException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -30,13 +32,13 @@ public class CampaignMongoRepository implements CampaignRepository {
 
 	@Override
 	public Campaign getCampaignBySlugAndOwner(String slug, String owner) {
-		CampaignDTO campaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
+		try {
+			CampaignDTO campaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
 
-		if (campaignDTO == null) {
-			throw new CampaignNotFoundException();
+			return mapToCampaign(campaignDTO);
+		} catch (CampaignNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		}
-
-		return mapToCampaign(campaignDTO);
 	}
 
 	private List<Campaign> mapToCampaigns(List<CampaignDTO> campaignDTOs) {
@@ -69,8 +71,10 @@ public class CampaignMongoRepository implements CampaignRepository {
 		try {
 			CampaignDTO campaignDTO = mapToCampaignDTO(campaign, LocalDate.now());
 			campaignMongoDao.save(campaignDTO);
+		} catch (DuplicateCampaignNameException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new CampaignCreationFailedException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 
@@ -79,8 +83,10 @@ public class CampaignMongoRepository implements CampaignRepository {
 		try {
 			CampaignDTO campaignDTO = mapToCampaignDTO(campaign);
 			campaignMongoDao.update(campaignDTO, slug);
+		} catch (CampaignNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new CampaignUpdateFailedException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 
@@ -90,8 +96,10 @@ public class CampaignMongoRepository implements CampaignRepository {
 			CampaignDTO campaignDTO = campaignMongoDao.findCampaignBySlugAndOwner(slug, owner);
 
 			campaignMongoDao.delete(campaignDTO);
+		} catch (CampaignNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new CampaignNotFoundException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 

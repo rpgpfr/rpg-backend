@@ -1,28 +1,37 @@
 package com.rpgproject.infrastructure.repository;
 
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
-import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
-import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaign;
 import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 
 @DataMongoTest
 @ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class CampaignMongoRepositoryTest {
 
 	private CampaignMongoRepository campaignMongoRepository;
@@ -34,6 +43,20 @@ class CampaignMongoRepositoryTest {
 	public void setUp() {
 		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		campaignMongoRepository = new CampaignMongoRepository(campaignMongoDao);
+		initializeMongoDB();
+	}
+
+	private void initializeMongoDB() {
+		IndexOptions indexOptions = new IndexOptions().unique(true);
+
+		mongoTemplate.createCollection("Campaign")
+			.createIndex(
+				Indexes.compoundIndex(
+					Indexes.ascending("slug"),
+					Indexes.ascending("owner")
+				),
+				indexOptions
+			);
 
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
 	}
@@ -94,7 +117,7 @@ class CampaignMongoRepositoryTest {
 	@DisplayName("Given a slug and an owner, when the campaign does not exist, then an exception is thrown")
 	void givenASlugAndAnOwner_whenTheCampaignDoesNotExist_thenAnExceptionIsThrown() {
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.getCampaignBySlugAndOwner(null, null)).isInstanceOf(CampaignNotFoundException.class);
+		assertThatCode(() -> campaignMongoRepository.getCampaignBySlugAndOwner(null, null)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
@@ -123,10 +146,19 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Given a campaign with an already existing name, when saving fails, then an exception is thrown")
+	void givenACampaignWithAnAlreadyExistingName_whenSavingFails_thenAnExceptionIsThrown() {
+		// When & Then
+		Campaign campaign = createCampaigns().getFirst();
+
+		assertThatCode(() -> campaignMongoRepository.save(campaign)).isInstanceOf(DuplicateException.class);
+	}
+
+	@Test
 	@DisplayName("Given a campaign, when saving fails, then an exception is thrown")
 	void givenACampaign_whenSavingFails_thenAnExceptionIsThrown() {
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.save(null)).isInstanceOf(CampaignCreationFailedException.class);
+		assertThatCode(() -> campaignMongoRepository.save(null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -142,10 +174,19 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("Given a non existing campaignDTO, when updating it, then an exception is thrown")
+	void givenANonExistingCampaignDTO_whenUpdatingIt_thenAnExceptionIsThrown() {
+		// When & Then
+		Campaign campaign = createCampaign();
+		String slug = "wrong slug";
+		assertThatCode(() -> campaignMongoRepository.update(campaign, slug)).isInstanceOf(NotFoundException.class);
+	}
+
+	@Test
 	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
 	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(CampaignUpdateFailedException.class);
+		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -161,10 +202,24 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when deleting fails, then an exception is thrown")
+	@DisplayName("Given a non-existing campaign, when deleting it, then an exception is thrown")
+	void givenANonExistingCampaign_whenDeletingIt_thenAnExceptionIsThrown() {
+		// Given & When & Then
+		assertThatCode(() -> campaignMongoRepository.delete(null, null)).isInstanceOf(NotFoundException.class);
+	}
+
+	@Test
+	@DisplayName("Given campaign, when deleting fails, then an exception is thrown")
 	void givenACampaign_whenDeletingFails_thenAnExceptionIsThrown() {
+		// Given
+		CampaignMongoDao campaignMongoDaoMock = mock(CampaignMongoDao.class);
+
+		ReflectionTestUtils.setField(campaignMongoRepository, "campaignMongoDao", campaignMongoDaoMock);
+
+		doThrow(new RuntimeException()).when(campaignMongoDaoMock).delete(null);
+
 		// When & Then
-		assertThatCode(() -> campaignMongoRepository.delete(null, null)).isInstanceOf(CampaignNotFoundException.class);
+		assertThatCode(() -> campaignMongoRepository.delete(null, null)).isInstanceOf(InternalException.class);
 	}
 
 }
