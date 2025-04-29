@@ -58,7 +58,7 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner, when gettinh the user's campaigns, then all of its campaigns are returned")
+	@DisplayName("Given an owner, when getting the user's campaigns, then all of its campaigns are returned")
 	void givenAnOwner_whenGettingTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
 		String owner = "username";
@@ -104,6 +104,18 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
+	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is thrown")
+	void givenASlugAndAnOwner_whenTheCampaignTheCampaignIsNotFound_thenAnExceptionIsThrown() {
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+		String slug = "wrong slug";
+		String owner = "wrong owner";
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.findCampaignBySlugAndOwner(slug, owner)).isInstanceOf(CampaignNotFoundException.class);
+	}
+
+	@Test
 	@DisplayName("Given a slug and an owner, when the campaign exists, then the id is returned")
 	void givenASlugAndAnOwner_whenTheCampaignExists_thenTheIdIsReturned() {
 		// Given
@@ -119,10 +131,10 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when the campaign does not exist, then an exception is thrown")
-	void givenACampaignDTO_whenTheCampaignDoesNotExist_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when it is not found, then an exception is thrown")
+	void givenACampaignDTO_whenItIsNotFound_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> campaignMongoDao.findCampaignIdBySlugAndOwner(null, null)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> campaignMongoDao.findCampaignIdBySlugAndOwner(null, null)).isInstanceOf(CampaignNotFoundException.class);
 	}
 
 	@Test
@@ -141,8 +153,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when saving it, then it is saved")
-	void givenACampaignDTO_whenSavingIt_thenItIsSaved() {
+	@DisplayName("Given a campaignDTO, when it does not exist, then it is saved")
+	void givenACampaignDTO_whenItDoesNotExist_thenItIsSaved() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 
@@ -151,15 +163,15 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when saving fails because of a duplicate key, then an exception is thrown")
-	void givenACampaignDTO_whenSavingFailsBecauseOfADuplicateKey_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when save fails because it already exists, then an exception is thrown")
+	void givenACampaignDTO_whenSaveFailsBecauseItAlreadyExist_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.save(createCampaignDTOs().getFirst())).isInstanceOf(DuplicateCampaignNameException.class);
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when saving fails, then an exception is thrown")
-	void givenACampaignDTO_whenSavingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when save fails, then an exception is thrown")
+	void givenACampaignDTO_whenSaveFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.save(null))
 			.isInstanceOf(RuntimeException.class)
@@ -167,8 +179,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when updating it, then it is updated")
-	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
+	@DisplayName("Given a campaignDTO, when it exists, then it is updated")
+	void givenACampaignDTO_whenItExists_thenItIsUpdated() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = campaignDTO.getSlug();
@@ -180,8 +192,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO with wrong owner, when updating, then an exception is thrown")
-	void givenACampaignDTOWithWrongOwner_whenUpdatingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when update fails because it is not found, then an exception is thrown")
+	void givenACampaignDTOWithWrongOwner_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 		String slug = campaignDTO.getSlug();
@@ -193,8 +205,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO with wrong slug, when updating, then an exception is thrown")
-	void givenACampaignDTOWithWrongSlug_whenUpdatingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO with wrong slug, when update fails because it is not found, then an exception is thrown")
+	void givenACampaignDTOWithWrongSlug_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 		String slug = "wrong slug";
@@ -204,8 +216,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
-	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when update fails, then an exception is thrown")
+	void givenACampaignDTO_whenUpdateFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.update(null, null))
 			.isInstanceOf(RuntimeException.class)
@@ -213,8 +225,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when deleting it, then it is deleted")
-	void givenACampaignDTO_whenDeletingIt_thenItIsDeleted() {
+	@DisplayName("Given a campaignDTO, when it exists, then it is deleted")
+	void givenACampaignDTO_whenItExists_thenItIsDeleted() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 
@@ -223,8 +235,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO with wrong info, when deleting it, then an exception is thrown")
-	void givenACampaignDTOWithWrongInfo_whenDeletingIt_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when delete fails because it is not found, then an exception is thrown")
+	void givenACampaignDTO_whenDeleteFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		CampaignDTO campaignDTO = new CampaignDTO("wrong owner", "wrong name", "wrong slug", "description", "type", "mood", LocalDate.of(2025, 1, 1));
 		campaignDTO.setId("wrong id");
@@ -234,8 +246,8 @@ class CampaignMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when deleting it, then an exception is thrown")
-	void givenAWrongCampaignDTO_whenDeletingIt_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaignDTO, when delete fails, then an exception is thrown")
+	void givenAWrongCampaignDTO_whenDeleteFails_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoDao.delete(null))
 			.isInstanceOf(RuntimeException.class)

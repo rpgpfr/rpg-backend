@@ -2,6 +2,7 @@ package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.QuestDTO;
 import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
+import com.rpgproject.infrastructure.exception.questmongo.QuestNotFoundException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -23,7 +24,13 @@ public class QuestMongoDao {
 	public QuestDTO findMainQuestByCampaignId(String campaignId) {
 		Query query = buildMainQuestByCampaignIdQuery(campaignId);
 
-		return mongoTemplate.findOne(query, QuestDTO.class);
+		QuestDTO questDTO = mongoTemplate.findOne(query, QuestDTO.class);
+
+		if (questDTO == null) {
+			throw new QuestNotFoundException();
+		}
+
+		return questDTO;
 	}
 
 	public void save(QuestDTO questDTO) {
@@ -43,6 +50,10 @@ public class QuestMongoDao {
 	public void updateMainQuest(QuestDTO questDTO) {
 		try {
 			updateMainQuestToDatabase(questDTO);
+		} catch (QuestNotFoundException e) {
+			System.err.println(e.getMessage());
+
+			throw new QuestNotFoundException();
 		} catch (RuntimeException e) {
 			System.err.println(e.getMessage());
 
@@ -57,7 +68,7 @@ public class QuestMongoDao {
 		QuestDTO updatedQuest = mongoTemplate.findAndModify(query, update, QuestDTO.class);
 
 		if (updatedQuest == null) {
-			throw new RuntimeException();
+			throw new QuestNotFoundException();
 		}
 	}
 
