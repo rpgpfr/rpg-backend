@@ -21,7 +21,7 @@ public class UserRestPresenter implements Presenter<User, ResponseEntity<Respons
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserViewModel>> ok() {
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override

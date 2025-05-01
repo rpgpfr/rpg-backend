@@ -24,7 +24,7 @@ public class CampaignsRestPresenter implements Presenter<List<Campaign>, Respons
 
 	@Override
 	public ResponseEntity<ResponseViewModel<List<CampaignViewModel>>> ok() {
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override

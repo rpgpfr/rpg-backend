@@ -25,7 +25,7 @@ public class QuestRestPresenter implements Presenter<Quest, ResponseEntity<Respo
 
 	@Override
 	public ResponseEntity<ResponseViewModel<QuestViewModel>> ok() {
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
