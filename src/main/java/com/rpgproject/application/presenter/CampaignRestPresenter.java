@@ -5,10 +5,12 @@ import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
 import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.Presenter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,13 @@ import java.util.List;
 
 @Component
 public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity<ResponseViewModel<CampaignViewModel>>> {
+
+	private final ExceptionHTTPStatusService exceptionHTTPStatusService;
+
+	@Autowired
+	public CampaignRestPresenter(ExceptionHTTPStatusService exceptionHTTPStatusService) {
+		this.exceptionHTTPStatusService = exceptionHTTPStatusService;
+	}
 
 	@Override
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> ok() {
@@ -64,12 +73,14 @@ public class CampaignRestPresenter implements Presenter<Campaign, ResponseEntity
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<CampaignViewModel>> error(Exception exception) {
-		return ResponseEntity
-			.badRequest()
-			.body(
-				new ResponseViewModel<>(null, exception.getMessage())
-			);
+	public ResponseEntity<ResponseViewModel<CampaignViewModel>> error(RuntimeException exception) {
+		return new ResponseEntity<>(
+			new ResponseViewModel<>(
+				null,
+				exception.getMessage()
+			),
+			exceptionHTTPStatusService.getHttpStatusFromExceptionClass(exception)
+		);
 	}
 
 }

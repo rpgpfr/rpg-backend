@@ -3,9 +3,11 @@ package com.rpgproject.application.presenter;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.GoalViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.Presenter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,12 @@ import java.util.List;
 @Component
 public class QuestRestPresenter implements Presenter<Quest, ResponseEntity<ResponseViewModel<QuestViewModel>>> {
 
+	private final ExceptionHTTPStatusService exceptionHTTPStatusService;
+
+	@Autowired
+	public QuestRestPresenter(ExceptionHTTPStatusService exceptionHTTPStatusService) {
+		this.exceptionHTTPStatusService = exceptionHTTPStatusService;
+	}
 
 	@Override
 	public ResponseEntity<ResponseViewModel<QuestViewModel>> ok() {
@@ -42,7 +50,13 @@ public class QuestRestPresenter implements Presenter<Quest, ResponseEntity<Respo
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<QuestViewModel>> error(Exception exception) {
-		return ResponseEntity.badRequest().body(new ResponseViewModel<>(null, exception.getMessage()));
+	public ResponseEntity<ResponseViewModel<QuestViewModel>> error(RuntimeException exception) {
+		return new ResponseEntity<>(
+			new ResponseViewModel<>(
+				null,
+				exception.getMessage()
+			),
+			exceptionHTTPStatusService.getHttpStatusFromExceptionClass(exception)
+		);
 	}
 }

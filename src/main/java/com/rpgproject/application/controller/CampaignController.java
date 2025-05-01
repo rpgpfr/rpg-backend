@@ -16,7 +16,7 @@ import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.domain.usecase.campaign.*;
-import com.rpgproject.domain.usecase.quest.EditMainQuest;
+import com.rpgproject.domain.usecase.quest.UpdateMainQuest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ public class CampaignController {
 	private final GetCampaignBySlugAndOwner<ResponseEntity<ResponseViewModel<CampaignViewModel>>> getCampaignBySlugAndOwner;
 	private final UpdateCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> updateCampaign;
 	private final DeleteCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> deleteCampaign;
-	private final EditMainQuest<ResponseEntity<ResponseViewModel<QuestViewModel>>> editMainQuest;
+	private final UpdateMainQuest<ResponseEntity<ResponseViewModel<QuestViewModel>>> updateMainQuest;
 
 	public CampaignController(QuestRepository questRepository, CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter, QuestRestPresenter questRestPresenter) {
 		this.getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
@@ -40,7 +40,7 @@ public class CampaignController {
 		this.getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
 		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
-		this.editMainQuest = new EditMainQuest<>(questRepository, questRestPresenter);
+		this.updateMainQuest = new UpdateMainQuest<>(questRepository, questRestPresenter);
 	}
 
 	@GetMapping("")
@@ -102,7 +102,7 @@ public class CampaignController {
 				.toList()
 		);
 
-		return editMainQuest.execute(quest, slug, owner);
+		return updateMainQuest.execute(quest, slug, owner);
 	}
 
 }

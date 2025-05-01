@@ -6,6 +6,7 @@ import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
 import com.rpgproject.application.presenter.UserProfileRestPresenter;
 import com.rpgproject.application.presenter.UserRestPresenter;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.CharacterMongoDao;
@@ -64,7 +65,7 @@ class UserProfileControllerTest {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		UserRepository userRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
@@ -74,8 +75,9 @@ class UserProfileControllerTest {
 		MapMongoRepository mapRepository = new MapMongoRepository(mapMongoDao);
 		CharacterMongoDao characterMongoDao = new CharacterMongoDao(mongoTemplate);
 		CharacterMongoRepository characterRepository = new CharacterMongoRepository(characterMongoDao);
-		UserProfileRestPresenter userProfileRestPresenter = new UserProfileRestPresenter();
-		UserRestPresenter userRestPresenter = new UserRestPresenter();
+		ExceptionHTTPStatusService exceptionHTTPStatusService = new ExceptionHTTPStatusService();
+		UserProfileRestPresenter userProfileRestPresenter = new UserProfileRestPresenter(exceptionHTTPStatusService);
+		UserRestPresenter userRestPresenter = new UserRestPresenter(exceptionHTTPStatusService);
 
 		userProfileController = new UserProfileController(userRepository, campaignRepository, mapRepository, characterRepository, userProfileRestPresenter, userRestPresenter);
 
@@ -84,13 +86,13 @@ class UserProfileControllerTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Campaign");
 	}
 
 	@Test
-	@DisplayName("Given a username, when user exists, then user profile is returned")
-	void givenAUsername_whenUserExists_thenUserProfileIsReturned() {
+	@DisplayName("Given a username, when the user exists, then the user profile is returned")
+	void givenAUsername_whenTheUserExists_thenTheUserProfileIsReturned() {
 		// Given
 		String username = "alvin";
 
@@ -118,8 +120,8 @@ class UserProfileControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given a username and a userUpdateRequestBody, when updated, then new user is returned")
-	void givenAUsernameAndAUserUpdateRequestBody_whenUpdated_thenNewUserIsReturned() {
+	@DisplayName("Given a username and a userUpdateRequestBody, when the user exists, then the user is updated")
+	void givenAUsernameAndAUserUpdateRequestBody_whenTheUserExists_thenTheUserIsUpdated() {
 		// Given
 		String username = "alvin";
 		UserUpdateRequestBody userUpdateRequestBody = new UserUpdateRequestBody("Goulou", "Hamaide", "Description", "RPG Knowledge");

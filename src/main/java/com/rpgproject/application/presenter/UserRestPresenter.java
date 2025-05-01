@@ -2,13 +2,22 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.port.Presenter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserRestPresenter implements Presenter<User, ResponseEntity<ResponseViewModel<UserViewModel>>> {
+
+	private final ExceptionHTTPStatusService exceptionHTTPStatusService;
+
+	@Autowired
+	public UserRestPresenter(ExceptionHTTPStatusService exceptionHTTPStatusService) {
+		this.exceptionHTTPStatusService = exceptionHTTPStatusService;
+	}
 
 	@Override
 	public ResponseEntity<ResponseViewModel<UserViewModel>> ok() {
@@ -33,12 +42,14 @@ public class UserRestPresenter implements Presenter<User, ResponseEntity<Respons
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<UserViewModel>> error(Exception exception) {
-		return ResponseEntity
-			.badRequest()
-			.body(
-				new ResponseViewModel<>(null, exception.getMessage())
-			);
+	public ResponseEntity<ResponseViewModel<UserViewModel>> error(RuntimeException exception) {
+		return new ResponseEntity<>(
+			new ResponseViewModel<>(
+				null,
+				exception.getMessage()
+			),
+			exceptionHTTPStatusService.getHttpStatusFromExceptionClass(exception)
+		);
 	}
 
 }

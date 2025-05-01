@@ -2,8 +2,9 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserViewModel;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.domain.exception.InternalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRestPresenterTest {
 
 	private UserRestPresenter userRestPresenter;
+	private ExceptionHTTPStatusService exceptionHTTPStatusService;
 
 	@BeforeEach
-	public void setUp() {
-		userRestPresenter = new UserRestPresenter();
+	void setUp() {
+		exceptionHTTPStatusService = new ExceptionHTTPStatusService();
+		userRestPresenter = new UserRestPresenter(exceptionHTTPStatusService);
 	}
 
 	@Test
-	@DisplayName("Should return an empty response entity")
-	void shouldReturnAnEmptyResponseEntity() {
+	@DisplayName("Should return an empty response")
+	void shouldReturnAnEmptyResponse() {
 		// Act
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.ok();
 
@@ -35,8 +38,8 @@ class UserRestPresenterTest {
 	}
 
 	@Test
-	@DisplayName("Should return a response with a userViewModel")
-	void shouldReturnAResponseWithAUserViewModel() {
+	@DisplayName("Should return a response with a user")
+	void shouldReturnAResponseWithAUser() {
 		// Arrange
 		User user = createUser();
 
@@ -53,13 +56,13 @@ class UserRestPresenterTest {
 	@DisplayName("Should return a response with an error message")
 	void shouldReturnAResponseWithAnErrorMessage() {
 		// Arrange
-		UserException exception = new UserException("error");
+		InternalException exception = new InternalException("error");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "error"));
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.internalServerError().body(new ResponseViewModel<>(null, "error"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
