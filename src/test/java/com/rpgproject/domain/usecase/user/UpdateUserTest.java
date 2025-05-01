@@ -1,7 +1,8 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +32,8 @@ class UpdateUserTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when updating, then present success")
-	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
+	@DisplayName("Given a user, when it is updated, then a success is presented")
+	void givenAUser_whenItIsUpdated_thenASuccessIsPresented() {
 		// Given
 		User user = createUser();
 
@@ -44,11 +45,11 @@ class UpdateUserTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when update throw an exception, then present error")
-	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
+	@DisplayName("Given a user, when update fails, then an exception is presented")
+	void givenAUser_whenUpdateFails_thenAnExceptionIsPresented() {
 		// Given
 		User user = createUser();
-		UserException exception = new UserException("error");
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(userRepository).update(user);
 

@@ -1,7 +1,8 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
@@ -35,8 +36,8 @@ class DeleteCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when deleting it, then it is deleted")
-	void givenACampaign_whenDeletingIt_thenItIsDeleted() {
+	@DisplayName("Given a campaign, when it exists, then a success is presented")
+	void givenACampaign_whenItExists_thenASuccessIsPresented() {
 		// Given
 		Campaign campaign = createCampaign();
 		String slug = campaign.getSlug();
@@ -52,13 +53,13 @@ class DeleteCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when delete fails, then an exception is thrown")
+	@DisplayName("Given a campaign, when delete fails, then an exception is presented")
 	void givenACampaign_whenDeleteFails_thenAnExceptionIsThrown() {
 		// Given
 		Campaign campaign = createCampaign();
 		String slug = campaign.getSlug();
 		String owner = campaign.getOwner();
-		CampaignNotFoundException exception = new CampaignNotFoundException();
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(campaignRepository).delete(slug, owner);
 

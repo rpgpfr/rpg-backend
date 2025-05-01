@@ -6,6 +6,6 @@ public interface Presenter<INPUT, OUTPUT> {
 
 	OUTPUT ok(INPUT input);
 
-	OUTPUT error(Exception exception);
+	OUTPUT error(RuntimeException exception);
 
 }

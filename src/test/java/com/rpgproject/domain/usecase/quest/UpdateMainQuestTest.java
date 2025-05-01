@@ -1,7 +1,8 @@
 package com.rpgproject.domain.usecase.quest;
 
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.quest.QuestEditFailedException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +16,9 @@ import static com.rpgproject.domain.EntityCreationTestUtils.createQuest;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class EditMainQuestTest {
+class UpdateMainQuestTest {
 
-	private EditMainQuest<?> editMainQuest;
+	private UpdateMainQuest<?> updateMainQuest;
 
 	@Mock
 	private QuestRepository questRepository;
@@ -27,11 +28,11 @@ class EditMainQuestTest {
 
 	@BeforeEach
 	public void setUp() {
-		this.editMainQuest = new EditMainQuest<>(questRepository, presenter);
+		this.updateMainQuest = new UpdateMainQuest<>(questRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a quest with a slug and an owner, when editing it, then it is updated")
+	@DisplayName("Given a quest with a slug and an owner, when updating it, then a success is presented")
 	void givenAQuestWithASlugAndAnOwner_whenEditingIt_thenASuccessIsPresented() {
 		// Given
 		Quest quest = createQuest();
@@ -39,7 +40,7 @@ class EditMainQuestTest {
 		String owner = "owner";
 
 		// When
-		editMainQuest.execute(quest, slug, owner);
+		updateMainQuest.execute(quest, slug, owner);
 
 		// Then
 		verify(questRepository, times(1)).updateMainQuest(quest, slug, owner);
@@ -47,18 +48,18 @@ class EditMainQuestTest {
 	}
 
 	@Test
-	@DisplayName("Given When Then")
-	void givenAQuestWithWrongInfo_whenEditingIt_thenAnExceptionIsPresented() {
+	@DisplayName("Given a quest with a slug and an owner, when update fails, then an exception is presented")
+	void givenAQuestWithWithASlugAndAnOwner_whenUpdateFails_thenAnExceptionIsPresented() {
 		// Given
 		Quest quest = createQuest();
 		String slug = "wrong slug";
 		String owner = "wrong owner";
-		QuestEditFailedException exception = new QuestEditFailedException();
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(questRepository).updateMainQuest(quest, slug, owner);
 
 		// When
-		editMainQuest.execute(quest, slug, owner);
+		updateMainQuest.execute(quest, slug, owner);
 
 		// Then
 		verify(questRepository, times(1)).updateMainQuest(quest, slug, owner);

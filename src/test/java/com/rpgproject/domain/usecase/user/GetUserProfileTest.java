@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,8 +42,8 @@ public class GetUserProfileTest {
 	}
 
 	@Test
-	@DisplayName("Given a user's uniquename, when accessing the user's profile, then all the profile's information are sent")
-	void givenAUsername_whenAccessingTheUsersProfile_thenAllTheProfilesInformationAreSent() {
+	@DisplayName("Given a username, when accessing the user's profile, then all the profile's information are presented")
+	void givenAUsername_whenAccessingTheUsersProfile_thenAllTheProfilesInformationArePresented() {
 		// Given
 		String username = "username";
 		User user = createUser();
@@ -68,11 +68,11 @@ public class GetUserProfileTest {
 	}
 
 	@Test
-	@DisplayName("Given a user's uniquename, when the user does not exist, then an error is sent")
-	void givenAUsername_whenTheUserDoesNotExist_thenAnErrorIsSent() {
+	@DisplayName("Given a username, when the user is not found, then an exception is presented")
+	void givenAUsername_whenTheUserIsNotFound_thenAnExceptionIsPresented() {
 		// Given
 		String username = "username";
-		UserException exception = new UserException("error");
+		NotFoundException exception = new NotFoundException("error");
 
 		when(userRepository.getUserByIdentifier(username)).thenThrow(exception);
 
@@ -80,7 +80,6 @@ public class GetUserProfileTest {
 		getUserProfile.execute(username);
 
 		// Then
-
 		verify(presenter).error(exception);
 	}
 

@@ -105,7 +105,7 @@ class CampaignMongoDaoTest {
 
 	@Test
 	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is thrown")
-	void givenASlugAndAnOwner_whenTheCampaignTheCampaignIsNotFound_thenAnExceptionIsThrown() {
+	void givenASlugAndAnOwner_whenTheCampaignIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = "wrong slug";

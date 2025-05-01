@@ -67,7 +67,7 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner, when getting users campaigns, then all of its campaigns are returned")
+	@DisplayName("Given an owner, when getting user's campaigns, then all of its campaigns are returned")
 	void givenAnOwner_whenGettingUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
 		String owner = "username";

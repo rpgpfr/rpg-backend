@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.UserException;
+import com.rpgproject.domain.exception.InvalidCredentialsException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 
@@ -18,8 +18,9 @@ public class LogUserIn<T> {
 	public T execute(String identifier, String password) {
 		try {
 			User loggedUser = userRepository.logIn(identifier, password);
+
 			return presenter.ok(loggedUser);
-		} catch (UserException e) {
+		} catch (InvalidCredentialsException e) {
 			return presenter.error(e);
 		}
 	}

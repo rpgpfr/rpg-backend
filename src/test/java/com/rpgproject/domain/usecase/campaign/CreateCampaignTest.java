@@ -2,7 +2,8 @@ package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
@@ -37,8 +38,8 @@ class CreateCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when creating it, then it is saved")
-	void givenACampaign_whenCreatingIt_thenItIsSaved() {
+	@DisplayName("Given a campaign, when creating it, then a success is presented")
+	void givenACampaign_whenCreatingIt_thenASuccessIsPresented() {
 		// Given
 		String owner = "alvin";
 		String name = "myCampaign";
@@ -55,13 +56,13 @@ class CreateCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when creation fails, then an exception is thrown")
-	void givenACampaign_whenCreationFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when creation fails, then an exception is presented")
+	void givenACampaign_whenCreationFails_thenAnExceptionIsPresented() {
 		// Given
 		String owner = "alvin";
 		String name = "myCampaign";
 		Campaign campaign = new Campaign(owner, name, "mycampaign", LocalDate.now());
-		CampaignCreationFailedException exception = new CampaignCreationFailedException();
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(campaignRepository).save(campaign);
 

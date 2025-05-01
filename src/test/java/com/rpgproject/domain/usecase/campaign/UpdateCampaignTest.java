@@ -1,7 +1,8 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
-import com.rpgproject.domain.exception.campaign.CampaignUpdateFailedException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +31,8 @@ class UpdateCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign and its slug, when updating it, then it is updated")
-	void givenACampaignAndItsSlug_whenUpdatingIt_thenItIsUpdated() {
+	@DisplayName("Given a campaign and its slug, when updating it, then a success is presented")
+	void givenACampaignAndItsSlug_whenUpdatingIt_thenASuccessIsPresented() {
 		// Given
 		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "camapgne-1";
@@ -45,12 +46,12 @@ class UpdateCampaignTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign and its slug, when update fails, then an error is presented")
-	void givenACampaignAndItsSlug_whenUpdateFails_thenAnErrorIsPresented() {
+	@DisplayName("Given a campaign and its slug, when update fails, then an exception is presented")
+	void givenACampaignAndItsSlug_whenUpdateFails_thenAnExceptionIsPresented() {
 		// Given
 		Campaign campaign = new Campaign("alvin", "updated name", "updated-name", null);
 		String slug = "slug";
-		CampaignUpdateFailedException exception = new CampaignUpdateFailedException();
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(campaignRepository).update(campaign, slug);
 

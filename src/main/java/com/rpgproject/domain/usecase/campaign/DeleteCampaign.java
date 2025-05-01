@@ -1,6 +1,8 @@
 package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
@@ -23,7 +25,7 @@ public class DeleteCampaign<T> {
 			campaignRepository.delete(slug, owner);
 
 			return presenter.ok();
-		} catch (RuntimeException e) {
+		} catch (NotFoundException | InternalException e) {
 			return presenter.error(e);
 		}
 	}

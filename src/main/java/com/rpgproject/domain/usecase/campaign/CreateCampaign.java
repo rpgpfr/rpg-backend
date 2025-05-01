@@ -2,12 +2,15 @@ package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.campaign.CampaignCreationFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 
 import java.time.LocalDate;
+
+import static com.rpgproject.domain.entity.Quest.createDefaultMainQuest;
 
 public class CreateCampaign<T> {
 
@@ -28,14 +31,14 @@ public class CreateCampaign<T> {
 
 			campaignRepository.save(campaign);
 
-			Quest quest = Quest.createDefaultMainQuest();
+			Quest quest = createDefaultMainQuest();
 
 			questRepository.save(quest, slug, owner);
 
 			campaign.setMainQuest(quest);
 
 			return presenter.ok();
-		} catch (CampaignCreationFailedException e) {
+		} catch (DuplicateException | InternalException e) {
 			return presenter.error(e);
 		}
 	}

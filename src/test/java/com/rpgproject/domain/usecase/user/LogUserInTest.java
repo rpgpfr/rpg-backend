@@ -1,6 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
+import com.rpgproject.domain.exception.InvalidCredentialsException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +31,8 @@ class LogUserInTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when logging in, then user is returned")
-	void givenAnIdentifierAndAPassword_whenLoggingIn_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when logging in, then user is presented")
+	void givenAnIdentifierAndAPassword_whenLoggingIn_thenUserIsPresented() {
 		// Given
 		String identifier = "username";
 		String password = "password";
@@ -47,12 +48,12 @@ class LogUserInTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when login fails, then an error is returned")
-	void givenAnIdentifierAndAPassword_whenLoginFails_thenAnErrorIsReturned() {
+	@DisplayName("Given an identifier and a password, when login fails because credentials are invalid, then an exception is presented")
+	void givenAnIdentifierAndAPassword_whenLoginFailsBecauseCredentialsAreInvalid_thenAnExceptionIsPresented() {
 		// Given
 		String identifier = "username";
 		String password = "password";
-		RuntimeException exception = new RuntimeException();
+		InvalidCredentialsException exception = new InvalidCredentialsException("invalid credentials");
 
 		when(userRepository.logIn(identifier, password)).thenThrow(exception);
 
