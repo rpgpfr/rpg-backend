@@ -114,8 +114,8 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when the campaign does not exist, then an exception is thrown")
-	void givenASlugAndAnOwner_whenTheCampaignDoesNotExist_thenAnExceptionIsThrown() {
+	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is thrown")
+	void givenASlugAndAnOwner_whenTheCampaignIsNotFound_thenAnExceptionIsThrown() {
 		// When & Then
 		assertThatCode(() -> campaignMongoRepository.getCampaignBySlugAndOwner(null, null)).isInstanceOf(NotFoundException.class);
 	}
@@ -136,8 +136,8 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when saving it, then it is saved")
-	void givenACampaign_whenSavingTheCampaign_thenCampaignIsSaved() {
+	@DisplayName("Given a campaign, when it does not exist, then it is saved")
+	void givenACampaign_whenItDoesNotExist_thenItIsSaved() {
 		// Given
 		Campaign campaign = new Campaign("alvin", "myCampaign", "mycampaign", null);
 
@@ -146,8 +146,8 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign with an already existing name, when saving fails, then an exception is thrown")
-	void givenACampaignWithAnAlreadyExistingName_whenSavingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when save fails because it already exists, then an exception is thrown")
+	void givenACampaign_whenSaveFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// When & Then
 		Campaign campaign = createCampaigns().getFirst();
 
@@ -155,15 +155,15 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when saving fails, then an exception is thrown")
-	void givenACampaign_whenSavingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when save fails, then an exception is thrown")
+	void givenACampaign_whenSaveFails_thenAnExceptionIsThrown() {
 		// When & Then
 		assertThatCode(() -> campaignMongoRepository.save(null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when updating it, then it is updated")
-	void givenACampaignDTO_whenUpdatingIt_thenItIsUpdated() {
+	@DisplayName("Given a campaign, when it exists, then it is updated")
+	void givenACampaign_whenItExists_thenItIsUpdated() {
 		// Given
 		Campaign oldCampaign = createCampaigns().getFirst();
 		Campaign campaign = new Campaign(oldCampaign.getOwner(), "updated name", "updated-name", null);
@@ -174,8 +174,8 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a non existing campaignDTO, when updating it, then an exception is thrown")
-	void givenANonExistingCampaignDTO_whenUpdatingIt_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when update fails because it is not found, then an exception is thrown")
+	void givenACampaign_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// When & Then
 		Campaign campaign = createCampaign();
 		String slug = "wrong slug";
@@ -183,15 +183,15 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignDTO, when updating fails, then an exception is thrown")
-	void givenACampaignDTO_whenUpdatingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when update fails, then an exception is thrown")
+	void givenACampaign_whenUpdateFails_thenAnExceptionIsThrown() {
 		// When & Then
 		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
-	@DisplayName("Given a campaign, when deleting it, then it is deleted")
-	void givenACampaign_whenDeletingTheCampaign_thenCampaignIsDeleted() {
+	@DisplayName("Given a campaign, when it exists, then it is deleted")
+	void givenACampaign_whenItExists_thenItIsDeleted() {
 		// Given
 		Campaign campaign = createCampaigns().getFirst();
 		String slug = campaign.getSlug();
@@ -202,15 +202,15 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a non-existing campaign, when deleting it, then an exception is thrown")
-	void givenANonExistingCampaign_whenDeletingIt_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign, when delete fails because it is not found, then an exception is thrown")
+	void givenACampaign_whenDeleteFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given & When & Then
 		assertThatCode(() -> campaignMongoRepository.delete(null, null)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
-	@DisplayName("Given campaign, when deleting fails, then an exception is thrown")
-	void givenACampaign_whenDeletingFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given campaign, when delete fails, then an exception is thrown")
+	void givenACampaign_whenDeleteFails_thenAnExceptionIsThrown() {
 		// Given
 		CampaignMongoDao campaignMongoDaoMock = mock(CampaignMongoDao.class);
 

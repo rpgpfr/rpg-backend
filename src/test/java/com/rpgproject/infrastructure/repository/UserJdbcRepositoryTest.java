@@ -56,8 +56,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist, then an exception is thrown")
-	void givenAUsername_whenUserDoesNotExist_thenAnExceptionIsThrown() {
+	@DisplayName("Given a username, when user is not found, then an exception is thrown")
+	void givenAUsername_whenUserIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		String username = "usernaaaame";
 
@@ -68,8 +68,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when registering, then user is saved")
-	void givenAUser_whenRegistering_thenUserIsSaved() {
+	@DisplayName("Given a user, when it does not exist, then it is registered")
+	void givenAUser_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		User user = createUser();
 
@@ -80,8 +80,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when register fails because of duplicateCredentials, then exception is thrown")
-	void givenAUser_whenRegisterFailsBecauseOfDuplicateCredentials_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when register fails because it already exists, then an exception is thrown")
+	void givenAUser_whenRegisterFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
 		User user = createUser();
 
@@ -92,8 +92,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when register fails, then exception is thrown")
-	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when register fails, then an exception is thrown")
+	void givenAUser_whenRegisterFails_thenAnExceptionIsThrown() {
 		// Given
 		User user = createUser();
 
@@ -104,8 +104,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when logging is successfull, then user is returned")
-	void givenAnIdentifierAndAPassword_whenLoggingIsSuccessfull_thenUserIsReturned() {
+	@DisplayName("Given an identifier and a password, when login is successful, then user is returned")
+	void givenAnIdentifierAndAPassword_whenLoginIsSuccessful_thenUserIsReturned() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -123,8 +123,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when password does not match, then login exception is thrown")
-	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginExceptionIsThrown() {
+	@DisplayName("Given an identifier and a password, when login fails because password does not match, then an exception is thrown")
+	void givenAnIdentifierAndAPassword_whenLoginFailsBecausePasswordDoesNotMatch_thenAnExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -137,8 +137,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when user is not found on login, then login exception is thrown")
-	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginExceptionIsThrown() {
+	@DisplayName("Given an identifier and a password, when login fails because user is not found, then an exception is thrown")
+	void givenAnIdentifierAndAPassword_whenLoginFailsBecauseUserIsNotFoundOnLogin_ThenAnExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -150,8 +150,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when updating, then updates are saved")
-	void givenAUser_whenUpdating_thenUpdatesAreSaved() {
+	@DisplayName("Given a user, when it exists, then it is updated")
+	void givenAUser_whenItExists_thenItIsUpdated() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
@@ -162,8 +162,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when update fails because of duplicate key, then exception is thrown")
-	void givenAUser_whenUpdateFailsBecauseOfDuplicateKey_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when update fails because it already exists, then an exception is thrown")
+	void givenAUser_whenUpdateFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
@@ -174,8 +174,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when update fails, then exception is thrown")
-	void givenAUser_whenUpdateFails_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when update fails, then an exception is thrown")
+	void givenAUser_whenUpdateFails_thenAnExceptionIsThrown() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 

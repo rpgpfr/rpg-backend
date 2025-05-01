@@ -103,8 +103,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when user does not exist, then user is saved")
-	void givenAUserDTO_whenUserDoesNotExist_thenUserIsSaved() {
+	@DisplayName("Given a UserDTO, when it does not exist, then it is registered")
+	void givenAUserDTO_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 
@@ -113,8 +113,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO with a password, when user does not exist, then user is saved")
-	void givenAUserDTOWithAPassword_whenUserDoesNotExist_thenUserIsSaved() {
+	@DisplayName("Given a UserDTO with a password, when it does not exist, then it is registered")
+	void givenAUserDTOWithAPassword_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", "password", null, null);
 
@@ -155,8 +155,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when updating it, then updates are saved")
-	void givenAUserDTO_whenUpdatingIt_thenUpdatesAreSaved() {
+	@DisplayName("Given a UserDTO, when it exists, then it is updated")
+	void givenAUserDTO_whenItExists_thenItIsUpdated() {
 		// Given
 		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null, LocalDate.of(2025, 1, 1));
 
@@ -165,8 +165,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO with description and rpgKnowledge, when updating it, then updates are saved")
-	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenUpdatingIt_thenUpdatesAreSaved() {
+	@DisplayName("Given a UserDTO with description and rpgKnowledge, when it exists, then it is updated")
+	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenItExists_thenItIsUpdated() {
 		// Given
 		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge", LocalDate.of(2025, 1, 1));
 

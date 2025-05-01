@@ -41,8 +41,8 @@ public class UserJdbcRepository implements UserRepository {
 				return mapToUser(userDTO);
 			}
 
-			throw new RuntimeException();
-		} catch (RuntimeException e) {
+			throw new UserNotFoundException();
+		} catch (UserNotFoundException e) {
 			throw new InvalidCredentialsException("Le mot de passe ou l'identifiant est incorrect.");
 		}
 	}
