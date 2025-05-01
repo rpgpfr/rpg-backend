@@ -26,7 +26,7 @@ class UpdateUserTest {
 	private Presenter<User, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		updateUser = new UpdateUser<>(userRepository, presenter);
 	}
 

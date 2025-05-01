@@ -30,7 +30,7 @@ class DeleteCampaignTest {
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, presenter);
 	}
 

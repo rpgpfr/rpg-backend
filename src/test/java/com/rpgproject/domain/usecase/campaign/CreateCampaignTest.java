@@ -32,7 +32,7 @@ class CreateCampaignTest {
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		createCampaign = new CreateCampaign<>(campaignRepository, questRepository, presenter);
 	}
 

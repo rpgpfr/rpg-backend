@@ -3,6 +3,7 @@ package com.rpgproject.infrastructure.dao;
 import com.rpgproject.infrastructure.dto.QuestDTO;
 import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
 import com.rpgproject.infrastructure.exception.questmongo.QuestNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+@Slf4j
 @Component
 public class QuestMongoDao {
 
@@ -37,13 +39,13 @@ public class QuestMongoDao {
 		try {
 			mongoTemplate.insert(questDTO);
 		} catch (DuplicateKeyException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
 			throw new DuplicateQuestNameException();
 		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Une erreur est survenue lors de la création de la quête.", e);
+			throw new RuntimeException("Une erreur est survenue lors de la création de la quête.");
 		}
 	}
 
@@ -51,11 +53,11 @@ public class QuestMongoDao {
 		try {
 			updateMainQuestToDatabase(questDTO);
 		} catch (QuestNotFoundException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
 			throw new QuestNotFoundException();
 		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
 			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
 		}

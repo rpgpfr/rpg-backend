@@ -1,11 +1,11 @@
 package com.rpgproject.domain.port;
 
-public interface Presenter<INPUT, OUTPUT> {
+public interface Presenter<I, O> {
 
-	OUTPUT ok();
+	O ok();
 
-	OUTPUT ok(INPUT input);
+	O ok(I input);
 
-	OUTPUT error(RuntimeException exception);
+	O error(RuntimeException exception);
 
 }

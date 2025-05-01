@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GetUserProfileTest {
+class GetUserProfileTest {
 
 	private GetUserProfile<?> getUserProfile;
 
@@ -37,7 +37,7 @@ public class GetUserProfileTest {
 	private Presenter<UserProfile, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		getUserProfile = new GetUserProfile<>(userRepository, campaignRepository, mapRepository, characterRepository, presenter);
 	}
 

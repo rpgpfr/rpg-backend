@@ -18,13 +18,12 @@ import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.domain.usecase.campaign.*;
 import com.rpgproject.domain.usecase.quest.UpdateMainQuest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 @RequestMapping("/campaigns")
-@Controller
 public class CampaignController {
 
 	private final GetCampaignsByOwner<ResponseEntity<ResponseViewModel<List<CampaignViewModel>>>> getCampaignsByOwner;
@@ -52,9 +51,7 @@ public class CampaignController {
 	@PostMapping("")
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> execute = createCampaign.execute(owner, campaignRequestBody.name());
-		System.out.println("Execute: " + execute);
-		return execute;
+		return createCampaign.execute(owner, campaignRequestBody.name());
 	}
 
 	@GetMapping("/{slug}")

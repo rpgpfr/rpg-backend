@@ -11,4 +11,5 @@ public interface QuestRepository {
 	void updateMainQuest(Quest quest, String slug, String owner);
 
 	void deleteBySlugAndOwner(String slug, String owner);
+
 }

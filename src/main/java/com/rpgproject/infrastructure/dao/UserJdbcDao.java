@@ -3,6 +3,7 @@ package com.rpgproject.infrastructure.dao;
 import com.rpgproject.infrastructure.dto.UserDTO;
 import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
 import com.rpgproject.infrastructure.exception.userjdbc.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class UserJdbcDao {
 
@@ -33,7 +35,9 @@ public class UserJdbcDao {
 
 		try {
 			return jdbcTemplate.queryForObject(GET_BY_IDENTIFIER, parameters, new BeanPropertyRowMapper<>(UserDTO.class));
-		} catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException _) {
+			log.error("User not found with identifier: {}", identifier);
+
 			throw new UserNotFoundException();
 		}
 	}
@@ -42,13 +46,13 @@ public class UserJdbcDao {
 		try {
 			saveToDatabase(userDTO);
 		} catch (DataIntegrityViolationException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
 			throw new DuplicateUserCredentialsException();
 		} catch (DataAccessException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Une erreur est survenue lors de la création du compte.", e);
+			throw new RuntimeException("Une erreur est survenue lors de la création du compte.");
 		}
 	}
 
@@ -115,13 +119,13 @@ public class UserJdbcDao {
 		try {
 			jdbcTemplate.update(updateQuery, parameters);
 		} catch (DataIntegrityViolationException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
 			throw new DuplicateUserCredentialsException();
 		} catch (DataAccessException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.");
 		}
 	}
 

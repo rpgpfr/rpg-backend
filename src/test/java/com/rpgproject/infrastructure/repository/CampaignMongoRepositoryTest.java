@@ -40,7 +40,7 @@ class CampaignMongoRepositoryTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		campaignMongoRepository = new CampaignMongoRepository(campaignMongoDao);
 		initializeMongoDB();
@@ -62,7 +62,7 @@ class CampaignMongoRepositoryTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Campaign");
 	}
 

@@ -26,7 +26,7 @@ class RegisterUserTest {
 	private Presenter<User, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		registerUser = new RegisterUser<>(userRepository, presenter);
 	}
 

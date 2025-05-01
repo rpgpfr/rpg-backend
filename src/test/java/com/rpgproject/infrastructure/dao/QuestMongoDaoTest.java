@@ -29,7 +29,7 @@ class QuestMongoDaoTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		questMongoDao = new QuestMongoDao(mongoTemplate);
 		initializeMongoDB();
 	}
@@ -51,7 +51,7 @@ class QuestMongoDaoTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Quest");
 	}
 
@@ -93,8 +93,11 @@ class QuestMongoDaoTest {
 	@Test
 	@DisplayName("Given a questDTO, when save fails because it already exists, then an exception is thrown")
 	void givenAQuestDTO_whenSaveFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> questMongoDao.save(createQuestDTOs().getFirst())).isInstanceOf(DuplicateQuestNameException.class);
+		// Given
+		QuestDTO questDTO = createQuestDTOs().getFirst();
+
+		// When & Then
+		assertThatCode(() -> questMongoDao.save(questDTO)).isInstanceOf(DuplicateQuestNameException.class);
 	}
 
 	@Test

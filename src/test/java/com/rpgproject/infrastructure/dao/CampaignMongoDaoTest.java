@@ -32,7 +32,7 @@ class CampaignMongoDaoTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		initializeMongoDB();
 	}
@@ -53,7 +53,7 @@ class CampaignMongoDaoTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Campaign");
 	}
 
@@ -107,7 +107,6 @@ class CampaignMongoDaoTest {
 	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is thrown")
 	void givenASlugAndAnOwner_whenTheCampaignIsNotFound_thenAnExceptionIsThrown() {
 		// Given
-		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = "wrong slug";
 		String owner = "wrong owner";
 
@@ -165,8 +164,11 @@ class CampaignMongoDaoTest {
 	@Test
 	@DisplayName("Given a campaignDTO, when save fails because it already exists, then an exception is thrown")
 	void givenACampaignDTO_whenSaveFailsBecauseItAlreadyExist_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> campaignMongoDao.save(createCampaignDTOs().getFirst())).isInstanceOf(DuplicateCampaignNameException.class);
+		// Given
+		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
+
+		// When & Then
+		assertThatCode(() -> campaignMongoDao.save(campaignDTO)).isInstanceOf(DuplicateCampaignNameException.class);
 	}
 
 	@Test

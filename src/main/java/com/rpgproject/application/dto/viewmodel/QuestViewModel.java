@@ -10,4 +10,5 @@ public record QuestViewModel(
 	@JsonInclude(JsonInclude.Include.NON_NULL) String description,
 	List<GoalViewModel> goals
 ) {
+
 }

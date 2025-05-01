@@ -25,7 +25,7 @@ class UpdateCampaignTest {
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		updateCampaign = new UpdateCampaign<>(campaignRepository, presenter);
 	}
 

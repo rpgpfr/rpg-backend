@@ -26,7 +26,7 @@ class LogUserInTest {
 	private Presenter<User, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		logUserIn = new LogUserIn<>(userRepository, presenter);
 	}
 

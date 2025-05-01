@@ -45,7 +45,7 @@ public class UserJdbcRepository implements UserRepository {
 			}
 
 			throw new UserNotFoundException();
-		} catch (UserNotFoundException e) {
+		} catch (UserNotFoundException _) {
 			throw new InvalidCredentialsException("Le mot de passe ou l'identifiant est incorrect.");
 		}
 	}

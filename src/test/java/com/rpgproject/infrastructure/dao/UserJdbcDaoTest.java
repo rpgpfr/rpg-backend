@@ -38,7 +38,7 @@ class UserJdbcDaoTest {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		userJdbcDao = new UserJdbcDao(jdbcTemplate);
 
 		initTables();

@@ -28,7 +28,7 @@ class GetCampaignsByOwnerTest {
 	private Presenter<List<Campaign>, ?> campaignsPresenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsPresenter);
 	}
 

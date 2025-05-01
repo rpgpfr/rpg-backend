@@ -23,7 +23,7 @@ class CharacterMongoRepositoryTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		CharacterMongoDao mapMongoDao = new CharacterMongoDao(mongoTemplate);
 		characterMongoRepository = new CharacterMongoRepository(mapMongoDao);
 
@@ -31,7 +31,7 @@ class CharacterMongoRepositoryTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Character");
 	}
 

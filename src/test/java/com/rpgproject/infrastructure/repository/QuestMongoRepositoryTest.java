@@ -40,7 +40,7 @@ class QuestMongoRepositoryTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		QuestMongoDao questMongoDao = new QuestMongoDao(mongoTemplate);
 		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
 		questMongoRepository = new QuestMongoRepository(questMongoDao, campaignMongoDao);
@@ -75,7 +75,7 @@ class QuestMongoRepositoryTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Quest");
 		mongoTemplate.dropCollection("Campaign");
 	}
@@ -187,7 +187,9 @@ class QuestMongoRepositoryTest {
 		doThrow(new RuntimeException()).when(questMongoDaoMock).updateMainQuest(any(QuestDTO.class));
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.updateMainQuest(createQuest(), null, null)).isInstanceOf(InternalException.class);
+		Quest quest = createQuest();
+		
+		assertThatCode(() -> questMongoRepository.updateMainQuest(quest, null, null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test

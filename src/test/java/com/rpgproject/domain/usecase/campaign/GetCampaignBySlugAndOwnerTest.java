@@ -31,7 +31,7 @@ class GetCampaignBySlugAndOwnerTest {
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, presenter);
 	}
 

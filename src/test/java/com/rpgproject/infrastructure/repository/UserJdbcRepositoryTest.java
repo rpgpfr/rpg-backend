@@ -36,7 +36,7 @@ class UserJdbcRepositoryTest {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
 		userJdbcRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 	}

@@ -26,7 +26,7 @@ class UpdateMainQuestTest {
 	private Presenter<Quest, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		this.updateMainQuest = new UpdateMainQuest<>(questRepository, presenter);
 	}
 
