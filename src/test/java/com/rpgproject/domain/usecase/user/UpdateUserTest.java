@@ -1,7 +1,6 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.DuplicateException;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;

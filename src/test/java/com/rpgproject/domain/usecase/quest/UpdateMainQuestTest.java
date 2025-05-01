@@ -2,7 +2,6 @@ package com.rpgproject.domain.usecase.quest;
 
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.InternalException;
-import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 import org.junit.jupiter.api.BeforeEach;

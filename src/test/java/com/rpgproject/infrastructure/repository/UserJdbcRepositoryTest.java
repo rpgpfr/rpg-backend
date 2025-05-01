@@ -1,7 +1,10 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.*;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.InvalidCredentialsException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
