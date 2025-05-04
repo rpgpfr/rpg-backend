@@ -23,7 +23,7 @@ class MapMongoRepositoryTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		MapMongoDao mapMongoDao = new MapMongoDao(mongoTemplate);
 		mapMongoRepository = new MapMongoRepository(mapMongoDao);
 
@@ -31,7 +31,7 @@ class MapMongoRepositoryTest {
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Map");
 	}
 

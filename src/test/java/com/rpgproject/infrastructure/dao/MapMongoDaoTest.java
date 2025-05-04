@@ -22,14 +22,14 @@ class MapMongoDaoTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		mapMongoDao = new MapMongoDao(mongoTemplate);
 
 		mongoTemplate.insert(createMapDTOs(), "Map");
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Map");
 	}
 

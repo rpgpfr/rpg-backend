@@ -2,6 +2,10 @@ package com.rpgproject.infrastructure.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
+import com.rpgproject.infrastructure.exception.campaignmongo.CampaignNotFoundException;
+import com.rpgproject.infrastructure.exception.campaignmongo.DuplicateCampaignNameException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -12,8 +16,11 @@ import java.util.List;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+@Slf4j
 @Component
 public class CampaignMongoDao {
+
+	private static final String OWNER_FIELD = "owner";
 
 	private final MongoTemplate mongoTemplate;
 
@@ -29,7 +36,7 @@ public class CampaignMongoDao {
 	}
 
 	private Query buildCampaignsByOwnerQuery(String owner) {
-		Query query = query(where("owner").is(owner));
+		Query query = query(where(OWNER_FIELD).is(owner));
 		query.fields().include("name", "slug", "createdAt");
 
 		return query;
@@ -38,7 +45,14 @@ public class CampaignMongoDao {
 	public CampaignDTO findCampaignBySlugAndOwner(String slug, String owner) {
 		Query query = buildCampaignBySlugAndOwnerQuery(slug, owner);
 
-		return mongoTemplate.findOne(query, CampaignDTO.class);
+		CampaignDTO campaignDTO = mongoTemplate.findOne(query, CampaignDTO.class);
+
+		if (campaignDTO == null) {
+			log.error("Campaign not found for slug: {} and owner: {}", slug, owner);
+			throw new CampaignNotFoundException();
+		}
+
+		return campaignDTO;
 	}
 
 	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
@@ -48,34 +62,46 @@ public class CampaignMongoDao {
 	public long getCountByOwner(String owner) {
 		return mongoTemplate
 			.query(CampaignDTO.class)
-			.matching(query(where("owner").is(owner)))
+			.matching(query(where(OWNER_FIELD).is(owner)))
 			.count();
 	}
 
 	public void save(CampaignDTO campaignDTO) {
 		try {
-			mongoTemplate.save(campaignDTO);
-		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			mongoTemplate.insert(campaignDTO);
+		} catch (DuplicateKeyException e) {
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Error saving campaign", e);
+			throw new DuplicateCampaignNameException();
+		} catch (RuntimeException e) {
+			log.error(e.getMessage());
+
+			throw new RuntimeException("Une erreur est survenue lors de la création de la campagne.");
 		}
 	}
 
 	public void update(CampaignDTO campaignDTO, String slug) {
 		try {
-			Query query = buildCampaignBySlugAndOwnerQuery(slug, campaignDTO.getOwner());
-			Update update = buildUpdate(campaignDTO);
+			updateToDatabase(campaignDTO, slug);
+		} catch (CampaignNotFoundException e) {
+			log.error(e.getMessage());
 
-			CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
-
-			if (updatedCampaignDTO == null) {
-				throw new RuntimeException();
-			}
+			throw new CampaignNotFoundException();
 		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Error updating campaign", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.");
+		}
+	}
+
+	private void updateToDatabase(CampaignDTO campaignDTO, String slug) {
+		Query query = buildCampaignBySlugAndOwnerQuery(slug, campaignDTO.getOwner());
+		Update update = buildUpdate(campaignDTO);
+
+		CampaignDTO updatedCampaignDTO = mongoTemplate.findAndModify(query, update, CampaignDTO.class);
+
+		if (updatedCampaignDTO == null) {
+			throw new CampaignNotFoundException();
 		}
 	}
 
@@ -83,7 +109,7 @@ public class CampaignMongoDao {
 		return query(
 			where("slug")
 				.is(slug)
-				.and("owner")
+				.and(OWNER_FIELD)
 				.is(owner)
 		);
 	}
@@ -97,15 +123,23 @@ public class CampaignMongoDao {
 
 	public void delete(CampaignDTO campaignDTO) {
 		try {
-			DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
+			deleteToDatabase(campaignDTO);
+		} catch (CampaignNotFoundException e) {
+			log.error(e.getMessage());
 
-			if (removeResult.getDeletedCount() == 0) {
-				throw new RuntimeException();
-			}
+			throw new CampaignNotFoundException();
 		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Error deleting campaign", e);
+			throw new RuntimeException("Une erreur est survenue lors de la suppression de la campagne.");
+		}
+	}
+
+	private void deleteToDatabase(CampaignDTO campaignDTO) {
+		DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
+
+		if (removeResult.getDeletedCount() == 0) {
+			throw new CampaignNotFoundException();
 		}
 	}
 

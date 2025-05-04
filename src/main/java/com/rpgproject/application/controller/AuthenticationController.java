@@ -10,10 +10,9 @@ import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.domain.usecase.user.LogUserIn;
 import com.rpgproject.domain.usecase.user.RegisterUser;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
@@ -27,7 +26,7 @@ public class AuthenticationController {
 
 	@PostMapping("/register")
 	@CrossOrigin(origins = "*")
-	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> registerUser(@RequestBody RegisterRequestBody requestBody) {
+	public ResponseEntity<ResponseViewModel<UserViewModel>> registerUser(@RequestBody RegisterRequestBody requestBody) {
 		User user = new User(requestBody.username(), requestBody.email(), requestBody.firstName(), requestBody.lastName(), requestBody.password());
 
 		return registerUser.execute(user);
@@ -35,7 +34,7 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	@CrossOrigin(origins = "*")
-	public @ResponseBody ResponseEntity<ResponseViewModel<UserViewModel>> login(@RequestBody LoginRequestBody requestBody) {
+	public ResponseEntity<ResponseViewModel<UserViewModel>> login(@RequestBody LoginRequestBody requestBody) {
 		return logUserIn.execute(requestBody.identifier(), requestBody.password());
 	}
 

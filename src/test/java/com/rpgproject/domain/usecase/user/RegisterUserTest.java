@@ -1,7 +1,7 @@
 package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,13 +26,13 @@ class RegisterUserTest {
 	private Presenter<User, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		registerUser = new RegisterUser<>(userRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a user, when user is registered, then present success")
-	void givenAUsername_whenUserIsRegistered_thenPresentSuccess() {
+	@DisplayName("Given a user, when it is registered, then a success is presented")
+	void givenAUser_whenItIsRegistered_thenASuccessIsPresented() {
 		// Given
 		User user = createUser();
 
@@ -44,11 +44,11 @@ class RegisterUserTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when register throw an exception, then present error")
-	void givenAUsername_whenRegisterThrowAnException_thenPresentError() {
+	@DisplayName("Given a user, when register fails, then an exception is presented")
+	void givenAUsername_whenItRegisterFails_thenAnExceptionIsPresented() {
 		// Given
 		User user = createUser();
-		RuntimeException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
+		InternalException exception = new InternalException("error");
 
 		doThrow(exception).when(userRepository).register(user);
 

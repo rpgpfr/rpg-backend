@@ -1,6 +1,10 @@
 package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.QuestDTO;
+import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
+import com.rpgproject.infrastructure.exception.questmongo.QuestNotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Component;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+@Slf4j
 @Component
 public class QuestMongoDao {
 
@@ -21,41 +26,52 @@ public class QuestMongoDao {
 	public QuestDTO findMainQuestByCampaignId(String campaignId) {
 		Query query = buildMainQuestByCampaignIdQuery(campaignId);
 
-		return mongoTemplate.findOne(query, QuestDTO.class);
+		QuestDTO questDTO = mongoTemplate.findOne(query, QuestDTO.class);
+
+		if (questDTO == null) {
+			throw new QuestNotFoundException();
+		}
+
+		return questDTO;
 	}
 
 	public void save(QuestDTO questDTO) {
 		try {
-			mongoTemplate.save(questDTO);
-		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			mongoTemplate.insert(questDTO);
+		} catch (DuplicateKeyException e) {
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Error saving campaign", e);
+			throw new DuplicateQuestNameException();
+		} catch (RuntimeException e) {
+			log.error(e.getMessage());
+
+			throw new RuntimeException("Une erreur est survenue lors de la création de la quête.");
 		}
 	}
 
 	public void updateMainQuest(QuestDTO questDTO) {
 		try {
-			Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
-			Update update = buildUpdate(questDTO);
+			updateMainQuestToDatabase(questDTO);
+		} catch (QuestNotFoundException e) {
+			log.error(e.getMessage());
 
-			QuestDTO updatedQuest = mongoTemplate.findAndModify(query, update, QuestDTO.class);
-
-			if (updatedQuest == null) {
-				throw new RuntimeException();
-			}
+			throw new QuestNotFoundException();
 		} catch (RuntimeException e) {
-			System.err.println(e.getMessage());
+			log.error(e.getMessage());
 
-			throw new RuntimeException("Error updating quest", e);
+			throw new RuntimeException("Une erreur est survenue lors de la mise à jour des informations.", e);
 		}
 	}
 
-	private Update buildUpdate(QuestDTO questDTO) {
-		return new Update()
-			.set("title", questDTO.getTitle())
-			.set("description", questDTO.getDescription())
-			.set("goals", questDTO.getGoals());
+	private void updateMainQuestToDatabase(QuestDTO questDTO) {
+		Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
+		Update update = buildUpdate(questDTO);
+
+		QuestDTO updatedQuest = mongoTemplate.findAndModify(query, update, QuestDTO.class);
+
+		if (updatedQuest == null) {
+			throw new QuestNotFoundException();
+		}
 	}
 
 	private Query buildMainQuestByCampaignIdQuery(String campaignId) {
@@ -65,6 +81,13 @@ public class QuestMongoDao {
 				.and("type")
 				.is("main")
 		);
+	}
+
+	private Update buildUpdate(QuestDTO questDTO) {
+		return new Update()
+			.set("title", questDTO.getTitle())
+			.set("description", questDTO.getDescription())
+			.set("goals", questDTO.getGoals());
 	}
 
 	public void deleteByCampaignId(String campaignId) {

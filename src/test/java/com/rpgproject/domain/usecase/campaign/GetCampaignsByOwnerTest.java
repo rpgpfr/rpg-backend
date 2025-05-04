@@ -28,12 +28,12 @@ class GetCampaignsByOwnerTest {
 	private Presenter<List<Campaign>, ?> campaignsPresenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsPresenter);
 	}
 
 	@Test
-	@DisplayName("Given an owner, when getting all the users campaigns Then all of its campaigns are presented")
+	@DisplayName("Given an owner, when getting the user's campaigns, then all of its campaigns are presented")
 	void givenAnOwner_whenGettingAllTheUsersCampaigns_thenAllOfItsCampaignsArePresented() {
 		// Given
 		String owner = "owner";

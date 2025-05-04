@@ -1,18 +1,18 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserLoginFailedException;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.InvalidCredentialsException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,7 +36,7 @@ class UserJdbcRepositoryTest {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
 		userJdbcRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 	}
@@ -59,20 +59,20 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist, then an error is thrown")
-	void givenAUsername_whenUserDoesNotExist_thenAnErrorIsThrown() {
+	@DisplayName("Given a username, when user is not found, then an exception is thrown")
+	void givenAUsername_whenUserIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		String username = "usernaaaame";
 
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When
-		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(UserNotFoundException.class);
+		assertThatCode(() -> userJdbcRepository.getUserByIdentifier(username)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
-	@DisplayName("Given a user, when registering, then user is saved")
-	void givenAUser_whenRegistering_thenUserIsSaved() {
+	@DisplayName("Given a user, when it does not exist, then it is registered")
+	void givenAUser_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		User user = createUser();
 
@@ -83,20 +83,32 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when register fails, then exception is thrown")
-	void givenAUser_whenRegisterFails_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when register fails because it already exists, then an exception is thrown")
+	void givenAUser_whenRegisterFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
 		User user = createUser();
 
-		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(UserRegistrationFailedException.class);
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(DuplicateException.class);
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when logging is successfull, then user is returned")
-	void givenAnIdentifierAndAPassword_whenLoggingIsSuccessfull_thenUserIsReturned() {
+	@DisplayName("Given a user, when register fails, then an exception is thrown")
+	void givenAUser_whenRegisterFails_thenAnExceptionIsThrown() {
+		// Given
+		User user = createUser();
+
+		doThrow(new RuntimeException()).when(jdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(InternalException.class);
+	}
+
+	@Test
+	@DisplayName("Given an identifier and a password, when login is successful, then user is returned")
+	void givenAnIdentifierAndAPassword_whenLoginIsSuccessful_thenUserIsReturned() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -114,8 +126,8 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when password does not match, then login error is thrown")
-	void givenAnIdentifierAndAPassword_whenPasswordDoesNotMatch_thenLoginErrorIsThrown() {
+	@DisplayName("Given an identifier and a password, when login fails because password does not match, then an exception is thrown")
+	void givenAnIdentifierAndAPassword_whenLoginFailsBecausePasswordDoesNotMatch_thenAnExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -124,12 +136,12 @@ class UserJdbcRepositoryTest {
 		when(bCryptPasswordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(InvalidCredentialsException.class);
 	}
 
 	@Test
-	@DisplayName("Given an identifier and a password, when user is not found on login, then login error is thrown")
-	void givenAnIdentifierAndAPassword_whenUserIsNotFoundOnLogin_ThenLoginErrorIsThrown() {
+	@DisplayName("Given an identifier and a password, when login fails because user is not found, then an exception is thrown")
+	void givenAnIdentifierAndAPassword_whenLoginFailsBecauseUserIsNotFoundOnLogin_ThenAnExceptionIsThrown() {
 		// Given
 		String username = "username";
 		String password = "password";
@@ -137,12 +149,12 @@ class UserJdbcRepositoryTest {
 		when(jdbcTemplate.queryForObject(anyString(), anyMap(), any(BeanPropertyRowMapper.class))).thenThrow(new EmptyResultDataAccessException(1));
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(UserLoginFailedException.class);
+		assertThatCode(() -> userJdbcRepository.logIn(username, password)).isInstanceOf(InvalidCredentialsException.class);
 	}
 
 	@Test
-	@DisplayName("Given a user, when updating, then updates are saved")
-	void givenAUser_whenUpdating_thenUpdatesAreSaved() {
+	@DisplayName("Given a user, when it exists, then it is updated")
+	void givenAUser_whenItExists_thenItIsUpdated() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
@@ -153,15 +165,27 @@ class UserJdbcRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given a user, when update fails, then exception is thrown")
-	void givenAUser_whenUpdateFails_thenExceptionIsThrown() {
+	@DisplayName("Given a user, when update fails because it already exists, then an exception is thrown")
+	void givenAUser_whenUpdateFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
-		doThrow(new DataIntegrityViolationException("error")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(UserUpdateFailedException.class);
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(DuplicateException.class);
+	}
+
+	@Test
+	@DisplayName("Given a user, when update fails, then an exception is thrown")
+	void givenAUser_whenUpdateFails_thenAnExceptionIsThrown() {
+		// Given
+		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
+
+		doThrow(new RuntimeException("exception")).when(jdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(InternalException.class);
 	}
 
 }

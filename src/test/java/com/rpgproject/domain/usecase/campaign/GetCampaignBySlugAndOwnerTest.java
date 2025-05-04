@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase.campaign;
 
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.campaign.CampaignNotFoundException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CampaignRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
@@ -31,13 +31,13 @@ class GetCampaignBySlugAndOwnerTest {
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, presenter);
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when getting a campaign, then it is presented")
-	void givenASlugAndAnOwner_whenGettingACampaign_thenItIsPresented() {
+	@DisplayName("Given a slug and an owner, when the campaign exists, then it is presented")
+	void givenASlugAndAnOwner_whenTheCampaignExists_thenItIsPresented() {
 		// Given
 		Campaign campaign = createCampaign();
 		Quest quest = createQuest();
@@ -57,21 +57,21 @@ class GetCampaignBySlugAndOwnerTest {
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when getting a campaign, then an exception is presented")
-	void givenASlugAndAnOwner_whenGettingACampaign_thenAnExceptionIsPresented() {
+	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is presented")
+	void givenASlugAndAnOwner_whenTheCampaignIsNotFound_thenAnExceptionIsPresented() {
 		// Given
 		Campaign campaign = createCampaign();
 		String slug = campaign.getSlug();
 		String owner = campaign.getOwner();
-		CampaignNotFoundException campaignNotFoundException = new CampaignNotFoundException();
+		NotFoundException exception = new NotFoundException("not found");
 
-		when(campaignRepository.getCampaignBySlugAndOwner(slug, owner)).thenThrow(campaignNotFoundException);
+		when(campaignRepository.getCampaignBySlugAndOwner(slug, owner)).thenThrow(exception);
 
 		// When
 		getCampaignBySlugAndOwner.execute(slug, owner);
 
 		// Then
-		verify(presenter, times(1)).error(any(CampaignNotFoundException.class));
+		verify(presenter, times(1)).error(exception);
 	}
 
 }

@@ -7,10 +7,10 @@ import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
-import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
 import com.rpgproject.application.presenter.CampaignRestPresenter;
 import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.application.presenter.QuestRestPresenter;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
@@ -38,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Import({
 	CampaignController.class,
+	ExceptionHTTPStatusService.class,
 	CampaignsRestPresenter.class,
 	CampaignRestPresenter.class,
 	QuestRestPresenter.class,
@@ -55,19 +56,19 @@ class CampaignControllerTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		mongoTemplate.insert(createCampaignDTOs(), "Campaign");
 		mongoTemplate.insert(createQuestDTOs(), "Quest");
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Campaign");
 		mongoTemplate.dropCollection("Quest");
 	}
 
 	@Test
-	@DisplayName("Given an owner, when looking for all the user's campaigns, then all of its campaigns are returned")
+	@DisplayName("Given an owner, when getting the user's campaigns, then all of its campaigns are returned")
 	void givenAnOwner_whenLookingForTheUsersCampaigns_thenAllOfItsCampaignsAreReturned() {
 		// Given
 		String owner = "username";
@@ -82,8 +83,8 @@ class CampaignControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner and a campaign request body, when creating it, then the campaign is saved")
-	void givenAnOwnerAndACampaignRequestBody_whenCreatingIt_thenTheCampaignIsSaved() {
+	@DisplayName("Given an owner and a campaign request body, when the campaign does not exist, then it is saved")
+	void givenAnOwnerAndACampaignRequestBody_whenTheCampaignDoesNotExist_thenItIsSaved() {
 		// Given
 		String owner = "username";
 		CampaignRequestBody campaignRequestBody = new CampaignRequestBody("my campaign");
@@ -92,14 +93,14 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
-	@DisplayName("Given a slug and an owner, when getting a campaign, then it is returned")
-	void givenASlugAndAnOwner_whenGettingACampaign_thenItIsReturned() {
+	@DisplayName("Given a slug and an owner, when the campaign exists, then it is returned")
+	void givenASlugAndAnOwner_whenTheCampaignExists_thenItIsReturned() {
 		// Given
 		String owner = "username";
 		String slug = "campagne-1";
@@ -119,8 +120,8 @@ class CampaignControllerTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner with a slug and a campaign update request body, when updating it, then the new slug is returned")
-	void givenAnOwnerWithASlugAndACampaignUpdateRequestBody_whenUpdatingIt_thenTheNewSlugIsReturned() {
+	@DisplayName("Given an owner with a slug and a campaign update request body, when the campaign exists, then it is updated")
+	void givenAnOwnerWithASlugAndACampaignUpdateRequestBody_whenTheCampaignExists_thenItIsUpdated() {
 		// Given
 		String owner = "username";
 		String slug = "campagne-1";
@@ -130,14 +131,14 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.updateCampaign(owner, slug, campaignUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
-	@DisplayName("Given When Then")
-	void givenAnOwnerAndASlug_whenDeletingACampaign_thenAResponseEntityIsReturned() {
+	@DisplayName("Given an owner and a slug, when the campaign exists, then it is deleted")
+	void givenAnOwnerAndASlug_whenTheCampaignExists_thenItIsDeleted() {
 		// Given
 		String owner = "username";
 		String slug = "campagne-1";
@@ -146,14 +147,14 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.deleteCampaign(owner, slug);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
-	@DisplayName("Given an owner with a slug and a quest update request body, when updating it, then an empty responseEntity is returned")
-	void givenAnOwnerWithASlugAndAQuestUpdateRequestBody_whenUpdatingIt_thenAnEmptyResponseEntityIsReturned() {
+	@DisplayName("Given an owner with a slug and a quest update request body, when the quest exists, then it is updated")
+	void givenAnOwnerWithASlugAndAQuestUpdateRequestBody_whenTheQuestExists_thenItIsUpdated() {
 		// Given
 		String owner = "username";
 		String slug = "campagne-1";
@@ -170,7 +171,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<QuestViewModel>> actualResponseEntity = campaignController.updateQuest(owner, slug, questUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

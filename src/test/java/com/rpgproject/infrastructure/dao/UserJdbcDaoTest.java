@@ -1,6 +1,8 @@
 package com.rpgproject.infrastructure.dao;
 
 import com.rpgproject.infrastructure.dto.UserDTO;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
+import com.rpgproject.infrastructure.exception.userjdbc.UserNotFoundException;
 import com.rpgproject.utils.BasicDatabaseExtension;
 import com.rpgproject.utils.EzDatabase;
 import lombok.SneakyThrows;
@@ -9,10 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.nio.file.Paths;
+import java.sql.SQLDataException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -34,15 +38,15 @@ class UserJdbcDaoTest {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		userJdbcDao = new UserJdbcDao(jdbcTemplate);
 
 		initTables();
 	}
 
 	@Test
-	@DisplayName("Given a username, when user exists, then user is returned")
-	void givenAUserName_whenUserExists_thenUserIsReturned() {
+	@DisplayName("Given a username, when user exists, then it is returned")
+	void givenAUsername_whenUserExists_thenItIsReturned() {
 		// Given
 		String username = "alvin";
 
@@ -65,8 +69,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given an email, when user exists, then user is returned")
-	void givenAnEmail_whenUserExists_thenUserIsReturned() {
+	@DisplayName("Given an email, when user exists, then it is returned")
+	void givenAnEmail_whenUserExists_thenItIsReturned() {
 		// Given
 		String email = "mail@example.com";
 
@@ -89,18 +93,18 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a username, when user does not exist, then an exception is thrown")
-	void givenAUsername_whenUserDoesNotExist_thenAnExceptionIsThrown() {
+	@DisplayName("Given a username, when user is not found, then an exception is thrown")
+	void givenAUsername_whenUserIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		String username = "usernaaaaame";
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.getUserByIdentifier(username)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.getUserByIdentifier(username)).isInstanceOf(UserNotFoundException.class);
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when registering, then user is saved")
-	void givenAUserDTO_whenRegistering_thenUserIsSaved() {
+	@DisplayName("Given a UserDTO, when it does not exist, then it is registered")
+	void givenAUserDTO_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 
@@ -109,13 +113,28 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO with a password, when registering, then user is saved")
-	void givenAUserDTOWithAPassword_whenRegistering_thenUserIsSaved() {
+	@DisplayName("Given a UserDTO with a password, when it does not exist, then it is registered")
+	void givenAUserDTOWithAPassword_whenItDoesNotExist_thenItIsRegistered() {
 		// Given
 		UserDTO userDTO = createUserDTO("firstName", "lastName", "password", null, null);
 
 		// When & Then
 		assertThatCode(() -> userJdbcDao.register(userDTO)).doesNotThrowAnyException();
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when register fails because it already exists, then an exception is thrown")
+	void givenAUserDTO_whenRegisterFailsBecauseItAlreadyExist_thenAnExceptionIsThrown() {
+		// Given
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
+		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+
+		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
+
+		doThrow(new DataIntegrityViolationException("already exists")).when(mockJdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.register(userDTO)).isInstanceOf(DuplicateUserCredentialsException.class);
 	}
 
 	@Test
@@ -127,15 +146,17 @@ class UserJdbcDaoTest {
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
 
-		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
+		doThrow(new BadSqlGrammarException("error", "", new SQLDataException())).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.register(userDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.register(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la création du compte.");
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when updating, then updates are saved")
-	void givenAUserDTO_whenUpdating_thenUpdatesAreSaved() {
+	@DisplayName("Given a UserDTO, when it exists, then it is updated")
+	void givenAUserDTO_whenItExists_thenItIsUpdated() {
 		// Given
 		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", null, null, LocalDate.of(2025, 1, 1));
 
@@ -144,8 +165,8 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO with description and rpgKnowledge, when updating, then updates are saved")
-	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenUpdating_thenUpdatesAreSaved() {
+	@DisplayName("Given a UserDTO with description and rpgKnowledge, when it exists, then it is updated")
+	void givenAUserDTOWithDescriptionAndRpgKnowledge_whenItExists_thenItIsUpdated() {
 		// Given
 		UserDTO userDTO = new UserDTO("alvin", "mail@example.com", "goulou", "Hamaide", "password", "description", "knowledge", LocalDate.of(2025, 1, 1));
 
@@ -154,10 +175,10 @@ class UserJdbcDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a UserDTO, when update fails, then an exception is thrown")
-	void givenAUserDTO_whenUpdateFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a UserDTO, when update fails because it already exists, then an exception is thrown")
+	void givenAUserDTO_whenUpdateFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
-		UserDTO userDTO = createUserDTO("goulou", "lastName", null, null, null);
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
 		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
 
 		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
@@ -165,7 +186,24 @@ class UserJdbcDaoTest {
 		doThrow(new DataIntegrityViolationException("error")).when(mockJdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
-		assertThatCode(() -> userJdbcDao.update(userDTO)).isInstanceOf(RuntimeException.class);
+		assertThatCode(() -> userJdbcDao.update(userDTO)).isInstanceOf(DuplicateUserCredentialsException.class);
+	}
+
+	@Test
+	@DisplayName("Given a UserDTO, when update fails, then an exception is thrown")
+	void givenAUserDTO_whenUpdateFails_thenAnExceptionIsThrown() {
+		// Given
+		UserDTO userDTO = createUserDTO("firstName", "lastName", null, null, null);
+		NamedParameterJdbcTemplate mockJdbcTemplate = mock(NamedParameterJdbcTemplate.class);
+
+		ReflectionTestUtils.setField(userJdbcDao, "jdbcTemplate", mockJdbcTemplate);
+
+		doThrow(new BadSqlGrammarException("error", "", new SQLDataException())).when(mockJdbcTemplate).update(anyString(), anyMap());
+
+		// When & Then
+		assertThatCode(() -> userJdbcDao.update(userDTO))
+			.isInstanceOf(RuntimeException.class)
+			.hasMessage("Une erreur est survenue lors de la mise à jour des informations.");
 	}
 
 	@SneakyThrows

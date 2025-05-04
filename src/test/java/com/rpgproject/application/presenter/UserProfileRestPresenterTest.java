@@ -2,8 +2,9 @@ package com.rpgproject.application.presenter;
 
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.UserProfileViewModel;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
+import com.rpgproject.domain.exception.InternalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,27 +16,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserProfileRestPresenterTest {
 
 	private UserProfileRestPresenter userProfileRestPresenter;
+	private ExceptionHTTPStatusService exceptionHTTPStatusService;
 
 	@BeforeEach
-	public void setUp() {
-		userProfileRestPresenter = new UserProfileRestPresenter();
+	void setUp() {
+		this.exceptionHTTPStatusService = new ExceptionHTTPStatusService();
+		this.userProfileRestPresenter = new UserProfileRestPresenter(exceptionHTTPStatusService);
 	}
 
 	@Test
-	@DisplayName("Should return an empty response entity")
-	void shouldReturnAnEmptyResponseEntity() {
+	@DisplayName("Should return an empty response")
+	void shouldReturnAnEmptyResponse() {
 		// Act
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
 
 	@Test
-	@DisplayName("Should return a response with user profile")
-	void shouldPresentAResponseWithUserProfile() {
+	@DisplayName("Should return a response with a user profile")
+	void shouldPresentAResponseWithAUserProfile() {
 		// Arrange
 		UserProfile userProfile = createUserProfile();
 
@@ -64,15 +67,15 @@ class UserProfileRestPresenterTest {
 
 	@Test
 	@DisplayName("Should return a response with an error message")
-	void shouldReturnA400ResponseEntityWithAnErrorMessage() {
+	void shouldReturnAResponseWithAnErrorMessage() {
 		// Arrange
-		UserRegistrationFailedException exception = new UserRegistrationFailedException("L'utilisateur ou le mail associé est déjà utilisé.");
+		InternalException exception = new InternalException("error");
 
 		// Act
 		ResponseEntity<ResponseViewModel<UserProfileViewModel>> actualResponseEntity = userProfileRestPresenter.error(exception);
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.badRequest().body(new ResponseViewModel<>(null, "L'utilisateur ou le mail associé est déjà utilisé."));
+		ResponseEntity<ResponseViewModel<UserProfileViewModel>> expectedResponseEntity = ResponseEntity.internalServerError().body(new ResponseViewModel<>(null, "error"));
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

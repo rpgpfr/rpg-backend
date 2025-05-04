@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @CurrentSecurityContext(expression = "authentication.name")
 public @interface CurrentOwner {
+
 }

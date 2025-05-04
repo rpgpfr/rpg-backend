@@ -22,14 +22,14 @@ class CharacterMongoDaoTest {
 	private MongoTemplate mongoTemplate;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		characterMongoDao = new CharacterMongoDao(mongoTemplate);
 
 		mongoTemplate.insert(createCharacterDTOs(), "Character");
 	}
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		mongoTemplate.dropCollection("Character");
 	}
 

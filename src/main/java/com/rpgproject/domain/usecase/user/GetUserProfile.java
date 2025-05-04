@@ -2,7 +2,7 @@ package com.rpgproject.domain.usecase.user;
 
 import com.rpgproject.domain.entity.User;
 import com.rpgproject.domain.entity.UserProfile;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.*;
 
 public class GetUserProfile<T> {
@@ -32,7 +32,7 @@ public class GetUserProfile<T> {
 			UserProfile userProfile = new UserProfile(user, campaignsCount, mapsCount, charactersCount, resourcesCount);
 
 			return presenter.ok(userProfile);
-		} catch (UserNotFoundException e) {
+		} catch (NotFoundException e) {
 			return presenter.error(e);
 		}
 	}

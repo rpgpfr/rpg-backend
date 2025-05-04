@@ -1,13 +1,15 @@
 package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.User;
-import com.rpgproject.domain.exception.user.UserLoginFailedException;
-import com.rpgproject.domain.exception.user.UserNotFoundException;
-import com.rpgproject.domain.exception.user.UserRegistrationFailedException;
-import com.rpgproject.domain.exception.user.UserUpdateFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.InvalidCredentialsException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.UserRepository;
 import com.rpgproject.infrastructure.dao.UserJdbcDao;
 import com.rpgproject.infrastructure.dto.UserDTO;
+import com.rpgproject.infrastructure.exception.userjdbc.DuplicateUserCredentialsException;
+import com.rpgproject.infrastructure.exception.userjdbc.UserNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -28,8 +30,8 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = userJdbcDao.getUserByIdentifier(identifier);
 
 			return mapToUser(userDTO);
-		} catch (RuntimeException e) {
-			throw new UserNotFoundException();
+		} catch (UserNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		}
 	}
 
@@ -42,9 +44,9 @@ public class UserJdbcRepository implements UserRepository {
 				return mapToUser(userDTO);
 			}
 
-			throw new UserLoginFailedException();
-		} catch (RuntimeException e) {
-			throw new UserLoginFailedException();
+			throw new UserNotFoundException();
+		} catch (UserNotFoundException _) {
+			throw new InvalidCredentialsException("Le mot de passe ou l'identifiant est incorrect.");
 		}
 	}
 
@@ -67,8 +69,10 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = mapToUserDTO(user);
 
 			userJdbcDao.register(userDTO);
+		} catch (DuplicateUserCredentialsException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new UserRegistrationFailedException("Le nom d'utilisateur ou le mail associé est déjà utilisé.");
+			throw new InternalException(e.getMessage());
 		}
 	}
 
@@ -78,8 +82,10 @@ public class UserJdbcRepository implements UserRepository {
 			UserDTO userDTO = mapToUserDTO(user);
 
 			userJdbcDao.update(userDTO);
+		} catch (DuplicateUserCredentialsException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new UserUpdateFailedException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 

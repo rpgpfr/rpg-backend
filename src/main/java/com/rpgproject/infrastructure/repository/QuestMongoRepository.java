@@ -2,14 +2,17 @@ package com.rpgproject.infrastructure.repository;
 
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
-import com.rpgproject.domain.exception.quest.MainQuestNotFoundException;
-import com.rpgproject.domain.exception.quest.QuestCreationException;
-import com.rpgproject.domain.exception.quest.QuestEditFailedException;
+import com.rpgproject.domain.exception.DuplicateException;
+import com.rpgproject.domain.exception.InternalException;
+import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.GoalDTO;
 import com.rpgproject.infrastructure.dto.QuestDTO;
+import com.rpgproject.infrastructure.exception.campaignmongo.CampaignNotFoundException;
+import com.rpgproject.infrastructure.exception.questmongo.DuplicateQuestNameException;
+import com.rpgproject.infrastructure.exception.questmongo.QuestNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,8 +35,8 @@ public class QuestMongoRepository implements QuestRepository {
 			QuestDTO questDTO = questMongoDao.findMainQuestByCampaignId(campaignId);
 
 			return mapToQuest(questDTO);
-		} catch (RuntimeException e) {
-			throw new MainQuestNotFoundException();
+		} catch (QuestNotFoundException | CampaignNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		}
 	}
 
@@ -63,8 +66,10 @@ public class QuestMongoRepository implements QuestRepository {
 			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
 
 			questMongoDao.save(questDTO);
+		} catch (DuplicateQuestNameException e) {
+			throw new DuplicateException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new QuestCreationException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 
@@ -75,8 +80,10 @@ public class QuestMongoRepository implements QuestRepository {
 			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
 
 			questMongoDao.updateMainQuest(questDTO);
+		} catch (QuestNotFoundException | CampaignNotFoundException e) {
+			throw new NotFoundException(e.getMessage());
 		} catch (RuntimeException e) {
-			throw new QuestEditFailedException();
+			throw new InternalException(e.getMessage());
 		}
 	}
 
