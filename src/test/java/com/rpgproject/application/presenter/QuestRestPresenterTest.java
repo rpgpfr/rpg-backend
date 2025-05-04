@@ -32,7 +32,7 @@ class QuestRestPresenterTest {
 		ResponseEntity<ResponseViewModel<QuestViewModel>> actualResponseEntity = questRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

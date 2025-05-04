@@ -32,7 +32,7 @@ class UserRestPresenterTest {
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponseEntity = userRestPresenter.ok();
 
 		// Assert
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}

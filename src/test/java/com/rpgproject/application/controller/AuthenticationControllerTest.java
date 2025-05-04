@@ -63,7 +63,7 @@ class AuthenticationControllerTest {
 		ResponseEntity<ResponseViewModel<UserViewModel>> actualResponse = authenticationController.registerUser(requestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<UserViewModel>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}

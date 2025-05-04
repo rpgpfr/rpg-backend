@@ -93,7 +93,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -131,7 +131,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.updateCampaign(owner, slug, campaignUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -147,7 +147,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.deleteCampaign(owner, slug);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
@@ -171,7 +171,7 @@ class CampaignControllerTest {
 		ResponseEntity<ResponseViewModel<QuestViewModel>> actualResponseEntity = campaignController.updateQuest(owner, slug, questUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.ok().build();
+		ResponseEntity<ResponseViewModel<QuestViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();
 
 		assertThat(actualResponseEntity).isEqualTo(expectedResponseEntity);
 	}
