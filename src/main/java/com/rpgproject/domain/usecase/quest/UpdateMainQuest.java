@@ -16,9 +16,9 @@ public class UpdateMainQuest<T> {
 		this.presenter = presenter;
 	}
 
-	public T execute(Quest quest, String slug, String owner) {
+	public T execute(Quest quest) {
 		try {
-			questRepository.updateMainQuest(quest, slug, owner);
+			questRepository.updateMainQuest(quest);
 
 			return presenter.ok();
 		} catch (NotFoundException | InternalException e) {

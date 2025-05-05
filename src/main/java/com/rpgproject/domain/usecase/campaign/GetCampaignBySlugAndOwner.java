@@ -22,7 +22,7 @@ public class GetCampaignBySlugAndOwner<T> {
 	public T execute(String slug, String owner) {
 		try {
 			Campaign campaign = campaignRepository.getCampaignBySlugAndOwner(slug, owner);
-			Quest campaignQuest = questRepository.findMainQuestBySlugAndOwner(slug, owner);
+			Quest campaignQuest = questRepository.findMainQuestByCampaignSlugAndOwner(slug, owner);
 
 			campaign.setMainQuest(campaignQuest);
 

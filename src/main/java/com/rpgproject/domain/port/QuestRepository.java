@@ -4,12 +4,12 @@ import com.rpgproject.domain.entity.Quest;
 
 public interface QuestRepository {
 
-	Quest findMainQuestBySlugAndOwner(String slug, String owner);
+	Quest findMainQuestByCampaignSlugAndOwner(String slug, String owner);
 
-	void save(Quest quest, String slug, String owner);
+	void save(Quest quest);
 
-	void updateMainQuest(Quest quest, String slug, String owner);
+	void updateMainQuest(Quest quest);
 
-	void deleteBySlugAndOwner(String slug, String owner);
+	void deleteByCampaignSlugAndOwner(String slug, String owner);
 
 }

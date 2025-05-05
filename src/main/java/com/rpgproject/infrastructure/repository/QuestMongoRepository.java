@@ -29,10 +29,9 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public Quest findMainQuestBySlugAndOwner(String slug, String owner) {
+	public Quest findMainQuestByCampaignSlugAndOwner(String campaignSlug, String owner) {
 		try {
-			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
-			QuestDTO questDTO = questMongoDao.findMainQuestByCampaignId(campaignId);
+			QuestDTO questDTO = questMongoDao.findMainQuestByCampaignSlugAndOwner(campaignSlug, owner);
 
 			return mapToQuest(questDTO);
 		} catch (QuestNotFoundException | CampaignNotFoundException e) {
@@ -42,6 +41,8 @@ public class QuestMongoRepository implements QuestRepository {
 
 	private Quest mapToQuest(QuestDTO questDTO) {
 		return new Quest(
+			questDTO.getOwner(),
+			questDTO.getCampaignSlug(),
 			questDTO.getTitle(),
 			questDTO.getType(),
 			questDTO.getDescription(),
@@ -60,10 +61,9 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public void save(Quest quest, String slug, String owner) {
+	public void save(Quest quest) {
 		try {
-			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
-			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
+			QuestDTO questDTO = mapToQuestDTO(quest);
 
 			questMongoDao.save(questDTO);
 		} catch (DuplicateQuestNameException e) {
@@ -74,10 +74,9 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public void updateMainQuest(Quest quest, String slug, String owner) {
+	public void updateMainQuest(Quest quest) {
 		try {
-			String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
-			QuestDTO questDTO = mapToQuestDTO(quest, campaignId);
+			QuestDTO questDTO = mapToQuestDTO(quest);
 
 			questMongoDao.updateMainQuest(questDTO);
 		} catch (QuestNotFoundException | CampaignNotFoundException e) {
@@ -87,9 +86,10 @@ public class QuestMongoRepository implements QuestRepository {
 		}
 	}
 
-	private QuestDTO mapToQuestDTO(Quest quest, String campaignId) {
+	private QuestDTO mapToQuestDTO(Quest quest) {
 		return new QuestDTO(
-			campaignId,
+			quest.owner(),
+			quest.campaignSlug(),
 			quest.type(),
 			quest.title(),
 			quest.description(),
@@ -108,10 +108,8 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public void deleteBySlugAndOwner(String slug, String owner) {
-		String campaignId = campaignMongoDao.findCampaignIdBySlugAndOwner(slug, owner);
-
-		questMongoDao.deleteByCampaignId(campaignId);
+	public void deleteByCampaignSlugAndOwner(String campaignSlug, String owner) {
+		questMongoDao.deleteByCampaignSlugAndOwner(campaignSlug, owner);
 	}
 
 }

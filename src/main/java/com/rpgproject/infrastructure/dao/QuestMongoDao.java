@@ -23,8 +23,8 @@ public class QuestMongoDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
-	public QuestDTO findMainQuestByCampaignId(String campaignId) {
-		Query query = buildMainQuestByCampaignIdQuery(campaignId);
+	public QuestDTO findMainQuestByCampaignSlugAndOwner(String campaignSlug, String owner) {
+		Query query = buildMainQuestByCampaignSlugAndOwner(campaignSlug, owner);
 
 		QuestDTO questDTO = mongoTemplate.findOne(query, QuestDTO.class);
 
@@ -64,7 +64,7 @@ public class QuestMongoDao {
 	}
 
 	private void updateMainQuestToDatabase(QuestDTO questDTO) {
-		Query query = buildMainQuestByCampaignIdQuery(questDTO.getCampaignId());
+		Query query = buildMainQuestByCampaignSlugAndOwner(questDTO.getCampaignSlug(), questDTO.getOwner());
 		Update update = buildUpdate(questDTO);
 
 		QuestDTO updatedQuest = mongoTemplate.findAndModify(query, update, QuestDTO.class);
@@ -74,10 +74,12 @@ public class QuestMongoDao {
 		}
 	}
 
-	private Query buildMainQuestByCampaignIdQuery(String campaignId) {
+	private Query buildMainQuestByCampaignSlugAndOwner(String campaignSlug, String owner) {
 		return query(
-			where("campaignId")
-				.is(campaignId)
+			where("campaignSlug")
+				.is(campaignSlug)
+				.and("owner")
+				.is(owner)
 				.and("type")
 				.is("main")
 		);
@@ -90,16 +92,18 @@ public class QuestMongoDao {
 			.set("goals", questDTO.getGoals());
 	}
 
-	public void deleteByCampaignId(String campaignId) {
-		Query query = buildQuestByCampaignIdQuery(campaignId);
+	public void deleteByCampaignSlugAndOwner(String campaignSlug, String owner) {
+		Query query = buildQuestByCampaignSlugAndOwnerQuery(campaignSlug, owner);
 
 		mongoTemplate.remove(query, QuestDTO.class);
 	}
 
-	private Query buildQuestByCampaignIdQuery(String campaignId) {
+	private Query buildQuestByCampaignSlugAndOwnerQuery(String campaignSlug, String owner) {
 		return query(
-			where("campaignId")
-				.is(campaignId)
+			where("campaignSlug")
+				.is(campaignSlug)
+				.and("owner")
+				.is(owner)
 		);
 	}
 }

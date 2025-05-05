@@ -46,7 +46,7 @@ class DeleteCampaignTest {
 		deleteCampaign.execute(slug, owner);
 
 		// Then
-		verify(questRepository, times(1)).deleteBySlugAndOwner(slug, owner);
+		verify(questRepository, times(1)).deleteByCampaignSlugAndOwner(slug, owner);
 		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).ok();
 	}
@@ -66,7 +66,7 @@ class DeleteCampaignTest {
 		deleteCampaign.execute(slug, owner);
 
 		// Then
-		verify(questRepository, times(1)).deleteBySlugAndOwner(slug, owner);
+		verify(questRepository, times(1)).deleteByCampaignSlugAndOwner(slug, owner);
 		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).error(exception);
 	}
