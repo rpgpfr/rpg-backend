@@ -87,6 +87,8 @@ public class CampaignController {
 	@CrossOrigin(origins = "*")
 	public ResponseEntity<ResponseViewModel<QuestViewModel>> updateQuest(@CurrentOwner String owner, @PathVariable String slug, @RequestBody QuestUpdateRequestBody questUpdateRequestBody) {
 		Quest quest = new Quest(
+			owner,
+			slug,
 			questUpdateRequestBody.title(),
 			questUpdateRequestBody.type(),
 			questUpdateRequestBody.description(),
@@ -99,7 +101,7 @@ public class CampaignController {
 				.toList()
 		);
 
-		return updateMainQuest.execute(quest, slug, owner);
+		return updateMainQuest.execute(quest);
 	}
 
 }

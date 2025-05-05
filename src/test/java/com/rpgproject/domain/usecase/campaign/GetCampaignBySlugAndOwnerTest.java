@@ -45,7 +45,7 @@ class GetCampaignBySlugAndOwnerTest {
 		String owner = campaign.getOwner();
 
 		when(campaignRepository.getCampaignBySlugAndOwner(slug, owner)).thenReturn(campaign);
-		when(questRepository.findMainQuestBySlugAndOwner(slug, owner)).thenReturn(quest);
+		when(questRepository.findMainQuestByCampaignSlugAndOwner(slug, owner)).thenReturn(quest);
 
 		// When
 		getCampaignBySlugAndOwner.execute(slug, owner);

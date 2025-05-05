@@ -20,14 +20,16 @@ public class QuestDTO {
 
 	@Id
 	private String id;
-	private String campaignId;
+	private String owner;
+	private String campaignSlug;
 	private String type;
 	private String title;
 	private String description;
 	private List<GoalDTO> goals;
 
-	public QuestDTO(String campaignId, String type, String title, String description, List<GoalDTO> goals) {
-		this.campaignId = campaignId;
+	public QuestDTO(String owner, String campaignSlug, String type, String title, String description, List<GoalDTO> goals) {
+		this.owner = owner;
+		this.campaignSlug = campaignSlug;
 		this.type = type;
 		this.title = title;
 		this.description = description;
@@ -39,13 +41,13 @@ public class QuestDTO {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		QuestDTO questDTO = (QuestDTO) o;
-		return Objects.equals(getCampaignId(), questDTO.getCampaignId()) && Objects.equals(getType(), questDTO.getType()) && Objects.equals(getTitle(), questDTO.getTitle()) && Objects.equals(getDescription(), questDTO.getDescription()) && Objects.equals(getGoals(), questDTO.getGoals());
+		return Objects.equals(getOwner(), questDTO.getOwner()) && Objects.equals(getCampaignSlug(), questDTO.getCampaignSlug()) && Objects.equals(getType(), questDTO.getType()) && Objects.equals(getTitle(), questDTO.getTitle()) && Objects.equals(getDescription(), questDTO.getDescription()) && Objects.equals(getGoals(), questDTO.getGoals());
 	}
 
 	@Override
 	@IgnoreCoverage
 	public int hashCode() {
-		return Objects.hash(getCampaignId(), getType(), getTitle(), getDescription(), getGoals());
+		return Objects.hash(getOwner(), getCampaignSlug(), getType(), getTitle(), getDescription(), getGoals());
 	}
 
 }

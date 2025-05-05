@@ -40,17 +40,17 @@ class CreateCampaignTest {
 	@DisplayName("Given a campaign, when creating it, then a success is presented")
 	void givenACampaign_whenCreatingIt_thenASuccessIsPresented() {
 		// Given
-		String owner = "alvin";
 		String name = "myCampaign";
+		String owner = "alvin";
 
 		// When
 		createCampaign.execute(owner, name);
 
 		// Then
-		Quest expectedQuest = Quest.createDefaultMainQuest();
+		Quest expectedQuest = Quest.createDefaultMainQuest("mycampaign", owner);
 
 		verify(campaignRepository, times(1)).save(any(Campaign.class));
-		verify(questRepository, times(1)).save(expectedQuest, "mycampaign", owner);
+		verify(questRepository, times(1)).save(expectedQuest);
 		verify(presenter, times(1)).ok();
 	}
 

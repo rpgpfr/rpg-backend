@@ -41,7 +41,8 @@ class QuestMongoDaoTest {
 			.createCollection("Quest")
 			.createIndex(
 				Indexes.compoundIndex(
-					Indexes.ascending("campaignId"),
+					Indexes.ascending("owner"),
+					Indexes.ascending("campaignSlug"),
 					Indexes.ascending("title")
 				),
 				indexOptions
@@ -56,13 +57,15 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignId, when a main quest exists, then it is returned")
-	void givenACampaignId_whenAMainQuestExists_thenItIsReturned() {
+	@DisplayName("Given a campaign slug and an owner, when a main quest exists, then it is returned")
+	void givenACampaignSlugAndAnOwner_whenAMainQuestExists_thenItIsReturned() {
 		// Given
-		String campaignId = "id1";
+		QuestDTO questDTO = createQuestDTOs().getFirst();
+		String slug = questDTO.getCampaignSlug();
+		String owner = questDTO.getOwner();
 
 		// When
-		QuestDTO actualQuest = questMongoDao.findMainQuestByCampaignId(campaignId);
+		QuestDTO actualQuest = questMongoDao.findMainQuestByCampaignSlugAndOwner(slug, owner);
 
 		// Then
 		QuestDTO expectedQuest = createQuestDTOs().getFirst();
@@ -71,13 +74,14 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Given a campaignId, when a main quest is not found, then an exception is thrown")
-	void givenACampaignId_whenAMainQuestIsNotFound_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign slug and an owner, when a main quest is not found, then an exception is thrown")
+	void givenACampaignSlugAndAnOwner_whenAMainQuestIsNotFound_thenAnExceptionIsThrown() {
 		// Given
-		String campaignId = "wrong id";
+		String campaignSlug = "wrong slug";
+		String owner = "wrong owner";
 
 		// When & Then
-		assertThatCode(() -> questMongoDao.findMainQuestByCampaignId(campaignId)).isInstanceOf(QuestNotFoundException.class);
+		assertThatCode(() -> questMongoDao.findMainQuestByCampaignSlugAndOwner(campaignSlug, owner)).isInstanceOf(QuestNotFoundException.class);
 	}
 
 	@Test
@@ -125,7 +129,6 @@ class QuestMongoDaoTest {
 	void givenAQuestDTO_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given
 		QuestDTO questDTO = createQuestDTO();
-		questDTO.setCampaignId("wrongCampaignId");
 
 		// When & Then
 		assertThatCode(() -> questMongoDao.updateMainQuest(questDTO)).isInstanceOf(QuestNotFoundException.class);
@@ -141,13 +144,15 @@ class QuestMongoDaoTest {
 	}
 
 	@Test
-	@DisplayName("Should delete all quests related to campaignId")
-	void shouldDeleteAllQuestsRelatedToCampaignId() {
+	@DisplayName("Should delete all quests related to campaignSlug and owner")
+	void shouldDeleteAllQuestsRelatedToCampaignSlugAndOwner() {
 		// Given
-		String campaignId = "id1";
+		QuestDTO questDTO = createQuestDTOs().getFirst();
+		String campaignSlug = questDTO.getCampaignSlug();
+		String owner = questDTO.getOwner();
 
 		// When & Then
-		assertThatCode(() -> questMongoDao.deleteByCampaignId(campaignId)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoDao.deleteByCampaignSlugAndOwner(campaignSlug, owner)).doesNotThrowAnyException();
 	}
 
 }

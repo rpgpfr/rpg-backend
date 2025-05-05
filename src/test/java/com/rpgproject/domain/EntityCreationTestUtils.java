@@ -8,14 +8,14 @@ import java.util.List;
 public class EntityCreationTestUtils {
 
 	public static Quest createQuest() {
-		return new Quest("title", "main", "description", List.of(new Goal("goal", false)));
+		return new Quest("alvin", "my-campaign", "title", "main", "description", List.of(new Goal("goal", false)));
 	}
 
 	public static List<Quest> createQuests() {
 		return List.of(
-			new Quest("quest 1", "main", "description", List.of(new Goal("goal", false))),
-			new Quest("quest 2", "main", "description", List.of(new Goal("goal", false))),
-			new Quest("quest 3", "main", "description", List.of(new Goal("goal", false)))
+			new Quest("username", "campagne-1", "quest 1", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("username", "campagne-2", "quest 2", "main", "description", List.of(new Goal("goal", false))),
+			new Quest("username", "campagne-3", "quest 3", "main", "description", List.of(new Goal("goal", false)))
 		);
 	}
 

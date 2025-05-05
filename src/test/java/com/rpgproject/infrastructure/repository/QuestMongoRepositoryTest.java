@@ -64,7 +64,8 @@ class QuestMongoRepositoryTest {
 			.createCollection("Quest")
 			.createIndex(
 				Indexes.compoundIndex(
-					Indexes.ascending("campaignId"),
+					Indexes.ascending("owner"),
+					Indexes.ascending("campaignSlug"),
 					Indexes.ascending("title")
 				),
 				indexOptions
@@ -81,13 +82,13 @@ class QuestMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner and a slug, when the main quest exists, then it is returned")
-	void givenAnOwnerAndASlug_whenTheMainQuestExists_thenItIsReturned() {
+	@DisplayName("Given a campaign slug and an owner, when the main quest exists, then it is returned")
+	void givenACampaignSlugAndAnOwner_whenTheMainQuestExists_thenItIsReturned() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 
 		// When
-		Quest actualQuest = questMongoRepository.findMainQuestBySlugAndOwner(campaignDTO.getSlug(), campaignDTO.getOwner());
+		Quest actualQuest = questMongoRepository.findMainQuestByCampaignSlugAndOwner(campaignDTO.getSlug(), campaignDTO.getOwner());
 
 		// Then
 		Quest expectedQuest = createQuests().getFirst();
@@ -96,56 +97,44 @@ class QuestMongoRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("Given an owner and a slug, when the main quest is not found, then an exception is thrown")
-	void givenAnOwnerAndASlug_whenTheMainQuestIsNotFound_thenAnExceptionIsThrown() {
+	@DisplayName("Given a campaign slug and an owner, when the main quest is not found, then an exception is thrown")
+	void givenACampaignSlugAndAnOwner_whenTheMainQuestIsNotFound_thenAnExceptionIsThrown() {
 		// Given & When & Then
-		assertThatCode(() -> questMongoRepository.findMainQuestBySlugAndOwner(null, null)).isInstanceOf(NotFoundException.class);
+		assertThatCode(() -> questMongoRepository.findMainQuestByCampaignSlugAndOwner(null, null)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
-	@DisplayName("Given a quest with a slug and an owner, when it does not exist, then it is saved")
-	void givenAQuestWithASlugAndAnOwner_whenItDoesNotExist_thenItIsSaved() {
+	@DisplayName("Given a quest, when it does not exist, then it is saved")
+	void givenAQuest_whenItDoesNotExist_thenItIsSaved() {
 		CampaignDTO campaignDTO = createCampaignDTO();
 		Quest quest = createQuest();
 
 		mongoTemplate.insert(campaignDTO, "Campaign");
 
-		String owner = campaignDTO.getOwner();
-		String slug = campaignDTO.getSlug();
-
 		// When & Then
-		assertThatCode(() -> questMongoRepository.save(quest, slug, owner)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoRepository.save(quest)).doesNotThrowAnyException();
 	}
 
 	@Test
-	@DisplayName("Given a quest with an owner and a campaign slug, when save fails because it already exists, then an exception is thrown")
-	void givenAQuestWithAnOwnerAndACampaignSlug_whenSaveFailsBecauseItDoesNotExist_thenAnExceptionIsThrown() {
+	@DisplayName("Given a quest, when save fails because it already exists, then an exception is thrown")
+	void givenAQuest_whenSaveFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
 		// Given
-		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		Quest quest = createQuests().getFirst();
-		String owner = campaignDTO.getOwner();
-		String slug = campaignDTO.getSlug();
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.save(quest, slug, owner)).isInstanceOf(DuplicateException.class);
+		assertThatCode(() -> questMongoRepository.save(quest)).isInstanceOf(DuplicateException.class);
 	}
 
 	@Test
-	@DisplayName("Given a quest with an owner and a campaign slug, when save fails, then an exception is thrown")
-	void givenAQuestWithAnOwnerAndACampaignSlug_whenSaveFails_thenAnExceptionIsThrown() {
-		// Given
-		CampaignDTO campaignDTO = createCampaignDTO();
-		Quest quest = createQuest();
-		String owner = campaignDTO.getOwner();
-		String slug = "wrong slug";
-
-		// When & Then
-		assertThatCode(() -> questMongoRepository.save(quest, slug, owner)).isInstanceOf(InternalException.class);
+	@DisplayName("Given a quest, when save fails, then an exception is thrown")
+	void givenAQuest_whenSaveFails_thenAnExceptionIsThrown() {
+		// Given &  When & Then
+		assertThatCode(() -> questMongoRepository.save(null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
-	@DisplayName("Given a main quest with owner and a campaign slug, when it exists, then it is updated")
-	void givenAMainQuestWithOwnerAndACampaignSlug_whenItExists_thenItIsUpdated() {
+	@DisplayName("Given a main quest, when it exists, then it is updated")
+	void givenAMainQuest_whenItExists_thenItIsUpdated() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 		QuestDTO questDTO = createQuestDTO();
@@ -153,55 +142,48 @@ class QuestMongoRepositoryTest {
 
 		mongoTemplate.insert(campaignDTO, "Campaign");
 		mongoTemplate.insert(questDTO, "Quest");
-
-		String owner = campaignDTO.getOwner();
-		String slug = campaignDTO.getSlug();
 		Quest quest = createQuest();
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.updateMainQuest(quest, slug, owner)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoRepository.updateMainQuest(quest)).doesNotThrowAnyException();
 	}
 
 	@Test
-	@DisplayName("Given a main quest with an owner and a campaign slug, when update fails because it is not found, then an exception is thrown")
-	void givenAMainQuestWithAnOwnerAndACampaignSlug_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
+	@DisplayName("Given a main quest, when update fails because it is not found, then an exception is thrown")
+	void givenAMainQuest_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
 		// Given
-		String owner = "wrong owner";
-		String slug = "wrong slug";
+		Quest quest = createQuest();
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.updateMainQuest(null, slug, owner)).isInstanceOf(NotFoundException.class);
+		assertThatCode(() -> questMongoRepository.updateMainQuest(quest)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
-	@DisplayName("Given a main quest with an owner and a campaign slug, when update fails, then an exception is thrown")
-	void givenAMainQuestWithAnOwnerAndACampaignSlug_whenUpdateFails_thenAnExceptionIsThrown() {
+	@DisplayName("Given a main quest, when update fails, then an exception is thrown")
+	void givenAMainQuest_whenUpdateFails_thenAnExceptionIsThrown() {
 		// Given
-		CampaignMongoDao campaignMongoDaoMock = mock(CampaignMongoDao.class);
 		QuestMongoDao questMongoDaoMock = mock(QuestMongoDao.class);
 
-		ReflectionTestUtils.setField(questMongoRepository, "campaignMongoDao", campaignMongoDaoMock);
 		ReflectionTestUtils.setField(questMongoRepository, "questMongoDao", questMongoDaoMock);
 
-		when(campaignMongoDaoMock.findCampaignIdBySlugAndOwner(null, null)).thenReturn("id");
 		doThrow(new RuntimeException()).when(questMongoDaoMock).updateMainQuest(any(QuestDTO.class));
 
 		// When & Then
 		Quest quest = createQuest();
 		
-		assertThatCode(() -> questMongoRepository.updateMainQuest(quest, null, null)).isInstanceOf(InternalException.class);
+		assertThatCode(() -> questMongoRepository.updateMainQuest(quest)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
-	@DisplayName("Should delete all quests related to campaignId")
-	void shouldDeleteAllQuestsRelatedToCampaignId() {
+	@DisplayName("Should delete all quests related to campaign slug and owner")
+	void shouldDeleteAllQuestsRelatedToCampaignSlugAndOwner() {
 		// Given
 		CampaignDTO campaignDTO = createCampaignDTOs().getFirst();
 		String slug = campaignDTO.getSlug();
 		String owner = campaignDTO.getOwner();
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.deleteBySlugAndOwner(slug, owner)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoRepository.deleteByCampaignSlugAndOwner(slug, owner)).doesNotThrowAnyException();
 	}
 
 }

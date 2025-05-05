@@ -31,9 +31,9 @@ public class CreateCampaign<T> {
 
 			campaignRepository.save(campaign);
 
-			Quest quest = createDefaultMainQuest();
+			Quest quest = createDefaultMainQuest(slug, owner);
 
-			questRepository.save(quest, slug, owner);
+			questRepository.save(quest);
 
 			campaign.setMainQuest(quest);
 

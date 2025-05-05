@@ -31,37 +31,33 @@ class UpdateMainQuestTest {
 	}
 
 	@Test
-	@DisplayName("Given a quest with a slug and an owner, when updating it, then a success is presented")
-	void givenAQuestWithASlugAndAnOwner_whenEditingIt_thenASuccessIsPresented() {
+	@DisplayName("Given a quest, when updating it, then a success is presented")
+	void givenAQuest_whenEditingIt_thenASuccessIsPresented() {
 		// Given
 		Quest quest = createQuest();
-		String slug = "slug";
-		String owner = "owner";
 
 		// When
-		updateMainQuest.execute(quest, slug, owner);
+		updateMainQuest.execute(quest);
 
 		// Then
-		verify(questRepository, times(1)).updateMainQuest(quest, slug, owner);
+		verify(questRepository, times(1)).updateMainQuest(quest);
 		verify(presenter, times(1)).ok();
 	}
 
 	@Test
-	@DisplayName("Given a quest with a slug and an owner, when update fails, then an exception is presented")
-	void givenAQuestWithWithASlugAndAnOwner_whenUpdateFails_thenAnExceptionIsPresented() {
+	@DisplayName("Given a quest, when update fails, then an exception is presented")
+	void givenAQuest_whenUpdateFails_thenAnExceptionIsPresented() {
 		// Given
 		Quest quest = createQuest();
-		String slug = "wrong slug";
-		String owner = "wrong owner";
 		InternalException exception = new InternalException("error");
 
-		doThrow(exception).when(questRepository).updateMainQuest(quest, slug, owner);
+		doThrow(exception).when(questRepository).updateMainQuest(quest);
 
 		// When
-		updateMainQuest.execute(quest, slug, owner);
+		updateMainQuest.execute(quest);
 
 		// Then
-		verify(questRepository, times(1)).updateMainQuest(quest, slug, owner);
+		verify(questRepository, times(1)).updateMainQuest(quest);
 		verify(presenter, times(1)).error(exception);
 	}
 
