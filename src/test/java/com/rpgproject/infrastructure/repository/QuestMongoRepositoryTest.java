@@ -6,7 +6,6 @@ import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.exception.DuplicateException;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.exception.NotFoundException;
-import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.CampaignDTO;
 import com.rpgproject.infrastructure.dto.QuestDTO;
@@ -42,8 +41,7 @@ class QuestMongoRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		QuestMongoDao questMongoDao = new QuestMongoDao(mongoTemplate);
-		CampaignMongoDao campaignMongoDao = new CampaignMongoDao(mongoTemplate);
-		questMongoRepository = new QuestMongoRepository(questMongoDao, campaignMongoDao);
+		questMongoRepository = new QuestMongoRepository(questMongoDao);
 
 		initializeMongoDB();
 	}
@@ -171,7 +169,7 @@ class QuestMongoRepositoryTest {
 
 		// When & Then
 		Quest quest = createQuest();
-		
+
 		assertThatCode(() -> questMongoRepository.updateMainQuest(quest)).isInstanceOf(InternalException.class);
 	}
 
@@ -184,7 +182,7 @@ class QuestMongoRepositoryTest {
 		String owner = campaignDTO.getOwner();
 
 		// When & Then
-		assertThatCode(() -> questMongoRepository.deleteByCampaignSlugAndOwner(slug, owner)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoRepository.deleteAllByCampaignSlugAndOwner(slug, owner)).doesNotThrowAnyException();
 	}
 
 }

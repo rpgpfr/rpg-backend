@@ -92,7 +92,7 @@ public class QuestMongoDao {
 			.set("goals", questDTO.getGoals());
 	}
 
-	public void deleteByCampaignSlugAndOwner(String campaignSlug, String owner) {
+	public void deleteAllByCampaignSlugAndOwner(String campaignSlug, String owner) {
 		Query query = buildQuestByCampaignSlugAndOwnerQuery(campaignSlug, owner);
 
 		mongoTemplate.remove(query, QuestDTO.class);

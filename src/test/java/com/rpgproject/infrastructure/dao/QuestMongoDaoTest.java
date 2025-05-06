@@ -152,7 +152,7 @@ class QuestMongoDaoTest {
 		String owner = questDTO.getOwner();
 
 		// When & Then
-		assertThatCode(() -> questMongoDao.deleteByCampaignSlugAndOwner(campaignSlug, owner)).doesNotThrowAnyException();
+		assertThatCode(() -> questMongoDao.deleteAllByCampaignSlugAndOwner(campaignSlug, owner)).doesNotThrowAnyException();
 	}
 
 }
