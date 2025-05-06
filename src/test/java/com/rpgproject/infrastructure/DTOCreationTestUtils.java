@@ -37,13 +37,6 @@ public class DTOCreationTestUtils {
 		return new QuestDTO("alvin", "my-campaign", "main", "title", "description", List.of(new GoalDTO("goal", false)));
 	}
 
-	public static CampaignDTO createCampaignDTO() {
-		CampaignDTO campaignDTO = new CampaignDTO("alvin", "My campaign", "my-campaign", "description", "type", "mood", LocalDate.of(2025, 1, 1));
-		campaignDTO.setId("newId");
-
-		return campaignDTO;
-	}
-
 	public static List<CampaignDTO> createCampaignDTOs() {
 		CampaignDTO campaign1 = new CampaignDTO("username", "campagne 1", "campagne-1", null, null, null, LocalDate.of(2025, 1, 1));
 		campaign1.setId("id1");
@@ -57,6 +50,13 @@ public class DTOCreationTestUtils {
 		return List.of(campaign1, campaign2, campaign3);
 	}
 
+	public static CampaignDTO createCampaignDTO() {
+		CampaignDTO campaignDTO = new CampaignDTO("alvin", "My campaign", "my-campaign", "description", "type", "mood", LocalDate.of(2025, 1, 1));
+		campaignDTO.setId("newId");
+
+		return campaignDTO;
+	}
+
 	public static List<MapDTO> createMapDTOs() {
 		return List.of(
 			new MapDTO("username", "map 1"),
@@ -67,10 +67,14 @@ public class DTOCreationTestUtils {
 
 	public static List<CharacterDTO> createCharacterDTOs() {
 		return List.of(
-			new CharacterDTO("username", "character 1"),
-			new CharacterDTO("username", "character 2"),
-			new CharacterDTO("username", "character 3")
+			new CharacterDTO("username", "campagne-1", "character 1"),
+			new CharacterDTO("username", "campagne-2", "character 2"),
+			new CharacterDTO("username", "campagne-3", "character 3")
 		);
+	}
+
+	public static CharacterDTO createCharacterDTO() {
+		return new CharacterDTO("alvin", "my-campaign", "character 1");
 	}
 
 }
