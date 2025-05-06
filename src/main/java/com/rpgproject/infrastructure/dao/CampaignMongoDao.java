@@ -123,7 +123,7 @@ public class CampaignMongoDao {
 
 	public void delete(CampaignDTO campaignDTO) {
 		try {
-			deleteToDatabase(campaignDTO);
+			deleteFromDatabase(campaignDTO);
 		} catch (CampaignNotFoundException e) {
 			log.error(e.getMessage());
 
@@ -135,10 +135,10 @@ public class CampaignMongoDao {
 		}
 	}
 
-	private void deleteToDatabase(CampaignDTO campaignDTO) {
-		DeleteResult removeResult = mongoTemplate.remove(campaignDTO);
+	private void deleteFromDatabase(CampaignDTO campaignDTO) {
+		DeleteResult deleteResult = mongoTemplate.remove(campaignDTO);
 
-		if (removeResult.getDeletedCount() == 0) {
+		if (deleteResult.getDeletedCount() == 0) {
 			throw new CampaignNotFoundException();
 		}
 	}

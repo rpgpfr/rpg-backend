@@ -19,7 +19,7 @@ public class CharacterDTO {
 	private String id;
 
 	private String owner;
-	public String campaignSlug;
+	private String campaignSlug;
 	private String name;
 
 	public CharacterDTO(String owner, String campaignSlug, String name) {
