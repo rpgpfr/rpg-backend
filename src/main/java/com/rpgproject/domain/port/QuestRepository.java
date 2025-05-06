@@ -10,6 +10,6 @@ public interface QuestRepository {
 
 	void updateMainQuest(Quest quest);
 
-	void deleteByCampaignSlugAndOwner(String slug, String owner);
+	void deleteAllByCampaignSlugAndOwner(String slug, String owner);
 
 }

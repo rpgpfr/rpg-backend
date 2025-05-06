@@ -6,7 +6,6 @@ import com.rpgproject.domain.exception.DuplicateException;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.QuestRepository;
-import com.rpgproject.infrastructure.dao.CampaignMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.dto.GoalDTO;
 import com.rpgproject.infrastructure.dto.QuestDTO;
@@ -21,11 +20,9 @@ import java.util.List;
 public class QuestMongoRepository implements QuestRepository {
 
 	private final QuestMongoDao questMongoDao;
-	private final CampaignMongoDao campaignMongoDao;
 
-	public QuestMongoRepository(QuestMongoDao questMongoDao, CampaignMongoDao campaignMongoDao) {
+	public QuestMongoRepository(QuestMongoDao questMongoDao) {
 		this.questMongoDao = questMongoDao;
-		this.campaignMongoDao = campaignMongoDao;
 	}
 
 	@Override
@@ -108,8 +105,8 @@ public class QuestMongoRepository implements QuestRepository {
 	}
 
 	@Override
-	public void deleteByCampaignSlugAndOwner(String campaignSlug, String owner) {
-		questMongoDao.deleteByCampaignSlugAndOwner(campaignSlug, owner);
+	public void deleteAllByCampaignSlugAndOwner(String campaignSlug, String owner) {
+		questMongoDao.deleteAllByCampaignSlugAndOwner(campaignSlug, owner);
 	}
 
 }

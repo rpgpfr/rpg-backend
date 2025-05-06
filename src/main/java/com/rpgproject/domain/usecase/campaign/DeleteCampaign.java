@@ -21,7 +21,7 @@ public class DeleteCampaign<T> {
 
 	public T execute(String slug, String owner) {
 		try {
-			questRepository.deleteByCampaignSlugAndOwner(slug, owner);
+			questRepository.deleteAllByCampaignSlugAndOwner(slug, owner);
 			campaignRepository.delete(slug, owner);
 
 			return presenter.ok();
