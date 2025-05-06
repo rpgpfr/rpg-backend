@@ -19,10 +19,12 @@ public class CharacterDTO {
 	private String id;
 
 	private String owner;
+	public String campaignSlug;
 	private String name;
 
-	public CharacterDTO(String owner, String name) {
+	public CharacterDTO(String owner, String campaignSlug, String name) {
 		this.owner = owner;
+		this.campaignSlug = campaignSlug;
 		this.name = name;
 	}
 
@@ -31,12 +33,13 @@ public class CharacterDTO {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		CharacterDTO that = (CharacterDTO) o;
-		return Objects.equals(getOwner(), that.getOwner()) && Objects.equals(getName(), that.getName());
+		return Objects.equals(getOwner(), that.getOwner()) && Objects.equals(getCampaignSlug(), that.getCampaignSlug()) && Objects.equals(getName(), that.getName());
 	}
 
 	@Override
 	@IgnoreCoverage
 	public int hashCode() {
-		return Objects.hash(getOwner(), getName());
+		return Objects.hash(getOwner(), getCampaignSlug(), getName());
 	}
+
 }

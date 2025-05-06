@@ -106,6 +106,7 @@ class QuestMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a quest, when it does not exist, then it is saved")
 	void givenAQuest_whenItDoesNotExist_thenItIsSaved() {
+		// Given
 		CampaignDTO campaignDTO = createCampaignDTO();
 		Quest quest = createQuest();
 

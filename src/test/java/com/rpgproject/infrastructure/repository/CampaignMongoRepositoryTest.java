@@ -116,7 +116,7 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a slug and an owner, when the campaign is not found, then an exception is thrown")
 	void givenASlugAndAnOwner_whenTheCampaignIsNotFound_thenAnExceptionIsThrown() {
-		// When & Then
+		// Given & When & Then
 		assertThatCode(() -> campaignMongoRepository.getCampaignBySlugAndOwner(null, null)).isInstanceOf(NotFoundException.class);
 	}
 
@@ -148,7 +148,7 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a campaign, when save fails because it already exists, then an exception is thrown")
 	void givenACampaign_whenSaveFailsBecauseItAlreadyExists_thenAnExceptionIsThrown() {
-		// When & Then
+		// Given & When & Then
 		Campaign campaign = createCampaigns().getFirst();
 
 		assertThatCode(() -> campaignMongoRepository.save(campaign)).isInstanceOf(DuplicateException.class);
@@ -157,7 +157,7 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a campaign, when save fails, then an exception is thrown")
 	void givenACampaign_whenSaveFails_thenAnExceptionIsThrown() {
-		// When & Then
+		// Given & When & Then
 		assertThatCode(() -> campaignMongoRepository.save(null)).isInstanceOf(InternalException.class);
 	}
 
@@ -176,16 +176,18 @@ class CampaignMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a campaign, when update fails because it is not found, then an exception is thrown")
 	void givenACampaign_whenUpdateFailsBecauseItIsNotFound_thenAnExceptionIsThrown() {
-		// When & Then
-		Campaign campaign = createCampaign();
+		// Given
 		String slug = "wrong slug";
+		Campaign campaign = createCampaign();
+
+		// When & Then
 		assertThatCode(() -> campaignMongoRepository.update(campaign, slug)).isInstanceOf(NotFoundException.class);
 	}
 
 	@Test
 	@DisplayName("Given a campaign, when update fails, then an exception is thrown")
 	void givenACampaign_whenUpdateFails_thenAnExceptionIsThrown() {
-		// When & Then
+		// Given & When & Then
 		assertThatCode(() -> campaignMongoRepository.update(null, null)).isInstanceOf(InternalException.class);
 	}
 
