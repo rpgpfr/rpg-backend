@@ -1,6 +1,8 @@
 package com.rpgproject.domain;
 
 import com.rpgproject.domain.entity.*;
+import com.rpgproject.domain.entity.Character;
+import com.rpgproject.infrastructure.dto.CharacterDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -50,6 +52,18 @@ public class EntityCreationTestUtils {
 			null,
 			LocalDate.of(2025, 1, 1)
 		);
+	}
+
+	public static List<Character> createCharacters() {
+		return List.of(
+			new Character("username", "campagne-1", "character 1"),
+			new Character("username", "campagne-2", "character 2"),
+			new Character("username", "campagne-3", "character 3")
+		);
+	}
+
+	public static Character createCharacter() {
+		return new Character("alvin", "my-campaign", "character 1");
 	}
 
 }
