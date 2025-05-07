@@ -3,6 +3,7 @@ package com.rpgproject.domain.usecase.campaign;
 import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.CampaignRepository;
+import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.Presenter;
 import com.rpgproject.domain.port.QuestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,11 +28,14 @@ class DeleteCampaignTest {
 	QuestRepository questRepository;
 
 	@Mock
+	CharacterRepository characterRepository;
+
+	@Mock
 	private Presenter<Campaign, ?> presenter;
 
 	@BeforeEach
 	void setUp() {
-		deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, presenter);
+		deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, characterRepository, presenter);
 	}
 
 	@Test
@@ -47,6 +51,7 @@ class DeleteCampaignTest {
 
 		// Then
 		verify(questRepository, times(1)).deleteAllByCampaignSlugAndOwner(slug, owner);
+		verify(characterRepository, times(1)).deleteAllByCampaignSlugAndOwner(slug, owner);
 		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).ok();
 	}
@@ -67,6 +72,7 @@ class DeleteCampaignTest {
 
 		// Then
 		verify(questRepository, times(1)).deleteAllByCampaignSlugAndOwner(slug, owner);
+		verify(characterRepository, times(1)).deleteAllByCampaignSlugAndOwner(slug, owner);
 		verify(campaignRepository, times(1)).delete(slug, owner);
 		verify(presenter, times(1)).error(exception);
 	}

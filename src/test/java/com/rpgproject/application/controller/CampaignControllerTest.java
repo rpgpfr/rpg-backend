@@ -12,8 +12,10 @@ import com.rpgproject.application.presenter.CampaignsRestPresenter;
 import com.rpgproject.application.presenter.QuestRestPresenter;
 import com.rpgproject.application.service.ExceptionHTTPStatusService;
 import com.rpgproject.infrastructure.dao.CampaignMongoDao;
+import com.rpgproject.infrastructure.dao.CharacterMongoDao;
 import com.rpgproject.infrastructure.dao.QuestMongoDao;
 import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
+import com.rpgproject.infrastructure.repository.CharacterMongoRepository;
 import com.rpgproject.infrastructure.repository.QuestMongoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +45,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 	CampaignRestPresenter.class,
 	QuestRestPresenter.class,
 	QuestMongoRepository.class,
+	CharacterMongoRepository.class,
 	CampaignMongoRepository.class,
 	QuestMongoDao.class,
+	CharacterMongoDao.class,
 	CampaignMongoDao.class
 })
 class CampaignControllerTest {

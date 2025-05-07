@@ -14,6 +14,7 @@ import com.rpgproject.domain.entity.Campaign;
 import com.rpgproject.domain.entity.Goal;
 import com.rpgproject.domain.entity.Quest;
 import com.rpgproject.domain.port.CampaignRepository;
+import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.QuestRepository;
 import com.rpgproject.domain.usecase.campaign.*;
 import com.rpgproject.domain.usecase.quest.UpdateMainQuest;
@@ -33,12 +34,12 @@ public class CampaignController {
 	private final DeleteCampaign<ResponseEntity<ResponseViewModel<CampaignViewModel>>> deleteCampaign;
 	private final UpdateMainQuest<ResponseEntity<ResponseViewModel<QuestViewModel>>> updateMainQuest;
 
-	public CampaignController(QuestRepository questRepository, CampaignRepository campaignRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter, QuestRestPresenter questRestPresenter) {
+	public CampaignController(CampaignRepository campaignRepository, QuestRepository questRepository, CharacterRepository characterRepository, CampaignsRestPresenter campaignsRestPresenter, CampaignRestPresenter campaignRestPresenter, QuestRestPresenter questRestPresenter) {
 		this.getCampaignsByOwner = new GetCampaignsByOwner<>(campaignRepository, campaignsRestPresenter);
 		this.createCampaign = new CreateCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.getCampaignBySlugAndOwner = new GetCampaignBySlugAndOwner<>(campaignRepository, questRepository, campaignRestPresenter);
 		this.updateCampaign = new UpdateCampaign<>(campaignRepository, campaignRestPresenter);
-		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, campaignRestPresenter);
+		this.deleteCampaign = new DeleteCampaign<>(campaignRepository, questRepository, characterRepository, campaignRestPresenter);
 		this.updateMainQuest = new UpdateMainQuest<>(questRepository, questRestPresenter);
 	}
 
