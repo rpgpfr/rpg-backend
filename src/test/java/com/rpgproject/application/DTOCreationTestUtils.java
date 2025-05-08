@@ -1,9 +1,6 @@
 package com.rpgproject.application;
 
-import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
-import com.rpgproject.application.dto.viewmodel.GoalViewModel;
-import com.rpgproject.application.dto.viewmodel.QuestViewModel;
-import com.rpgproject.application.dto.viewmodel.UserViewModel;
+import com.rpgproject.application.dto.viewmodel.*;
 import com.rpgproject.application.dto.viewmodel.campaign.InfoViewModel;
 
 import java.time.LocalDate;
@@ -57,6 +54,10 @@ public class DTOCreationTestUtils {
 
 	public static CampaignViewModel createFullCampaignViewModel() {
 		return new CampaignViewModel("My campaign", "my-campaign", new InfoViewModel(null, null, null), createQuestViewModel(), LocalDate.of(2025, 1, 1));
+	}
+
+	public static CharacterViewModel createCharacterViewModel() {
+		return new CharacterViewModel("character 1");
 	}
 
 }
