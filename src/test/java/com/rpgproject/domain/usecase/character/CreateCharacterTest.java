@@ -43,7 +43,7 @@ class CreateCharacterTest {
 
 		// Then
 		verify(characterRepository).save(character);
-		verify(characterPresenter).ok(character);
+		verify(characterPresenter).ok();
 	}
 
 	@Test

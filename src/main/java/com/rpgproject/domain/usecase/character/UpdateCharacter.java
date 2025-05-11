@@ -21,7 +21,7 @@ public class UpdateCharacter<T> {
 		try {
 			characterRepository.update(character, oldName);
 
-			return characterPresenter.ok(character);
+			return characterPresenter.ok();
 		} catch (DuplicateException | NotFoundException | InternalException e) {
 			return characterPresenter.error(e);
 		}

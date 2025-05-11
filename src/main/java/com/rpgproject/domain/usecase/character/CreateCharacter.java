@@ -20,7 +20,7 @@ public class CreateCharacter<T> {
 		try {
 			characterRepository.save(character);
 
-			return characterPresenter.ok(character);
+			return characterPresenter.ok();
 		} catch (DuplicateException | InternalException e) {
 			return characterPresenter.error(e);
 		}
