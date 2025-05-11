@@ -23,6 +23,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
@@ -36,21 +37,8 @@ import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCampaignD
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createQuestDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataMongoTest
+@SpringBootTest
 @ActiveProfiles("test")
-@Import({
-	CampaignController.class,
-	ExceptionHTTPStatusService.class,
-	CampaignsRestPresenter.class,
-	CampaignRestPresenter.class,
-	QuestRestPresenter.class,
-	QuestMongoRepository.class,
-	CharacterMongoRepository.class,
-	CampaignMongoRepository.class,
-	QuestMongoDao.class,
-	CharacterMongoDao.class,
-	CampaignMongoDao.class
-})
 class CampaignControllerTest {
 
 	@Autowired

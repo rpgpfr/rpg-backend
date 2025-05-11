@@ -13,10 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.sql.SQLDataException;
 
 import static com.rpgproject.domain.EntityCreationTestUtils.createUser;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createUserDTO;
@@ -77,6 +81,7 @@ class UserJdbcRepositoryTest {
 		User user = createUser();
 
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
+		when(bCryptPasswordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.register(user)).doesNotThrowAnyException();
@@ -88,7 +93,7 @@ class UserJdbcRepositoryTest {
 		// Given
 		User user = createUser();
 
-		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new DataIntegrityViolationException("duplicate")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(DuplicateException.class);
@@ -100,7 +105,7 @@ class UserJdbcRepositoryTest {
 		// Given
 		User user = createUser();
 
-		doThrow(new RuntimeException()).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new BadSqlGrammarException("error", "sql", new SQLDataException("reason"))).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.register(user)).isInstanceOf(InternalException.class);
@@ -156,7 +161,7 @@ class UserJdbcRepositoryTest {
 	@DisplayName("Given a user, when it exists, then it is updated")
 	void givenAUser_whenItExists_thenItIsUpdated() {
 		// Given
-		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
+		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null, "description", "rpgKnowledge", null);
 
 		when(jdbcTemplate.update(anyString(), anyMap())).thenReturn(1);
 
@@ -170,7 +175,7 @@ class UserJdbcRepositoryTest {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
-		doThrow(new DuplicateUserCredentialsException()).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new DataIntegrityViolationException("duplicate")).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(DuplicateException.class);
@@ -182,7 +187,7 @@ class UserJdbcRepositoryTest {
 		// Given
 		User user = new User("alvin", "mail@example.com", "goulou", "lastName", null);
 
-		doThrow(new RuntimeException("exception")).when(jdbcTemplate).update(anyString(), anyMap());
+		doThrow(new BadSqlGrammarException("exception", "sql", new SQLDataException("reason"))).when(jdbcTemplate).update(anyString(), anyMap());
 
 		// When & Then
 		assertThatCode(() -> userJdbcRepository.update(user)).isInstanceOf(InternalException.class);
