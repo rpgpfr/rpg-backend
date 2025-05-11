@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -127,8 +129,17 @@ class QuestMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a quest, when save fails, then an exception is thrown")
 	void givenAQuest_whenSaveFails_thenAnExceptionIsThrown() {
-		// Given &  When & Then
-		assertThatCode(() -> questMongoRepository.save(null)).isInstanceOf(InternalException.class);
+		// Given
+		Quest quest = createQuests().getFirst();
+		MongoTemplate mongoTemplateMock = mock(MongoTemplate.class);
+		QuestMongoDao questMongoDao = new QuestMongoDao(mongoTemplateMock);
+
+		ReflectionTestUtils.setField(questMongoRepository, "questMongoDao", questMongoDao);
+
+		when(mongoTemplateMock.insert(any(QuestDTO.class))).thenThrow(RuntimeException.class);
+
+		// When & Then
+		assertThatCode(() -> questMongoRepository.save(quest)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -161,15 +172,15 @@ class QuestMongoRepositoryTest {
 	@DisplayName("Given a main quest, when update fails, then an exception is thrown")
 	void givenAMainQuest_whenUpdateFails_thenAnExceptionIsThrown() {
 		// Given
-		QuestMongoDao questMongoDaoMock = mock(QuestMongoDao.class);
+		Quest quest = createQuest();
+		MongoTemplate mongoTemplateMock = mock(MongoTemplate.class);
+		QuestMongoDao questMongoDao = new QuestMongoDao(mongoTemplateMock);
 
-		ReflectionTestUtils.setField(questMongoRepository, "questMongoDao", questMongoDaoMock);
+		ReflectionTestUtils.setField(questMongoRepository, "questMongoDao", questMongoDao);
 
-		doThrow(new RuntimeException()).when(questMongoDaoMock).updateMainQuest(any(QuestDTO.class));
+		when(mongoTemplateMock.findAndModify(any(Query.class), any(Update.class), eq(QuestDTO.class))).thenThrow(RuntimeException.class);
 
 		// When & Then
-		Quest quest = createQuest();
-
 		assertThatCode(() -> questMongoRepository.updateMainQuest(quest)).isInstanceOf(InternalException.class);
 	}
 

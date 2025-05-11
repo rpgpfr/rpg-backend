@@ -43,17 +43,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith(BasicDatabaseExtension.class)
-@Import({
-	UserProfileController.class,
-	UserJdbcRepository.class,
-	UserJdbcDao.class,
-	CampaignMongoRepository.class,
-	CampaignMongoDao.class,
-	MapMongoRepository.class,
-	MapMongoDao.class,
-	CharacterMongoRepository.class,
-	CharacterMongoDao.class
-})
 class UserProfileControllerTest {
 
 	private UserProfileController userProfileController;

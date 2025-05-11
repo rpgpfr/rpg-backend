@@ -49,14 +49,11 @@ public class CampaignMongoDao {
 
 		if (campaignDTO == null) {
 			log.error("Campaign not found for slug: {} and owner: {}", slug, owner);
+
 			throw new CampaignNotFoundException();
 		}
 
 		return campaignDTO;
-	}
-
-	public String findCampaignIdBySlugAndOwner(String slug, String owner) {
-		return findCampaignBySlugAndOwner(slug, owner).getId();
 	}
 
 	public long getCountByOwner(String owner) {

@@ -8,15 +8,21 @@ import com.rpgproject.domain.exception.DuplicateException;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.infrastructure.dao.CharacterMongoDao;
+import com.rpgproject.infrastructure.dto.CharacterDTO;
 import com.rpgproject.infrastructure.dto.QuestDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -25,9 +31,14 @@ import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCharacter
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createQuestDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DataMongoTest
 @ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class CharacterMongoRepositoryTest {
 
 	private CharacterMongoRepository characterMongoRepository;
@@ -121,8 +132,17 @@ class CharacterMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a character, when save fails, then an exception is thrown")
 	void givenACharacter_whenSaveFails_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> characterMongoRepository.save(null)).isInstanceOf(InternalException.class);
+		// Given
+		Character character = createCharacter();
+		MongoTemplate mongoTemplateMock = mock(MongoTemplate.class);
+		CharacterMongoDao characterMongoDao = new CharacterMongoDao(mongoTemplateMock);
+
+		ReflectionTestUtils.setField(characterMongoRepository, "characterMongoDao", characterMongoDao);
+
+		when(mongoTemplateMock.insert(any(CharacterDTO.class))).thenThrow(RuntimeException.class);
+
+		// When & Then
+		assertThatCode(() -> characterMongoRepository.save(character)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -170,9 +190,17 @@ class CharacterMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a character and its old name, when update fails, then an exception is thrown")
 	void givenACharacterAndItsOldName_whenUpdateFails_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> characterMongoRepository.update(null, null))
-			.isInstanceOf(InternalException.class);
+		// Given
+		Character character = createCharacter();
+		MongoTemplate mongoTemplateMock = mock(MongoTemplate.class);
+		CharacterMongoDao characterMongoDao = new CharacterMongoDao(mongoTemplateMock);
+
+		ReflectionTestUtils.setField(characterMongoRepository, "characterMongoDao", characterMongoDao);
+
+		when(mongoTemplateMock.findAndModify(any(Query.class), any(Update.class), eq(CharacterDTO.class))).thenThrow(RuntimeException.class);
+
+		// When & Then
+		assertThatCode(() -> characterMongoRepository.update(character, null)).isInstanceOf(InternalException.class);
 	}
 
 	@Test
@@ -210,8 +238,17 @@ class CharacterMongoRepositoryTest {
 	@Test
 	@DisplayName("Given a character, when delete fails, then an exception is thrown")
 	void givenAWrongCharacter_whenDeleteFails_thenAnExceptionIsThrown() {
-		// Given & When & Then
-		assertThatCode(() -> characterMongoRepository.delete(null)).isInstanceOf(InternalException.class);
+		// Given
+		Character character = createCharacter();
+		MongoTemplate mongoTemplateMock = mock(MongoTemplate.class);
+		CharacterMongoDao characterMongoDao = new CharacterMongoDao(mongoTemplateMock);
+
+		ReflectionTestUtils.setField(characterMongoRepository, "characterMongoDao", characterMongoDao);
+
+		when(mongoTemplateMock.remove(any(CharacterDTO.class))).thenThrow(RuntimeException.class);
+
+		// When & Then
+		assertThatCode(() -> characterMongoRepository.delete(character)).isInstanceOf(InternalException.class);
 	}
 
 }

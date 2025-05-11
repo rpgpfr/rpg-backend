@@ -34,7 +34,6 @@ import static org.mockito.Mockito.when;
 class AuthenticationControllerTest {
 
 	private AuthenticationController authenticationController;
-	private UserJdbcDao userJdbcDao;
 
 	@Mock
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -44,7 +43,7 @@ class AuthenticationControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		userJdbcDao = new UserJdbcDao(jdbcTemplate);
+		UserJdbcDao userJdbcDao = new UserJdbcDao(jdbcTemplate);
 		UserRepository userRepository = new UserJdbcRepository(userJdbcDao, bCryptPasswordEncoder);
 		ExceptionHTTPStatusService exceptionHTTPStatusService = new ExceptionHTTPStatusService();
 		UserRestPresenter userRestPresenter = new UserRestPresenter(exceptionHTTPStatusService);
