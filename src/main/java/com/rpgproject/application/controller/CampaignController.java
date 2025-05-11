@@ -1,7 +1,6 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.annotation.CurrentOwner;
-import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
 import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
@@ -51,8 +50,8 @@ public class CampaignController {
 
 	@PostMapping("")
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestBody CampaignRequestBody campaignRequestBody) {
-		return createCampaign.execute(owner, campaignRequestBody.name());
+	public ResponseEntity<ResponseViewModel<CampaignViewModel>> createCampaign(@CurrentOwner String owner, @RequestParam String name) {
+		return createCampaign.execute(owner, name);
 	}
 
 	@GetMapping("/{slug}")
