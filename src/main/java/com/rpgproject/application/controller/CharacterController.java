@@ -1,7 +1,6 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.annotation.CurrentOwner;
-import com.rpgproject.application.dto.requestbody.CharacterRequestBody;
 import com.rpgproject.application.dto.requestbody.CharacterUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CharacterViewModel;
@@ -29,21 +28,21 @@ public class CharacterController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> createCharacter(@PathVariable String slug, @RequestBody CharacterRequestBody characterRequestBody, @CurrentOwner String owner) {
-		Character character = new Character(owner, slug, characterRequestBody.name());
+	public ResponseEntity<ResponseViewModel<CharacterViewModel>> createCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestParam String name) {
+		Character character = new Character(owner, slug, name);
 
 		return createCharacter.execute(character);
 	}
 
 	@PutMapping("")
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> updateCharacter(@PathVariable String slug, @RequestBody CharacterUpdateRequestBody characterUpdateRequestBody, @CurrentOwner String owner) {
+	public ResponseEntity<ResponseViewModel<CharacterViewModel>> updateCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CharacterUpdateRequestBody characterUpdateRequestBody) {
 		Character character = new Character(owner, slug, characterUpdateRequestBody.newName());
 
 		return updateCharacter.execute(character, characterUpdateRequestBody.oldName());
 	}
 
 	@DeleteMapping("")
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> deleteCharacter(@PathVariable String slug, @RequestParam String name, @CurrentOwner String owner) {
+	public ResponseEntity<ResponseViewModel<CharacterViewModel>> deleteCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestParam String name) {
 		Character character = new Character(owner, slug, name);
 
 		return deleteCharacter.execute(character);

@@ -1,6 +1,5 @@
 package com.rpgproject.application.controller;
 
-import com.rpgproject.application.dto.requestbody.CharacterRequestBody;
 import com.rpgproject.application.dto.requestbody.CharacterUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CharacterViewModel;
@@ -41,12 +40,12 @@ class CharacterControllerTest {
 	@DisplayName("Given a characterRequestBody with a campaign slug and an owner, when the character does not exist, then it is saved")
 	void givenACharacterRequestBodyWithACampaignSlugAndAnOwner_whenTheCharacterDoesNotExist_thenItIsSaved() {
 		// Given
-		CharacterRequestBody characterRequestBody = new CharacterRequestBody("character 1");
+		String name = "character 1";
 		String owner = "username";
 		String slug = "my-campaign";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.createCharacter(slug, characterRequestBody, owner);
+		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.createCharacter(owner, slug, name);
 
 		// Then
 		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
@@ -63,7 +62,7 @@ class CharacterControllerTest {
 		String slug = "campagne-1";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.updateCharacter(slug, characterUpdateRequestBody, owner);
+		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.updateCharacter(owner, slug, characterUpdateRequestBody);
 
 		// Then
 		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
@@ -80,7 +79,7 @@ class CharacterControllerTest {
 		String slug = "campagne-1";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.deleteCharacter(slug, characterName, owner);
+		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.deleteCharacter(owner, slug, characterName);
 
 		// Then
 		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
