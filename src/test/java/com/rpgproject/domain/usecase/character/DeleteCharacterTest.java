@@ -43,7 +43,7 @@ class DeleteCharacterTest {
 
 		// Then
 		verify(characterRepository).delete(character);
-		verify(characterPresenter).ok(character);
+		verify(characterPresenter).ok();
 	}
 
 	@Test

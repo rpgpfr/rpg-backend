@@ -45,7 +45,7 @@ class UpdateCharacterTest {
 		// Then
 		String expectedOldName = "oldName";
 		verify(characterRepository).update(character, expectedOldName);
-		verify(characterPresenter).ok(character);
+		verify(characterPresenter).ok();
 	}
 
 	@Test

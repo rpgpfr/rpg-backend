@@ -21,7 +21,7 @@ public class DeleteCharacter<T> {
 		try {
 			characterRepository.delete(character);
 
-			return characterPresenter.ok(character);
+			return characterPresenter.ok();
 		} catch (NotFoundException | InternalException e) {
 			return characterPresenter.error(e);
 		}
