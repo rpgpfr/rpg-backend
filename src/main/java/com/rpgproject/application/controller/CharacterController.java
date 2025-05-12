@@ -1,6 +1,7 @@
 package com.rpgproject.application.controller;
 
 import com.rpgproject.application.annotation.CurrentOwner;
+import com.rpgproject.application.dto.requestbody.CharacterRequestBody;
 import com.rpgproject.application.dto.requestbody.CharacterUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CharacterViewModel;
@@ -28,8 +29,8 @@ public class CharacterController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> createCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestParam String name) {
-		Character character = new Character(owner, slug, name);
+	public ResponseEntity<ResponseViewModel<CharacterViewModel>> createCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CharacterRequestBody characterRequestBody) {
+		Character character = new Character(owner, slug, characterRequestBody.name());
 
 		return createCharacter.execute(character);
 	}
