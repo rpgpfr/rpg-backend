@@ -1,17 +1,30 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.CampaignRequestBody;
 import com.rpgproject.application.dto.requestbody.CampaignUpdateRequestBody;
 import com.rpgproject.application.dto.requestbody.GoalUpdateRequestBody;
 import com.rpgproject.application.dto.requestbody.QuestUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CampaignViewModel;
 import com.rpgproject.application.dto.viewmodel.QuestViewModel;
+import com.rpgproject.application.presenter.CampaignRestPresenter;
+import com.rpgproject.application.presenter.CampaignsRestPresenter;
+import com.rpgproject.application.presenter.QuestRestPresenter;
+import com.rpgproject.application.service.ExceptionHTTPStatusService;
+import com.rpgproject.infrastructure.dao.CampaignMongoDao;
+import com.rpgproject.infrastructure.dao.CharacterMongoDao;
+import com.rpgproject.infrastructure.dao.QuestMongoDao;
+import com.rpgproject.infrastructure.repository.CampaignMongoRepository;
+import com.rpgproject.infrastructure.repository.CharacterMongoRepository;
+import com.rpgproject.infrastructure.repository.QuestMongoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -66,10 +79,10 @@ class CampaignControllerTest {
 	void givenAnOwnerAndACampaignRequestBody_whenTheCampaignDoesNotExist_thenItIsSaved() {
 		// Given
 		String owner = "username";
-		String name = "my campaign";
+		CampaignRequestBody campaignRequestBody = new CampaignRequestBody("my campaign");
 
 		// When
-		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, name);
+		ResponseEntity<ResponseViewModel<CampaignViewModel>> actualResponseEntity = campaignController.createCampaign(owner, campaignRequestBody);
 
 		// Then
 		ResponseEntity<ResponseViewModel<CampaignViewModel>> expectedResponseEntity = ResponseEntity.noContent().build();

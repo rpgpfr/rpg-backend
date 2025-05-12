@@ -1,5 +1,6 @@
 package com.rpgproject.application.controller;
 
+import com.rpgproject.application.dto.requestbody.CharacterRequestBody;
 import com.rpgproject.application.dto.requestbody.CharacterUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CharacterViewModel;
@@ -40,12 +41,12 @@ class CharacterControllerTest {
 	@DisplayName("Given a characterRequestBody with a campaign slug and an owner, when the character does not exist, then it is saved")
 	void givenACharacterRequestBodyWithACampaignSlugAndAnOwner_whenTheCharacterDoesNotExist_thenItIsSaved() {
 		// Given
-		String name = "character 1";
+		CharacterRequestBody characterRequestBody = new CharacterRequestBody("character 1");
 		String owner = "username";
 		String slug = "my-campaign";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.createCharacter(owner, slug, name);
+		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.createCharacter(owner, slug, characterRequestBody);
 
 		// Then
 		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
