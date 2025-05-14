@@ -1,18 +1,19 @@
 package com.rpgproject.domain.usecase.character;
 
 import com.rpgproject.domain.entity.Character;
-import com.rpgproject.domain.exception.DuplicateException;
 import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.Presenter;
 
+import java.util.List;
+
 public class DeleteCharacter<T> {
 
 	CharacterRepository characterRepository;
-	Presenter<Character, T> characterPresenter;
+	Presenter<List<Character>, T> characterPresenter;
 
-	public DeleteCharacter(CharacterRepository characterRepository, Presenter<Character, T> characterPresenter) {
+	public DeleteCharacter(CharacterRepository characterRepository, Presenter<List<Character>, T> characterPresenter) {
 		this.characterRepository = characterRepository;
 		this.characterPresenter = characterPresenter;
 	}

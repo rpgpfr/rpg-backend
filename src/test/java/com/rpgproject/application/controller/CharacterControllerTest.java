@@ -4,6 +4,7 @@ import com.rpgproject.application.dto.requestbody.CharacterRequestBody;
 import com.rpgproject.application.dto.requestbody.CharacterUpdateRequestBody;
 import com.rpgproject.application.dto.responsebody.ResponseViewModel;
 import com.rpgproject.application.dto.viewmodel.CharacterViewModel;
+import com.rpgproject.domain.entity.Campaign;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
+import static com.rpgproject.application.DTOCreationTestUtils.createCharacterViewModels;
+import static com.rpgproject.domain.EntityCreationTestUtils.createCampaigns;
 import static com.rpgproject.infrastructure.DTOCreationTestUtils.createCharacterDTOs;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,6 +43,28 @@ class CharacterControllerTest {
 	}
 
 	@Test
+	@DisplayName("Given a campaign slug and an owner, when getting the characters, then all of them are returned")
+	void givenACampaignSlugAndAnOwner_whenGettingTheCharacters_thenAllOfThemAreReturned() {
+		// Given
+		Campaign campaign = createCampaigns().getFirst();
+		String slug = campaign.getSlug();
+		String owner = campaign.getOwner();
+
+		// When
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.getCharacters(owner, slug);
+
+		// Then
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> expectedResponse = ResponseEntity.ok(
+			new ResponseViewModel<>(
+				List.of(createCharacterViewModels().getFirst()),
+				null
+			)
+		);
+
+		assertThat(actualResponse).isEqualTo(expectedResponse);
+	}
+
+	@Test
 	@DisplayName("Given a characterRequestBody with a campaign slug and an owner, when the character does not exist, then it is saved")
 	void givenACharacterRequestBodyWithACampaignSlugAndAnOwner_whenTheCharacterDoesNotExist_thenItIsSaved() {
 		// Given
@@ -46,10 +73,10 @@ class CharacterControllerTest {
 		String slug = "my-campaign";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.createCharacter(owner, slug, characterRequestBody);
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.createCharacter(owner, slug, characterRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
@@ -63,10 +90,10 @@ class CharacterControllerTest {
 		String slug = "campagne-1";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.updateCharacter(owner, slug, characterUpdateRequestBody);
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.updateCharacter(owner, slug, characterUpdateRequestBody);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}
@@ -80,10 +107,10 @@ class CharacterControllerTest {
 		String slug = "campagne-1";
 
 		// When
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> actualResponse = characterController.deleteCharacter(owner, slug, characterName);
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.deleteCharacter(owner, slug, characterName);
 
 		// Then
-		ResponseEntity<ResponseViewModel<CharacterViewModel>> expectedResponse = ResponseEntity.noContent().build();
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> expectedResponse = ResponseEntity.noContent().build();
 
 		assertThat(actualResponse).isEqualTo(expectedResponse);
 	}

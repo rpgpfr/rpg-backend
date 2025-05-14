@@ -56,6 +56,14 @@ public class DTOCreationTestUtils {
 		return new CampaignViewModel("My campaign", "my-campaign", new InfoViewModel(null, null, null), createQuestViewModel(), LocalDate.of(2025, 1, 1));
 	}
 
+	public static List<CharacterViewModel> createCharacterViewModels() {
+		return List.of(
+			new CharacterViewModel("character 1"),
+			new CharacterViewModel("character 2"),
+			new CharacterViewModel("character 3")
+		);
+	}
+
 	public static CharacterViewModel createCharacterViewModel() {
 		return new CharacterViewModel("character 1");
 	}
