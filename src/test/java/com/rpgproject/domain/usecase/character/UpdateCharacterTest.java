@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static com.rpgproject.domain.EntityCreationTestUtils.createCharacter;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -25,7 +27,7 @@ class UpdateCharacterTest {
 	private CharacterRepository characterRepository;
 
 	@Mock
-	private Presenter<Character, ?> characterPresenter;
+	private Presenter<List<Character>, ?> characterPresenter;
 
 	@BeforeEach
 	void setUp() {

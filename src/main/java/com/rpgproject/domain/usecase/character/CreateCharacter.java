@@ -6,12 +6,14 @@ import com.rpgproject.domain.exception.InternalException;
 import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.Presenter;
 
+import java.util.List;
+
 public class CreateCharacter<T> {
 
-	CharacterRepository characterRepository;
-	Presenter<Character, T> characterPresenter;
+	private final CharacterRepository characterRepository;
+	private final Presenter<List<Character>, T> characterPresenter;
 
-	public CreateCharacter(CharacterRepository characterRepository, Presenter<Character, T> characterPresenter) {
+	public CreateCharacter(CharacterRepository characterRepository, Presenter<List<Character>, T> characterPresenter) {
 		this.characterRepository = characterRepository;
 		this.characterPresenter = characterPresenter;
 	}

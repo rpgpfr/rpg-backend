@@ -9,33 +9,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-public class CharacterRestPresenter implements Presenter<Character, ResponseEntity<ResponseViewModel<CharacterViewModel>>> {
+public class CharactersRestPresenter implements Presenter<List<Character>, ResponseEntity<ResponseViewModel<List<CharacterViewModel>>>> {
 
 	private final ExceptionHTTPStatusService exceptionHTTPStatusService;
 
 	@Autowired
-	public CharacterRestPresenter(ExceptionHTTPStatusService exceptionHTTPStatusService) {
+	public CharactersRestPresenter(ExceptionHTTPStatusService exceptionHTTPStatusService) {
 		this.exceptionHTTPStatusService = exceptionHTTPStatusService;
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> ok() {
+	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> ok() {
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> ok(Character character) {
+	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> ok(List<Character> characters) {
 		return ResponseEntity.ok(
 			new ResponseViewModel<>(
-				new CharacterViewModel(character.name()),
+				characters
+					.stream()
+					.map(character -> new CharacterViewModel(character.name()))
+					.toList()
+				,
 				null
 			)
 		);
 	}
 
 	@Override
-	public ResponseEntity<ResponseViewModel<CharacterViewModel>> error(RuntimeException exception) {
+	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> error(RuntimeException exception) {
 		return new ResponseEntity<>(
 			new ResponseViewModel<>(
 				null,

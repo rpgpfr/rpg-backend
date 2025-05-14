@@ -7,12 +7,14 @@ import com.rpgproject.domain.exception.NotFoundException;
 import com.rpgproject.domain.port.CharacterRepository;
 import com.rpgproject.domain.port.Presenter;
 
+import java.util.List;
+
 public class UpdateCharacter<T> {
 
 	CharacterRepository characterRepository;
-	Presenter<Character, T> characterPresenter;
+	Presenter<List<Character>, T> characterPresenter;
 
-	public UpdateCharacter(CharacterRepository characterRepository, Presenter<Character, T> characterPresenter) {
+	public UpdateCharacter(CharacterRepository characterRepository, Presenter<List<Character>, T> characterPresenter) {
 		this.characterRepository = characterRepository;
 		this.characterPresenter = characterPresenter;
 	}

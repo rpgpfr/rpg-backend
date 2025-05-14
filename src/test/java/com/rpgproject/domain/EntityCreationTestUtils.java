@@ -2,7 +2,6 @@ package com.rpgproject.domain;
 
 import com.rpgproject.domain.entity.*;
 import com.rpgproject.domain.entity.Character;
-import com.rpgproject.infrastructure.dto.CharacterDTO;
 
 import java.time.LocalDate;
 import java.util.List;
