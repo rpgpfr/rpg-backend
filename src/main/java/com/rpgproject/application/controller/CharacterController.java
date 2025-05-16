@@ -45,7 +45,7 @@ public class CharacterController {
 		return createCharacter.execute(character);
 	}
 
-	@PutMapping("")
+	@PatchMapping("")
 	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> updateCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CharacterUpdateRequestBody characterUpdateRequestBody) {
 		Character character = new Character(owner, slug, characterUpdateRequestBody.newName());
 
@@ -53,8 +53,8 @@ public class CharacterController {
 	}
 
 	@DeleteMapping("")
-	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> deleteCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestParam String name) {
-		Character character = new Character(owner, slug, name);
+	public ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> deleteCharacter(@CurrentOwner String owner, @PathVariable String slug, @RequestBody CharacterRequestBody characterRequestBody) {
+		Character character = new Character(owner, slug, characterRequestBody.name());
 
 		return deleteCharacter.execute(character);
 	}

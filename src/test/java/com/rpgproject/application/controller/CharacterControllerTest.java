@@ -102,12 +102,12 @@ class CharacterControllerTest {
 	@DisplayName("Given a character name with a campaign slug and an owner, when the character exists, then it is deleted")
 	void givenACharacterNameWithACampaignSlugAndAnOwner_whenTheCharacterExists_thenItIsDelete() {
 		// Given
-		String characterName = "character 1";
+		CharacterRequestBody characterRequestBody = new CharacterRequestBody("character 1");
 		String owner = "username";
 		String slug = "campagne-1";
 
 		// When
-		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.deleteCharacter(owner, slug, characterName);
+		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> actualResponse = characterController.deleteCharacter(owner, slug, characterRequestBody);
 
 		// Then
 		ResponseEntity<ResponseViewModel<List<CharacterViewModel>>> expectedResponse = ResponseEntity.noContent().build();
